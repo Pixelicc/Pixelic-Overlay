@@ -50,10 +50,10 @@ const addPlayer = (player, forced) => {
       };
     }
     axiosClient
-      .get(`BACKEND`, { headers: headers }) // Waiting for Hypixel to accept my Application
+      .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-KEY": dataStore.get("pixelicKey"), ...headers } })
       .then((data) => {
         if ((playersInQueue.includes(player) && inLobby !== true) || forced) {
-          var Player = { success: true, username: data.data.username, UUID: data.data.UUID, rank: data.data.rank, plusColor: data.data.plusColor, plusPlusColor: data.data.plusPlusColor, ...data.data.stats.Bedwars };
+          var Player = { success: true, username: data.data.username, UUID: data.data.UUID, rank: data.data.rank, plusColor: data.data.plusColor, plusPlusColor: data.data.plusPlusColor, ...data.data.Bedwars };
           Player.cores = {
             wins: Player.overall.wins - Player["4v4"].wins,
             losses: Player.overall.losses - Player["4v4"].losses,

@@ -5,7 +5,7 @@ var customTags = {};
 const updateData = async () => {
   try {
     customTags = (
-      await axios.get("https://api.pixelic.de/overlay/tags", {
+      await axios.get("https://api.pixelic.de/hypixel/v1/overlay/tags", {
         headers: {
           "Cache-Control": "no-cache",
           Expires: "0",

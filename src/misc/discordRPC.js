@@ -25,11 +25,11 @@ module.exports = {
 
       const setActivity = async (player) => {
         axios
-          .get(`BACKEND`) // Waiting for Hypixel to accept my Application
+          .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, {}, { headers: { "X-API-KEY": key } })
           .then(async (res) => {
             res = res.data;
 
-            const level = Math.floor(res.stats.Bedwars.level);
+            const level = Math.floor(res.Bedwars.level);
             var star = "✫";
 
             if (level >= 1100) star = "✪";
@@ -39,7 +39,7 @@ module.exports = {
             client.setActivity({
               instance: false,
               details: `[${level}${star}] ${res.username}`,
-              state: `Lifetime » Wins: ${res.stats.Bedwars.overall.wins.toLocaleString("en-US")} | Finals: ${res.stats.Bedwars.overall.finalKills.toLocaleString("en-US")} | Beds: ${res.stats.Bedwars.overall.bedsBroken.toLocaleString("en-US")}`,
+              state: `Lifetime » Wins: ${res.Bedwars.overall.wins.toLocaleString("en-US")} | Finals: ${res.Bedwars.overall.finalKills.toLocaleString("en-US")} | Beds: ${res.Bedwars.overall.bedsBroken.toLocaleString("en-US")}`,
               startTimestamp,
               largeImageKey: "pixelic",
               largeImageText: "Pixelic-Overlay",
