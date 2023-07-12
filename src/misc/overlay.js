@@ -18,7 +18,9 @@ const axiosClient = axios.create();
 
 axiosRetry(axiosClient, {
   retries: 10,
-  retryDelay: axiosRetry.exponentialDelay,
+  retryDelay: (retryCount, error) => {
+    return Number(error.response.headers["x-ratelimit-reset"]) * 1000;
+  },
   retryCondition: (error) => {
     if (error?.response?.status) {
       return error.response.status === 429;
@@ -50,7 +52,7 @@ const addPlayer = (player, forced) => {
       };
     }
     axiosClient
-      .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-KEY": dataStore.get("pixelicKey"), ...headers } })
+      .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-Key": dataStore.get("pixelicKey"), ...headers } })
       .then((data) => {
         if ((playersInQueue.includes(player) && inLobby !== true) || forced) {
           var Player = { success: true, username: data.data.username, UUID: data.data.UUID, rank: data.data.rank, plusColor: data.data.plusColor, plusPlusColor: data.data.plusPlusColor, ...data.data.Bedwars };

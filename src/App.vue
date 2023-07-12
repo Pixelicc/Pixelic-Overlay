@@ -11,6 +11,12 @@
         </v-btn></router-link
       >
 
+      <router-link to="/statistics" class="v-btn" @click="turnOffTable">
+        <v-btn icon style="-webkit-app-region: no-drag">
+          <v-icon color="primary">mdi-chart-line</v-icon>
+        </v-btn></router-link
+      >
+
       <router-link to="/settings" class="v-btn" @click="turnOffTable">
         <v-btn icon style="-webkit-app-region: no-drag">
           <v-icon color="primary">mdi-settings</v-icon>
@@ -64,7 +70,6 @@ import rankParser from "./misc/rankParser";
 import starParser from "./misc/starParser";
 import tagsParser from "./misc/tagsParser";
 import statColorParser from "./misc/statColorParser";
-import axios from "axios";
 
 const ipcRenderer = useIpcRenderer();
 

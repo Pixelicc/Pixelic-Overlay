@@ -109,7 +109,7 @@ const setKey = (key) => {
   }
   if (/[0-9a-fA-F]{12}4[0-9a-fA-F]{19}/.test(key)) {
     axios
-      .get(`https://api.pixelic.de/key?key=${key}`)
+      .get("https://api.pixelic.de/v1/key", {}, { headers: { "X-API-Key": key } })
       .then(() => {
         keyErrors.value = [];
         dataStore.set("pixelicKey", key);
