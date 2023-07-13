@@ -32,7 +32,7 @@
 - Easy to use and setup
 - Shows nicked players
 - Color-coded Stats in terms of skill level
-- Detail statistics page
+- Detailed statistics page
 
 ### Settings
 
