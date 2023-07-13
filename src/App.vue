@@ -261,17 +261,17 @@ const updateHeaders = () => {
     { title: "Icons", align: "start", key: "icons", align: " d-none" },
     { title: "Level", align: "start", key: "level", align: " d-none" },
     { title: "FullLevel", align: "start", key: "fullLevel", align: " d-none" },
-    { title: "Level", align: "start", key: "levelFormatted", width: "10%" },
+    { title: "Level", align: "start", key: "levelFormatted", width: "8%" },
     { title: "FullUsername", align: "start", key: "fullUsername", align: " d-none" },
     { title: "Name", align: "start", key: "username", width: "20%" },
   ];
 
   if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "start", key: "WS", width: "8%" }, { title: "WS", align: "start", key: "WSFormatted", align: " d-none" });
-  if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "start", key: "wins", width: "12%" }, { title: "Wins", align: "start", key: "winsFormatted", align: " d-none" });
-  if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "start", key: "WLR", width: "12%" }, { title: "WLR", align: "start", key: "WLRFormatted", align: " d-none" });
-  if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "start", key: "finalKills", width: "12%" }, { title: "Finals", align: "start", key: "finalKillsFormatted", align: " d-none" });
-  if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "start", key: "FKDR", width: "12%" }, { title: "FKDR", align: "start", key: "FKDRFormatted", align: " d-none" });
-  if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "start", key: "BBLR", width: "12%" }, { title: "BBLR", align: "start", key: "BBLRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "start", key: "wins", width: "10%" }, { title: "Wins", align: "start", key: "winsFormatted", align: " d-none" });
+  if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "start", key: "WLR", width: "10%" }, { title: "WLR", align: "start", key: "WLRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "start", key: "finalKills", width: "10%" }, { title: "Finals", align: "start", key: "finalKillsFormatted", align: " d-none" });
+  if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "start", key: "FKDR", width: "10%" }, { title: "FKDR", align: "start", key: "FKDRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "start", key: "BBLR", width: "10%" }, { title: "BBLR", align: "start", key: "BBLRFormatted", align: " d-none" });
 };
 
 updateHeaders();

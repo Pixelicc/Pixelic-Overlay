@@ -167,7 +167,7 @@ const parseMessage = (msg) => {
     removePlayer(updateStringCondition(msg), { party: true });
   } else if (msg.indexOf("You left the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
     clear();
-  } else if (msg.indexOf("The party was disbanded") !== -1 && msg.indexOf(":") === -1 && inLobby) {
+  } else if ((msg.indexOf("The party was disbanded") !== -1 || msg.indexOf("has disbanded the party!") !== -1) && msg.indexOf(":") === -1 && inLobby) {
     clear();
   } else if ((msg.indexOf("FINAL KILL") !== -1 || msg.indexOf("disconnected") !== -1) && msg.indexOf(":") === -1) {
     inLobby = false;
