@@ -2,5 +2,5 @@
   background-color: rgba(var(--v-theme-background), 0.75) !important;
 }
 .v-tooltip .v-overlay__content {
-  background: rgba(var(--v-theme-background), 0.75) !important;
+  background: rgba(var(--v-theme-background), 1) !important;
 }
