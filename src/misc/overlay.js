@@ -94,30 +94,8 @@ const addPlayer = (player, options) => {
         }
       })
       .catch((error) => {
-        const defaultBedwarsObject = {
-          gamesPlayed: 0,
-          winstreak: 0,
-          wins: 0,
-          losses: 0,
-          WLR: 0,
-          finalKills: 0,
-          finalDeaths: 0,
-          FKDR: 0,
-          kills: 0,
-          deaths: 0,
-          KDR: 0,
-          bedsBroken: 0,
-          bedsLost: 0,
-          BBLR: 0,
-          resourcesCollected: {
-            iron: 0,
-            gold: 0,
-            diamond: 0,
-            emerald: 0,
-          },
-        };
         if (inLobby !== true || options.forced) {
-          players.push({ success: false, cause: error.response.data.cause, username: player, ...{ EXP: 500, level: 1, coins: 0, overall: defaultBedwarsObject, cores: defaultBedwarsObject, solo: defaultBedwarsObject, doubles: defaultBedwarsObject, threes: defaultBedwarsObject, fours: defaultBedwarsObject, "4v4": defaultBedwarsObject } });
+          players.push({ success: false, cause: error.response.data.cause, username: player });
           removeDuplicates();
         }
       });

@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>Pixelic Overlay [BETA]</h1>
+    <h1>Pixelic Overlay</h1>
 </div>
 <div align="center">
         <a href="https://discord.com/invite/2vAuyVvdwj"><img src="https://img.shields.io/discord/926873163411910746?color=blue&label=Discord&logo=discord&style=for-the-badge" alt="Discord"></a>
@@ -32,6 +32,7 @@
 - Easy to use and setup
 - Shows nicked players
 - Color-coded Stats in terms of skill level
+- Detail statistics page
 
 ### Settings
 
@@ -44,13 +45,18 @@
 - Hide Overlay Ingame » Automatically hides the Overlay after the game has started. Shows up again once you enter a new Queue.
 - Theme » Allows you to select one of the default themes or set it to custom to fully customize the theme. By default you can choose between Dark, White and Sakura Themes.
 - Discord RPC » Toggle whether to show that you are using the Overlay on Discord.
-- Developer Mode » Enables the Chrome Dev Tools and shows extra Tags after a Playername. Those Tags include the CF-Cache-Status and PX-Cache-Status Header for detailed Information about the data fetch.
+- Developer Mode » Enables the Chrome Dev Tools and shows extra Tags. Those Tags include the CF-Cache-Status and PX-Cache-Status Header for detailed Information about the data fetch.
 
 ## Previews
 
 ### Overlay Page
 
-![Preview](https://media.discordapp.net/attachments/1096522521756578053/1115671258953175090/image.png)
+![Overlay Page](https://cdn.discordapp.com/attachments/927561825141289043/1129055446012018738/image.png)
+
+### Statistics Page
+
+![Statistics Page 1](https://media.discordapp.net/attachments/927561825141289043/1129055711230435328/image.png)
+![Statistics Page2 ](https://media.discordapp.net/attachments/927561825141289043/1129055822295613570/image.png)
 
 ## Discord
 

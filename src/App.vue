@@ -192,15 +192,18 @@ setInterval(() => {
     if (Player?.cause) {
       if (Player.cause === "Invalid UUID or Username") {
         Players.push({
-          username: mcColorParser(`§c[NICKED] ${Player.username}`),
+          username: mcColorParser(`§c${Player.username}`),
+          tags: [{ text: "NICKED", tooltip: "This player is hiding their name!", color: "red-lighten-1" }],
         });
       } else if (Player.cause === "This Player never played Hypixel") {
         Players.push({
-          username: mcColorParser(`§c[NO-DATA] ${Player.username}`),
+          username: mcColorParser(`§c${Player.username}`),
+          tags: [{ text: "NICKED", tooltip: "This player never played on Hypixel!", color: "red-lighten-1" }],
         });
       } else {
         Players.push({
-          username: mcColorParser(`§4[FETCHING FAILED] ${Player.username}`),
+          username: mcColorParser(`§4${Player.username}`),
+          tags: [{ text: "FETCHING-FAILED", tooltip: "Some error occured while fetching!", color: "red-lighten-1" }],
         });
       }
     } else {
@@ -254,7 +257,7 @@ const updateHeaders = () => {
   // TODO: Dynamically adjust header width //
 
   headers.value = [
-    { title: "Tags", align: "start", key: "tags", width: "15%" },
+    { title: "Tags", align: "start", key: "tags", width: "20%" },
     { title: "Icons", align: "start", key: "icons", align: " d-none" },
     { title: "Level", align: "start", key: "level", align: " d-none" },
     { title: "FullLevel", align: "start", key: "fullLevel", align: " d-none" },
