@@ -1,5 +1,6 @@
 <div align="center">
     <h1>Pixelic Overlay</h1>
+    <a href="https://wakatime.com/badge/user/fdd9682f-df58-46bb-9b10-374601d7f52d/project/4b12db36-4d51-4adb-bc90-3b45c943c02d"><img src="https://wakatime.com/badge/user/fdd9682f-df58-46bb-9b10-374601d7f52d/project/4b12db36-4d51-4adb-bc90-3b45c943c02d.svg" alt="wakatime"></a>
 </div>
 <div align="center">
         <a href="https://discord.com/invite/2vAuyVvdwj"><img src="https://img.shields.io/discord/926873163411910746?color=blue&label=Discord&logo=discord&style=for-the-badge" alt="Discord"></a>
