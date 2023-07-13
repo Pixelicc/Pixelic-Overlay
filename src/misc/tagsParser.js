@@ -21,7 +21,7 @@ updateData().then(() => {});
 
 setInterval(async () => {
   await updateData();
-}, 15 * 60 * 1000);
+}, 5 * 60 * 1000);
 
 export default function (UUID) {
   if (UUID === undefined) return "";

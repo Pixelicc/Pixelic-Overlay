@@ -8,9 +8,11 @@ const ipcRenderer = useIpcRenderer();
 
 var players = [];
 var playersInQueue = []; // Needed as the API Requests can't be handled instantly
+var playersInParty = [];
 
 const removeDuplicates = () => {
   playersInQueue = [...new Set(playersInQueue)];
+  playersInParty = [...new Set(playersInParty)];
   players = [...new Map(players.map((player) => [player.username, player])).values()];
 };
 
@@ -41,11 +43,13 @@ const getRatio = (a, b) => {
   return Number(a / b);
 };
 
-const addPlayer = (player, forced) => {
+const addPlayer = (player, options) => {
+  if (!options) options = {};
   playersInQueue.push(player);
-  if (!players.some((p) => p.username === player) || forced) {
+  if (options.party) playersInParty.push(player);
+  if (!players.some((p) => p.username === player) || options.forced) {
     var headers = {};
-    if (forced) {
+    if (options.forced) {
       headers = {
         "Cache-Control": "no-cache",
         Expires: "0",
@@ -54,7 +58,7 @@ const addPlayer = (player, forced) => {
     axiosClient
       .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-Key": dataStore.get("pixelicKey"), ...headers } })
       .then((data) => {
-        if ((playersInQueue.includes(player) && inLobby !== true) || forced) {
+        if ((playersInQueue.includes(player) && inLobby !== true) || options.forced) {
           var Player = { success: true, username: data.data.username, UUID: data.data.UUID, rank: data.data.rank, plusColor: data.data.plusColor, plusPlusColor: data.data.plusPlusColor, ...data.data.Bedwars };
           Player.cores = {
             wins: Player.overall.wins - Player["4v4"].wins,
@@ -79,7 +83,13 @@ const addPlayer = (player, forced) => {
           if (dataStore.get("developerMode") === true) {
             Player.headers = data.headers;
           }
-          players.push(Player);
+
+          if (playersInParty.includes(player)) {
+            players.push({ ...Player, icons: [{ tooltip: "Party", color: "indigo", name: "mdi-account" }] });
+          } else {
+            players.push(Player);
+          }
+
           removeDuplicates();
         }
       })
@@ -106,7 +116,7 @@ const addPlayer = (player, forced) => {
             emerald: 0,
           },
         };
-        if (inLobby !== true || forced) {
+        if (inLobby !== true || options.forced) {
           players.push({ success: false, cause: error.response.data.cause, username: player, ...{ EXP: 500, level: 1, coins: 0, overall: defaultBedwarsObject, cores: defaultBedwarsObject, solo: defaultBedwarsObject, doubles: defaultBedwarsObject, threes: defaultBedwarsObject, fours: defaultBedwarsObject, "4v4": defaultBedwarsObject } });
           removeDuplicates();
         }
@@ -118,6 +128,9 @@ const removePlayer = (player) => {
   playersInQueue = playersInQueue.filter((p) => {
     return p !== player;
   });
+  playersInParty = playersInParty.filter((p) => {
+    return p !== player;
+  });
   players = players.filter((p) => {
     return p.username !== player;
   });
@@ -126,13 +139,10 @@ const removePlayer = (player) => {
 const clear = () => {
   playersInQueue = [];
   players = [];
-  addPlayer(dataStore.get("player"), true);
+  playersInParty = [];
+  addPlayer(dataStore.get("player"), { forced: true });
 };
 
-/**
- * (parameter) msg: string
- * @param {String} msg
- */
 const parseMessage = (msg) => {
   if (msg.indexOf("ONLINE:") !== -1 && msg.indexOf(",") !== -1) {
     clear();
@@ -166,18 +176,17 @@ const parseMessage = (msg) => {
       inLobby = true;
     }
   } else if ((msg.indexOf("Party Leader:") === 0 || msg.indexOf("Party Members:") === 0 || msg.indexOf("Party Moderators:") === 0) && inLobby) {
-    // '/pl' or '/p list' for Party stats
     let pmsg = msg.substring(msg.indexOf(":") + 2);
     let who = pmsg.split(" ");
     for (let i = 0; i < who.length; i++) {
       if (/^[a-zA-Z0-9_]+$/.test(who[i])) {
-        addPlayer(updateStringCondition(who[i]), true);
+        addPlayer(updateStringCondition(who[i]), { forced: true, party: true });
       }
     }
   } else if (msg.indexOf("joined the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
-    addPlayer(updateStringCondition(msg), true);
+    addPlayer(updateStringCondition(msg), { forced: true, party: true });
   } else if (msg.indexOf("left the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
-    removePlayer(updateStringCondition(msg));
+    removePlayer(updateStringCondition(msg), { party: true });
   } else if (msg.indexOf("You left the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
     clear();
   } else if (msg.indexOf("The party was disbanded") !== -1 && msg.indexOf(":") === -1 && inLobby) {

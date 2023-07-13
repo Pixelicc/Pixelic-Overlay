@@ -8,6 +8,16 @@ const ranks = {
   VIP: "§a[VIP]",
 };
 
+const ranksSimple = {
+  OWNER: "§c",
+  ADMIN: "§c",
+  YOUTUBER: "§c",
+  PIG_PLUS_PLUS_PLUS: "§d",
+  MVP: "§b",
+  VIP_PLUS: "§a",
+  VIP: "§a",
+};
+
 const plusColors = {
   GREEN: "§a",
   AQUA: "§b",
@@ -29,16 +39,16 @@ const plusColors = {
 
 export default function (rank, plusColor, plusPlusColor) {
   if (rank === null) {
-    return "§7";
+    return ["§7", "§7"];
   }
   if (rank === "MVP_PLUS_PLUS") {
-    return `${plusColors[plusPlusColor]}[MVP${plusColors[plusColor]}++${plusColors[plusPlusColor]}]`;
+    return [`${plusColors[plusPlusColor]}[MVP${plusColors[plusColor]}++${plusColors[plusPlusColor]}]`, "§6"];
   }
   if (rank === "MVP_PLUS") {
-    return `§b[MVP${plusColors[plusColor]}+§b]`;
+    return [`§b[MVP${plusColors[plusColor]}+§b]`, "§b"];
   }
   if (ranks[rank] !== undefined) {
-    return ranks[rank];
+    return [ranks[rank], ranksSimple[rank]];
   }
   return "";
 }

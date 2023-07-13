@@ -5,7 +5,7 @@ const Store = require("electron-store");
 const Tail = require("tail").Tail;
 const url = require("url");
 const discordRPC = require("./src/misc/discordRPC");
-const { isLatest, version } = require("./gitUpdate");
+const { isLatest } = require("./gitUpdate");
 
 Store.initRenderer();
 

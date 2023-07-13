@@ -42,10 +42,41 @@
       </v-btn>
     </v-toolbar>
     <router-view></router-view>
-    <v-data-table v-if="shown" :headers="headers" :items="players" :items-per-page="-1" class="elevation-1" density="compact" no-data-text="No Players found">
+    <v-data-table v-if="shown" :headers="headers" :items="players" :items-per-page="-1" class="datatable elevation-1" density="compact" no-data-text="No Players found">
       <template v-slot:item="{ item }">
         <tr>
-          <td><span v-html="item.columns.username"></span></td>
+          <td>
+            <v-tooltip v-for="tag in item.columns.tags" location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-chip v-bind="props" class="ma-1" size="x-small" :color="tag.color" :prepend-icon="tag.prependIcon" :append-icon="tag.appendIcon">
+                  {{ tag.text }}
+                </v-chip>
+              </template>
+              <span style="color: rgba(var(--v-theme-primary))">{{ tag.tooltip }}</span>
+            </v-tooltip>
+            <v-tooltip v-for="icon in item.columns.icons" location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-icon v-bind="props" class="ma-1" size="x-small" :color="icon.color">{{ icon.name }}</v-icon>
+              </template>
+              <span style="color: rgba(var(--v-theme-primary))">{{ icon.tooltip }}</span>
+            </v-tooltip>
+          </td>
+          <td>
+            <v-tooltip location="bottom">
+              <template v-slot:activator="{ props }">
+                <span v-bind="props" class="d-flex justify-center" v-html="item.columns.levelFormatted"></span>
+              </template>
+              <span v-html="item.columns.fullLevel"></span>
+            </v-tooltip>
+          </td>
+          <td>
+            <v-tooltip location="bottom">
+              <template v-slot:activator="{ props }">
+                <span v-bind="props" v-html="item.columns.username"></span>
+              </template>
+              <span v-html="item.columns.fullUsername"></span>
+            </v-tooltip>
+          </td>
           <td v-if="headers.some((h) => h.title === 'WS')"><span v-html="item.columns.WSFormatted"></span></td>
           <td v-if="headers.some((h) => h.title === 'Wins')"><span v-html="item.columns.winsFormatted"></span></td>
           <td v-if="headers.some((h) => h.title === 'WLR')"><span v-html="item.columns.WLRFormatted"></span></td>
@@ -86,7 +117,7 @@ shown.value = true;
 const turnOnTable = () => {
   shown.value = true;
   if (dataStore.get("player") !== "" && dataStore.get("pixelicKey") !== "") {
-    addPlayer(dataStore.get("player"), true);
+    addPlayer(dataStore.get("player"), { forced: true });
   }
 };
 
@@ -96,6 +127,8 @@ const turnOffTable = () => {
 
 var players = ref(0);
 players.value = [];
+
+addPlayer(dataStore.get("player", { forced: true }));
 
 ipcRenderer.on("mcLog", (event, msg) => {
   parseMessage(msg);
@@ -138,7 +171,7 @@ const forceAddPlayer = (player) => {
       if (shown.value === false) {
         ipcRenderer.send("viewStatistics", dataStore.get("player"));
       } else {
-        addPlayer(player.target["_value"], true);
+        addPlayer(player.target["_value"], { forced: true });
       }
     } else {
       searchErrors.value = ["Invalid Hypixel Username"];
@@ -149,7 +182,7 @@ const forceAddPlayer = (player) => {
   if (shown.value === false) {
     ipcRenderer.send("viewStatistics", player.target["_value"]);
   } else {
-    addPlayer(player.target["_value"], true);
+    addPlayer(player.target["_value"], { forced: true });
   }
 };
 
@@ -171,28 +204,28 @@ setInterval(() => {
         });
       }
     } else {
-      var tags = "";
-      tags += tagsParser(Player.UUID);
+      var tags = [...tagsParser(Player.UUID)];
       if (dataStore.get("developerMode") === true) {
-        tags += " ";
         if (Player.headers["cf-cache-status"] === "HIT") {
-          tags += "§a[CF-HIT]";
+          tags.push({ text: "CF", tooltip: "CF-Cache-HIT", color: "green-lighten-1" });
         } else if (Player.headers["cf-cache-status"] === "MISS") {
-          tags += "§4[CF-MISS]";
+          tags.push({ text: "CF", tooltip: "CF-Cache-MISS", color: "orange-lighten-2" });
         } else {
-          tags += "§c[CF-EXPIRED]";
+          tags.push({ text: "CF", tooltip: "CF-Cache-EXPIRED", color: "red-lighten-1" });
         }
-        tags += " ";
         if (Player.headers["px-cache-status"] === "HIT") {
-          tags += "§a[PX-HIT]";
+          tags.push({ text: "PX", tooltip: "PX-Cache-HIT", color: "green-lighten-1" });
         } else {
-          tags += "§4[PX-MISS]";
+          tags.push({ text: "PX", tooltip: "PX-Cache-MISS", color: "red-lighten-1" });
         }
       }
 
       Players.push({
+        fullUsername: mcColorParser(`${rankParser(Player.rank, Player.plusColor, Player.plusPlusColor)[0]} ${Player.username}`),
+        username: mcColorParser(`${rankParser(Player.rank, Player.plusColor, Player.plusPlusColor)[1]} ${Player.username}`),
         level: Math.floor(Player.level),
-        username: mcColorParser(`${starParser(Math.floor(Player.level))} ${rankParser(Player.rank, Player.plusColor, Player.plusPlusColor)} ${Player.username} ${tags}`),
+        fullLevel: mcColorParser(starParser(Math.floor(Player.level))[0]),
+        levelFormatted: mcColorParser(starParser(Math.floor(Player.level))[1]),
         WS: Player[dataStore.get("mode").toLowerCase()].winstreak,
         WSFormatted: mcColorParser(statColorParser(Player[dataStore.get("mode").toLowerCase()].winstreak, "WS", dataStore.get("mode").toLowerCase())),
         wins: Player[dataStore.get("mode").toLowerCase()].wins,
@@ -205,6 +238,8 @@ setInterval(() => {
         FKDRFormatted: mcColorParser(statColorParser(Player[dataStore.get("mode").toLowerCase()].FKDR.toFixed(2), "FKDR")),
         BBLR: Player[dataStore.get("mode").toLowerCase()].BBLR.toFixed(2),
         BBLRFormatted: mcColorParser(statColorParser(Player[dataStore.get("mode").toLowerCase()].BBLR.toFixed(2), "BBLR")),
+        tags: tags,
+        icons: Player.icons,
       });
     }
   }
@@ -216,20 +251,33 @@ var headers = ref(0);
 const updateHeaders = () => {
   const selectedHeaders = dataStore.get("colums");
 
+  // TODO: Dynamically adjust header width //
+
   headers.value = [
-    { title: "Name", align: "start", key: "level" },
-    { title: "Name", align: "start", key: "username", align: " d-none" },
+    { title: "Tags", align: "start", key: "tags", width: "15%" },
+    { title: "Icons", align: "start", key: "icons", align: " d-none" },
+    { title: "Level", align: "start", key: "level", align: " d-none" },
+    { title: "FullLevel", align: "start", key: "fullLevel", align: " d-none" },
+    { title: "Level", align: "start", key: "levelFormatted", width: "10%" },
+    { title: "FullUsername", align: "start", key: "fullUsername", align: " d-none" },
+    { title: "Name", align: "start", key: "username", width: "20%" },
   ];
 
-  if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "start", key: "WS", width: "20px" }, { title: "WS", align: "start", key: "WSFormatted", align: " d-none" });
-  if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "start", key: "wins" }, { title: "Wins", align: "start", key: "winsFormatted", align: " d-none" });
-  if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "start", key: "WLR" }, { title: "WLR", align: "start", key: "WLRFormatted", align: " d-none" });
-  if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "start", key: "finalKills" }, { title: "Finals", align: "start", key: "finalKillsFormatted", align: " d-none" });
-  if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "start", key: "FKDR" }, { title: "FKDR", align: "start", key: "FKDRFormatted", align: " d-none" });
-  if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "start", key: "BBLR" }, { title: "BBLR", align: "start", key: "BBLRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "start", key: "WS", width: "8%" }, { title: "WS", align: "start", key: "WSFormatted", align: " d-none" });
+  if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "start", key: "wins", width: "12%" }, { title: "Wins", align: "start", key: "winsFormatted", align: " d-none" });
+  if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "start", key: "WLR", width: "12%" }, { title: "WLR", align: "start", key: "WLRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "start", key: "finalKills", width: "12%" }, { title: "Finals", align: "start", key: "finalKillsFormatted", align: " d-none" });
+  if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "start", key: "FKDR", width: "12%" }, { title: "FKDR", align: "start", key: "FKDRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "start", key: "BBLR", width: "12%" }, { title: "BBLR", align: "start", key: "BBLRFormatted", align: " d-none" });
 };
 
 updateHeaders();
 
 setInterval(() => updateHeaders(), 1000);
 </script>
+
+<style>
+.datatable table {
+  table-layout: fixed;
+}
+</style>

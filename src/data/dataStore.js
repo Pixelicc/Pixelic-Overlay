@@ -55,7 +55,7 @@ const store = new Store({
     },
     colums: {
       type: "array",
-      default: ["Wins", "WLR", "Finals", "FKDR", "BBLR"],
+      default: ["WS", "Wins", "WLR", "Finals", "FKDR", "BBLR"],
     },
     windowLocation: {
       type: "object",
