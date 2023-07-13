@@ -190,15 +190,20 @@ setInterval(() => {
   const Players = [];
   for (var Player of getPlayers()) {
     if (Player?.cause) {
-      if (Player.cause === "Invalid UUID or Username") {
+      if (Player.cause.toLowerCase() === "invalid uuid or username") {
         Players.push({
           username: mcColorParser(`§c${Player.username}`),
           tags: [{ text: "NICKED", tooltip: "This player is hiding their name!", color: "red-lighten-1" }],
         });
-      } else if (Player.cause === "This Player never played Hypixel") {
+      } else if (Player.cause.toLowerCase() === "this player never played hypixel") {
         Players.push({
           username: mcColorParser(`§c${Player.username}`),
-          tags: [{ text: "NICKED", tooltip: "This player never played on Hypixel!", color: "red-lighten-1" }],
+          tags: [{ text: "NO-DATA", tooltip: "This player never played on Hypixel!", color: "red-lighten-1" }],
+        });
+      } else if (Player.cause.toLowerCase() === "invalid api-key") {
+        Players.push({
+          username: mcColorParser(`§c${Player.username}`),
+          tags: [{ text: "INVALID API-KEY", tooltip: "You are using an invalid API-Key!", color: "red-lighten-1" }],
         });
       } else {
         Players.push({
