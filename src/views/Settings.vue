@@ -143,10 +143,10 @@ const setMode = (mode) => {
 const getMode = ref(0);
 getMode.value = dataStore.get("mode").charAt(0).toUpperCase() + dataStore.get("mode").slice(1);
 
-const clients = ["Vanilla", "Lunar", "Badlion", "Custom"];
+const clients = ["Vanilla", "Lunar", "Badlion", "Custom (Requires restart after location change)"];
 
 const setClient = (client) => {
-  dataStore.set("client", client);
+  dataStore.set("client", client.split(" ")[0]);
   ipcRenderer.send("logChange", null);
 };
 
@@ -155,7 +155,6 @@ getClient.value = dataStore.get("client").charAt(0).toUpperCase() + dataStore.ge
 
 const setCustomLogFile = (path) => {
   dataStore.set("customLogFilePath", path);
-  //ipcRenderer.send("logChange", null);
 };
 
 const getCustomLogFile = ref(0);

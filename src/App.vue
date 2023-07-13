@@ -262,13 +262,13 @@ const updateHeaders = () => {
   // TODO: Dynamically adjust header width //
 
   headers.value = [
-    { title: "Tags", align: "start", key: "tags", width: "20%" },
+    { title: "Tags", align: "start", key: "tags", sortable: false, width: "20%" },
     { title: "Icons", align: "start", key: "icons", align: " d-none" },
     { title: "Level", align: "start", key: "level", align: " d-none" },
     { title: "FullLevel", align: "start", key: "fullLevel", align: " d-none" },
     { title: "Level", align: "start", key: "levelFormatted", width: "8%" },
     { title: "FullUsername", align: "start", key: "fullUsername", align: " d-none" },
-    { title: "Name", align: "start", key: "username", width: "23%" },
+    { title: "Name", align: "start", key: "username", sortable: false, width: "23%" },
   ];
 
   if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "start", key: "WS", width: "8%" }, { title: "WS", align: "start", key: "WSFormatted", align: " d-none" });
