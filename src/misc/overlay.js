@@ -59,7 +59,7 @@ const addPlayer = (player, options) => {
       .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-Key": dataStore.get("pixelicKey"), ...headers } })
       .then((data) => {
         if ((playersInQueue.includes(player) && inLobby !== true) || options.forced) {
-          var Player = { success: true, username: data.data.username, UUID: data.data.UUID, rank: data.data.rank, plusColor: data.data.plusColor, plusPlusColor: data.data.plusPlusColor, ...data.data.Bedwars };
+          var Player = { success: true, username: data.data.username, UUID: data.data.UUID, rank: data.data.rank, plusColor: data.data.plusColor, plusPlusColor: data.data.plusPlusColor, icons: [], ...data.data.Bedwars };
           Player.cores = {
             wins: Player.overall.wins - Player["4v4"].wins,
             losses: Player.overall.losses - Player["4v4"].losses,
@@ -84,11 +84,10 @@ const addPlayer = (player, options) => {
             Player.headers = data.headers;
           }
 
-          if (playersInParty.includes(player)) {
-            players.push({ ...Player, icons: [{ tooltip: "Party", color: "indigo", name: "mdi-account" }] });
-          } else {
-            players.push(Player);
-          }
+          if (playersInParty.includes(player)) Player.icons.push({ tooltip: "Party", color: "indigo", name: "mdi-account" });
+          if (options.mention) Player.icons.push({ tooltip: "This person mentioned you!", color: "yellow-lighten-3", name: "mdi-at" });
+
+          players.push(Player);
 
           removeDuplicates();
         }
@@ -121,6 +120,8 @@ const clear = () => {
   addPlayer(dataStore.get("player"), { forced: true });
 };
 
+var lastMessage = "";
+
 const parseMessage = (msg) => {
   if (msg.indexOf("ONLINE:") !== -1 && msg.indexOf(",") !== -1) {
     clear();
@@ -145,8 +146,8 @@ const parseMessage = (msg) => {
     if (dataStore.get("hideIngame") === true) {
       ipcRenderer.send("windowEvent", "show");
     }
-  } else if ((msg.indexOf("joined the lobby!") !== -1 || msg.indexOf("rewards!") !== -1) && msg.indexOf(":") === -1) {
-    if (inLobby == false) {
+  } else if ((msg.indexOf("joined the lobby!") !== -1 || msg.indexOf("rewards!") !== -1 || (lastMessage.trim().length === 0 && msg.trim().length === 0)) && msg.indexOf(":") === -1) {
+    if (inLobby === false) {
       clear();
       if (dataStore.get("hideIngame") === true) {
         ipcRenderer.send("windowEvent", "show");
@@ -169,6 +170,8 @@ const parseMessage = (msg) => {
     clear();
   } else if ((msg.indexOf("The party was disbanded") !== -1 || msg.indexOf("has disbanded the party!") !== -1) && msg.indexOf(":") === -1 && inLobby) {
     clear();
+  } else if (msg.toLowerCase().indexOf(dataStore.get("player").toLowerCase()) !== -1 && msg.indexOf("Party") === -1 && msg.indexOf(":") > -1 && inLobby) {
+    addPlayer(msg.slice(0, msg.indexOf(":")).split(" ").slice(-1)[0], { forced: true, mention: true });
   } else if ((msg.indexOf("FINAL KILL") !== -1 || msg.indexOf("disconnected") !== -1) && msg.indexOf(":") === -1) {
     inLobby = false;
     removePlayer(msg.split(" ")[0]);
@@ -180,6 +183,7 @@ const parseMessage = (msg) => {
       ipcRenderer.send("windowEvent", "hide");
     }
   }
+  lastMessage = msg;
 };
 
 const getPlayers = () => {
