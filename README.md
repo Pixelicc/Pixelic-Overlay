@@ -28,10 +28,10 @@
 ### General features
 
 - Shows stats of players in your lobby in seconds
-- Works with Lunarclient, Badlion, Vanilla and any custom selected log file.
+- Works with Lunarclient, Badlion, Vanilla and any custom selected log file
 - Resizable, movable, and minimizable
 - Easy to use and setup
-- Shows nicked players
+- Can show nicked players, party members and players that mentioned you in chat
 - Color-coded Stats in terms of skill level
 - Detailed statistics page
 
