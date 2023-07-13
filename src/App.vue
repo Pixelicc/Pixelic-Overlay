@@ -263,7 +263,7 @@ const updateHeaders = () => {
     { title: "FullLevel", align: "start", key: "fullLevel", align: " d-none" },
     { title: "Level", align: "start", key: "levelFormatted", width: "8%" },
     { title: "FullUsername", align: "start", key: "fullUsername", align: " d-none" },
-    { title: "Name", align: "start", key: "username", width: "20%" },
+    { title: "Name", align: "start", key: "username", width: "23%" },
   ];
 
   if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "start", key: "WS", width: "8%" }, { title: "WS", align: "start", key: "WSFormatted", align: " d-none" });
