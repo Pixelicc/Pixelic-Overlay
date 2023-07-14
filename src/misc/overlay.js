@@ -199,11 +199,11 @@ const refreshPlayers = () => {
   if (refreshing === false) {
     refreshing = true;
     for (const player of players) {
-      addPlayer(player.username, true);
+      addPlayer(player.username, { forced: true });
     }
-    new Promise((r) => setTimeout(r, 1000)).then(() => {
+    setTimeout(() => {
       refreshing = false;
-    });
+    }, 1000);
   }
 };
 
