@@ -163,8 +163,10 @@ const parseMessage = (msg) => {
         addPlayer(updateStringCondition(who[i]), { forced: true, party: true });
       }
     }
+    addPlayer(dataStore.get("player"), { forced: true, party: true });
   } else if (msg.indexOf("joined the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
     addPlayer(updateStringCondition(msg), { forced: true, party: true });
+    addPlayer(dataStore.get("player"), { forced: true, party: true });
   } else if (msg.indexOf("left the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
     removePlayer(updateStringCondition(msg));
   } else if (msg.indexOf("You left the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
