@@ -84,7 +84,7 @@ const addPlayer = (player, options) => {
             Player.headers = data.headers;
           }
 
-          if (playersInParty.includes(player)) Player.icons.push({ tooltip: "Party", color: "indigo", name: "mdi-account" });
+          if (playersInParty.includes(player)) Player.icons.push({ tooltip: "Party", color: "indigo", name: "mdi-account-group" });
           if (options.mention) Player.icons.push({ tooltip: "This person mentioned you!", color: "yellow-lighten-3", name: "mdi-at" });
 
           players.push(Player);

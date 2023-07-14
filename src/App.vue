@@ -42,15 +42,13 @@
       </v-btn>
     </v-toolbar>
     <router-view></router-view>
-    <v-data-table v-if="shown" :headers="headers" :items="players" :items-per-page="-1" class="datatable elevation-1" density="compact" no-data-text="No Players found">
+    <v-data-table v-if="shown" :headers="headers" :items="players" :items-per-page="-1" class="datatable elevation-1" density="compact" no-data-text="No Players found" sort-asc-icon="mdi-chevron-up" sort-desc-icon="mdi-chevron-down">
       <template v-slot:item="{ item }">
         <tr>
-          <td>
+          <td class="align-center justify-center">
             <v-tooltip v-for="tag in item.columns.tags" location="bottom">
               <template v-slot:activator="{ props }">
-                <v-chip v-bind="props" class="ma-1" size="x-small" :color="tag.color" :prepend-icon="tag.prependIcon" :append-icon="tag.appendIcon">
-                  {{ tag.text }}
-                </v-chip>
+                <v-chip v-bind="props" class="ma-1" size="x-small" :color="tag.color" :prepend-icon="tag.prependIcon" :append-icon="tag.appendIcon">{{ tag.text }}</v-chip>
               </template>
               <span style="color: rgba(var(--v-theme-primary))">{{ tag.tooltip }}</span>
             </v-tooltip>
@@ -64,7 +62,7 @@
           <td>
             <v-tooltip location="bottom">
               <template v-slot:activator="{ props }">
-                <span v-bind="props" class="d-flex justify-center" v-html="item.columns.levelFormatted"></span>
+                <span v-bind="props" v-html="item.columns.levelFormatted"></span>
               </template>
               <span v-html="item.columns.fullLevel"></span>
             </v-tooltip>
@@ -262,21 +260,21 @@ const updateHeaders = () => {
   // TODO: Dynamically adjust header width //
 
   headers.value = [
-    { title: "Tags", align: "start", key: "tags", sortable: false, width: "20%" },
-    { title: "Icons", align: "start", key: "icons", align: " d-none" },
-    { title: "Level", align: "start", key: "level", align: " d-none" },
-    { title: "FullLevel", align: "start", key: "fullLevel", align: " d-none" },
-    { title: "Level", align: "start", key: "levelFormatted", width: "8%" },
-    { title: "FullUsername", align: "start", key: "fullUsername", align: " d-none" },
-    { title: "Name", align: "start", key: "username", sortable: false, width: "23%" },
+    { title: "Tags", align: "center", key: "tags", sortable: false, width: "20%" },
+    { title: "Icons", key: "icons", align: " d-none" },
+    { title: "Level", key: "level", align: " d-none" },
+    { title: "FullLevel", key: "fullLevel", align: " d-none" },
+    { title: "Level", align: "center", key: "levelFormatted", width: "10%" },
+    { title: "FullUsername", key: "fullUsername", align: " d-none" },
+    { title: "Name", align: "center", key: "username", sortable: false, width: "25%" },
   ];
 
-  if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "start", key: "WS", width: "8%" }, { title: "WS", align: "start", key: "WSFormatted", align: " d-none" });
-  if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "start", key: "wins", width: "10%" }, { title: "Wins", align: "start", key: "winsFormatted", align: " d-none" });
-  if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "start", key: "WLR", width: "10%" }, { title: "WLR", align: "start", key: "WLRFormatted", align: " d-none" });
-  if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "start", key: "finalKills", width: "10%" }, { title: "Finals", align: "start", key: "finalKillsFormatted", align: " d-none" });
-  if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "start", key: "FKDR", width: "10%" }, { title: "FKDR", align: "start", key: "FKDRFormatted", align: " d-none" });
-  if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "start", key: "BBLR", width: "10%" }, { title: "BBLR", align: "start", key: "BBLRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "center", key: "WS", width: "8%" }, { title: "WS", key: "WSFormatted", align: " d-none" });
+  if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "center", key: "wins", width: "10%" }, { title: "Wins", key: "winsFormatted", align: " d-none" });
+  if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "center", key: "WLR", width: "10%" }, { title: "WLR", key: "WLRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "center", key: "finalKills", width: "10%" }, { title: "Finals", key: "finalKillsFormatted", align: " d-none" });
+  if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "center", key: "FKDR", width: "10%" }, { title: "FKDR", key: "FKDRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "center", key: "BBLR", width: "10%" }, { title: "BBLR", key: "BBLRFormatted", align: " d-none" });
 };
 
 updateHeaders();
@@ -286,6 +284,18 @@ setInterval(() => updateHeaders(), 1000);
 
 <style>
 .datatable table {
+  text-align: center;
   table-layout: fixed;
+}
+.datatable thead th {
+  font-size: 12px !important;
+}
+.v-data-table .v-table__wrapper > table > thead > tr > th:not(.v-data-table__th--sorted) .v-data-table-header__sort-icon,
+.v-data-table .v-table__wrapper > table tbody > tr > th:not(.v-data-table__th--sorted) .v-data-table-header__sort-icon {
+  width: 0;
+}
+.v-data-table .v-table__wrapper > table > thead > tr > th:not(.v-data-table__th--sorted):hover .v-data-table-header__sort-icon,
+.v-data-table .v-table__wrapper > table tbody > tr > th:not(.v-data-table__th--sorted):hover .v-data-table-header__sort-icon {
+  opacity: 0 !important;
 }
 </style>
