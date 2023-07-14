@@ -166,7 +166,7 @@ const parseMessage = (msg) => {
   } else if (msg.indexOf("joined the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
     addPlayer(updateStringCondition(msg), { forced: true, party: true });
   } else if (msg.indexOf("left the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
-    removePlayer(updateStringCondition(msg), { party: true });
+    removePlayer(updateStringCondition(msg));
   } else if (msg.indexOf("You left the party") !== -1 && msg.indexOf(":") === -1 && inLobby) {
     clear();
   } else if ((msg.indexOf("The party was disbanded") !== -1 || msg.indexOf("has disbanded the party!") !== -1) && msg.indexOf(":") === -1 && inLobby) {
