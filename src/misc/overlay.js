@@ -94,6 +94,7 @@ const addPlayer = (player, options) => {
       })
       .catch((error) => {
         if (inLobby !== true || options.forced) {
+          if (error.response.data.cause.toLowerCase() === "this player never played hypixel" && inLobby === false) error.response.data.cause = "Invalid UUID or Username"; // Needed if there is an actual player called like a nick but has never played on Hypixel
           players.push({ success: false, cause: error.response.data.cause, username: player });
           removeDuplicates();
         }
