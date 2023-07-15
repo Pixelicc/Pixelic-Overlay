@@ -4,8 +4,8 @@
 </div>
 <div align="center">
         <a href="https://discord.com/invite/2vAuyVvdwj"><img src="https://img.shields.io/discord/926873163411910746?color=blue&label=Discord&logo=discord&style=for-the-badge" alt="Discord"></a>
-        <a href="https://github.com/Pixelicc/Pixelic-Overlay"><img src="https://img.shields.io/github/stars/pixelicc/Pixelic-Overlay?style=for-the-badge" alt="Stars"></a>
-    <a href="https://github.com/Pixelicc/Pixelic-Overlay"><img src="https://img.shields.io/github/downloads/pixelicc/Pixelic-Overlay/total?style=for-the-badge" alt="Downloads"></a>
+        <a href="https://github.com/Pixelicc/Pixelic-Overlay/stargazers"><img src="https://img.shields.io/github/stars/pixelicc/Pixelic-Overlay?style=for-the-badge" alt="Stars"></a>
+    <a href="https://github.com/Pixelicc/Pixelic-Overlay/releases"><img src="https://img.shields.io/github/downloads/pixelicc/Pixelic-Overlay/total?style=for-the-badge" alt="Downloads"></a>
 </div>
 
 ## Sections
