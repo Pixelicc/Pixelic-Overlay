@@ -189,8 +189,8 @@ const updateData = async () => {
     if (historical.data[0].date === new Date().toISOString().slice(0, 10)) dailyData = historical.data[0];
 
     for (const day of historical.data.slice(0, 7).reverse()) {
-      var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-      var lastSunday = new Date(today.setDate(today.getDate() - today.getDay())).setHours(0, 0, 0, 0);
+      var today = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate());
+      var lastSunday = new Date(today.setDate(today.getUTCDate() - today.getUTCDay())).setUTCHours(0, 0, 0, 0);
       if (day.timestamp * 1000 > lastSunday.valueOf()) {
         weeklyData = day;
         break;
@@ -198,7 +198,7 @@ const updateData = async () => {
     }
 
     for (const day of historical.data.slice(0, 31).reverse()) {
-      if (new Date(day.timestamp * 1000).getMonth() === new Date().getMonth()) {
+      if (new Date(day.timestamp * 1000).getUTCMonth() === new Date().getUTCMonth()) {
         monthlyData = day;
         break;
       }
@@ -229,7 +229,7 @@ const updateData = async () => {
       const yesterday = parsedWeeklyData[day - 1];
 
       const date = new Date();
-      date.setDate(date.getDate() - 1 * (parsedWeeklyData.length - day - 1));
+      date.setDate(date.getUTCDate() - 1 * (parsedWeeklyData.length - day - 1));
 
       daysWeekly.push(`${date.toISOString().slice(0, 10)} - ${(currentDay.Bedwars.level - yesterday.Bedwars.level).toFixed(2)}✫`);
       winsWeekly.push(currentDay.Bedwars.overall.wins - yesterday.Bedwars.overall.wins);
@@ -285,9 +285,9 @@ const updateData = async () => {
     var firstMonth = null;
 
     for (const day in monthlyChartData) {
-      if (monthlyChartData[day].timestamp < Math.floor(new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0).valueOf() / 1000)) continue;
+      if (monthlyChartData[day].timestamp < Math.floor(new Date(new Date().getUTCFullYear(), 0, 1, 0, 0, 0, 0).valueOf() / 1000)) continue;
 
-      const getMonth = new Date(monthlyChartData[day].timestamp * 1000).getMonth();
+      const getMonth = new Date(monthlyChartData[day].timestamp * 1000).getUTCMonth();
 
       if (firstMonth === null) {
         firstMonth = getMonth;
