@@ -45,16 +45,17 @@ const getRatio = (a, b) => {
 
 const addPlayer = (player, options) => {
   if (!options) options = {};
-  playersInQueue.push(player);
+  if (!options.forced) playersInQueue.push(player);
   if (options.party) playersInParty.push(player);
   if (!players.some((p) => p.username === player) || options.forced) {
     axiosClient
       .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-Key": dataStore.get("pixelicKey"), "cache-control": "no-cache" } })
       .then((data) => {
         if ((playersInQueue.includes(player) && inLobby !== true) || options.forced) {
-          var Player = { success: true, username: data.data.username, UUID: data.data.UUID, rank: data.data.rank, plusColor: data.data.plusColor, plusPlusColor: data.data.plusPlusColor, icons: [], ...data.data.Bedwars };
+          var Player = { success: true, username: data.data.username, UUID: data.data.UUID, rank: data.data.rank, plusColor: data.data.plusColor, plusPlusColor: data.data.plusPlusColor, APISettings: data.data.APISettings, icons: [], ...data.data.Bedwars };
           Player.cores = {
             wins: Player.overall.wins - Player["4v4"].wins,
+            winstreak: Player.overall.winstreak,
             losses: Player.overall.losses - Player["4v4"].losses,
             WLR: getRatio(Player.overall.wins - Player["4v4"].wins, Player.overall.losses - Player["4v4"].losses),
             finalKills: Player.overall.finalKills - Player["4v4"].finalKills,
