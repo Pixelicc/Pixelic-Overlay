@@ -233,7 +233,7 @@ setInterval(() => {
         fullLevel: mcColorParser(starParser(Math.floor(Player.level))[0]),
         levelFormatted: mcColorParser(starParser(Math.floor(Player.level))[1]),
         WS: Player[dataStore.get("mode").toLowerCase()].winstreak,
-        WSFormatted: mcColorParser(statColorParser(Player[dataStore.get("mode").toLowerCase()].winstreak, "WS", dataStore.get("mode").toLowerCase())),
+        WSFormatted: mcColorParser(Player.APISettings.winstreaksHidden ? "§c?" : statColorParser(Player[dataStore.get("mode").toLowerCase()].winstreak, "WS", dataStore.get("mode").toLowerCase())),
         wins: Player[dataStore.get("mode").toLowerCase()].wins,
         winsFormatted: mcColorParser(statColorParser(Player[dataStore.get("mode").toLowerCase()].wins, "wins")),
         WLR: Player[dataStore.get("mode").toLowerCase()].WLR.toFixed(2),
@@ -272,7 +272,7 @@ const updateHeaders = () => {
   if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "center", key: "WS", width: "8%" }, { title: "WS", key: "WSFormatted", align: " d-none" });
   if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "center", key: "wins", width: "10%" }, { title: "Wins", key: "winsFormatted", align: " d-none" });
   if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "center", key: "WLR", width: "10%" }, { title: "WLR", key: "WLRFormatted", align: " d-none" });
-  if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "center", key: "finalKills", width: "10%" }, { title: "Finals", key: "finalKillsFormatted", align: " d-none" });
+  if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "center", key: "finalKills", width: "12%" }, { title: "Finals", key: "finalKillsFormatted", align: " d-none" });
   if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "center", key: "FKDR", width: "10%" }, { title: "FKDR", key: "FKDRFormatted", align: " d-none" });
   if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "center", key: "BBLR", width: "10%" }, { title: "BBLR", key: "BBLRFormatted", align: " d-none" });
 };
