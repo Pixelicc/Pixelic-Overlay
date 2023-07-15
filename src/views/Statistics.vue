@@ -307,8 +307,8 @@ const updateData = async () => {
       const lastMonth = parsedMonthlyData[month - 1];
 
       const date = new Date();
-      date.setDate(1);
-      date.setMonth(date.getMonth() - 1 * (parsedMonthlyData.length - month - (new Date(parsedMonthlyData[parsedMonthlyData.length - 2].timestamp * 1000).getMonth() !== new Date().getMonth() - 1 ? 1 : 0)));
+      date.setUTCDate(1);
+      date.setMonth(date.getUTCMonth() - 1 * (parsedMonthlyData.length - month - (new Date(parsedMonthlyData[parsedMonthlyData.length - 2].timestamp * 1000).getUTCMonth() !== new Date().getUTCMonth() - 1 ? 1 : 0)));
 
       daysMonthly.push(`${date.toISOString().slice(0, 7)} - ${(currentMonth.Bedwars.level - lastMonth.Bedwars.level).toFixed(2)}✫`);
       winsMonthly.push(currentMonth.Bedwars.overall.wins - lastMonth.Bedwars.overall.wins);
