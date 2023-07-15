@@ -175,7 +175,7 @@ const updateData = async () => {
 
   playerFormatted.value = "N/A";
 
-  const playerData = await axios.get(`https://api.pixelic.de/hypixel/v1/overlay/player/${playerName}`, { headers: { "X-API-Key": dataStore.get("pixelicKey") } }).catch((error) => console.error("Invalid Hypixel Player"));
+  const playerData = await axios.get(`https://api.pixelic.de/hypixel/v1/overlay/player/${playerName}`, { headers: { "X-API-Key": dataStore.get("pixelicKey"), "cache-control": "no-cache" } }).catch((error) => console.error("Invalid Hypixel Player"));
   playerFormatted.value = mcColorParser(`${starParser(Math.floor(playerData.data.Bedwars.level))[0]} ${rankParser(playerData.data.rank, playerData.data.plusColor, playerData.data.plusPlusColor)[0]} ${playerData.data.username}`);
 
   axios.get(`https://api.pixelic.de/hypixel/v1/player/${playerName}/all`, { headers: { "X-API-Key": dataStore.get("pixelicKey") } }).then((historical) => {

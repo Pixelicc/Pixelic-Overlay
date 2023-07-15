@@ -25,7 +25,7 @@ module.exports = {
 
       const setActivity = async (player, key) => {
         axios
-          .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-Key": key } })
+          .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-Key": key, "cache-control": "no-cache" } })
           .then(async (res) => {
             res = res.data;
 

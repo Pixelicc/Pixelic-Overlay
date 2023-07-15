@@ -48,15 +48,8 @@ const addPlayer = (player, options) => {
   playersInQueue.push(player);
   if (options.party) playersInParty.push(player);
   if (!players.some((p) => p.username === player) || options.forced) {
-    var headers = {};
-    if (options.forced) {
-      headers = {
-        "Cache-Control": "no-cache",
-        Expires: "0",
-      };
-    }
     axiosClient
-      .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-Key": dataStore.get("pixelicKey"), ...headers } })
+      .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-Key": dataStore.get("pixelicKey"), "cache-control": "no-cache" } })
       .then((data) => {
         if ((playersInQueue.includes(player) && inLobby !== true) || options.forced) {
           var Player = { success: true, username: data.data.username, UUID: data.data.UUID, rank: data.data.rank, plusColor: data.data.plusColor, plusPlusColor: data.data.plusPlusColor, icons: [], ...data.data.Bedwars };
