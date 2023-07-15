@@ -126,7 +126,7 @@ const turnOffTable = () => {
 var players = ref(0);
 players.value = [];
 
-addPlayer(dataStore.get("player", { forced: true }));
+addPlayer(dataStore.get("player"), { forced: true });
 
 ipcRenderer.on("mcLog", (event, msg) => {
   parseMessage(msg);
@@ -215,9 +215,9 @@ setInterval(() => {
         if (Player.headers["cf-cache-status"] === "HIT") {
           tags.push({ text: "CF", tooltip: "CF-Cache-HIT", color: "green-lighten-1" });
         } else if (Player.headers["cf-cache-status"] === "MISS") {
-          tags.push({ text: "CF", tooltip: "CF-Cache-MISS", color: "orange-lighten-2" });
+          tags.push({ text: "CF", tooltip: "CF-Cache-MISS", color: "red-lighten-1" });
         } else {
-          tags.push({ text: "CF", tooltip: "CF-Cache-EXPIRED", color: "red-lighten-1" });
+          tags.push({ text: "CF", tooltip: "CF-Cache-EXPIRED", color: "orange-lighten-2" });
         }
         if (Player.headers["px-cache-status"] === "HIT") {
           tags.push({ text: "PX", tooltip: "PX-Cache-HIT", color: "green-lighten-1" });
