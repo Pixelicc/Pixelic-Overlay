@@ -21,12 +21,11 @@ const axiosClient = axios.create();
 axiosRetry(axiosClient, {
   retries: 10,
   retryDelay: (retryCount, error) => {
-    return Number(error.response.headers["x-ratelimit-reset"]) * 1000;
+    if (error?.response?.headers?.["x-ratelimit-reset"]) return Number(error.response.headers["x-ratelimit-reset"]) * 1000;
+    return axiosRetry.exponentialDelay(retryCount);
   },
   retryCondition: (error) => {
-    if (error?.response?.status) {
-      return error.response.status === 429;
-    }
+    if (error?.response?.status) return error.response.status === 429 || error.response.status === 502 || error.response.status === 503 || error.response.status === 504;
     return false;
   },
 });
@@ -34,10 +33,10 @@ axiosRetry(axiosClient, {
 var inLobby = false;
 
 const getRatio = (a, b) => {
-  if (a == 0) {
+  if (a === 0) {
     return 0;
   }
-  if (b == 0) {
+  if (b === 0) {
     return a;
   }
   return Number(a / b);
