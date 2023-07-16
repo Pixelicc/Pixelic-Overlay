@@ -1,4 +1,4 @@
-export default function (value, stat, mode) {
+export default (value, stat, mode) => {
   if (stat === "wins") {
     if (value >= 25_000) return "§5" + value.toLocaleString("en-US");
     if (value >= 10_000) return "§d" + value.toLocaleString("en-US");
@@ -79,4 +79,4 @@ export default function (value, stat, mode) {
     if (value >= 1) return "§f" + value;
     if (value >= 0) return "§7" + value;
   }
-}
+};

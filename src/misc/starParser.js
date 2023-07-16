@@ -1,4 +1,4 @@
-export default function (star) {
+export default (star) => {
   const prestigeColors = [
     { req: 0, fn: (n) => `§7[${n}✫]` },
     { req: 100, fn: (n) => `§f[${n}✫]` },
@@ -248,4 +248,4 @@ export default function (star) {
   const index = prestigeColors.findIndex(({ req }, index, arr) => star >= req && (arr[index + 1] && star < arr[index + 1].req) | !arr[index + 1]);
 
   return [prestigeColors[index].fn(star), prestigeColors[index].fn(star).replaceAll("[", "").replaceAll("]", "").replaceAll("✫", "").replaceAll("✪", "").replaceAll("⚝", "").replaceAll("✥", "")];
-}
+};

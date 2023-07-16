@@ -17,10 +17,10 @@ const colors = {
   f: "#FFFFFF",
 };
 
-export default function (text) {
+export default (text) => {
   var splitText = text.split("§").slice(1);
   var finalText = "";
 
   splitText.forEach((parts) => (finalText += `<span style="color:${colors[parts[0]]}">${parts.split("").slice(1).join("")}</span>`));
   return finalText;
-}
+};

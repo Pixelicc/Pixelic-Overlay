@@ -37,7 +37,7 @@ const plusColors = {
   BLUE: "§9",
 };
 
-export default function (rank, plusColor, plusPlusColor) {
+export default (rank, plusColor, plusPlusColor) => {
   if (rank === null) {
     return ["§7", "§7"];
   }
@@ -51,4 +51,4 @@ export default function (rank, plusColor, plusPlusColor) {
     return [ranks[rank], ranksSimple[rank]];
   }
   return "";
-}
+};
