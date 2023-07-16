@@ -9,7 +9,6 @@ export default (value, stat, mode) => {
     if (value >= 500) return "§2" + value;
     if (value >= 250) return "§a" + value;
     if (value >= 125) return "§f" + value;
-    if (value >= 0) return "§7" + value;
   } else if (stat === "finalKills") {
     if (value >= 100_000) return "§5" + value.toLocaleString("en-US");
     if (value >= 50_000) return "§d" + value.toLocaleString("en-US");
@@ -20,7 +19,6 @@ export default (value, stat, mode) => {
     if (value >= 5_000) return "§2" + value.toLocaleString("en-US");
     if (value >= 2_500) return "§a" + value.toLocaleString("en-US");
     if (value >= 1_250) return "§f" + value.toLocaleString("en-US");
-    if (value >= 0) return "§7" + value;
   } else if (stat === "WS") {
     if (mode !== "4v4") {
       if (value >= 100) return "§5" + value.toLocaleString("en-US");
@@ -32,7 +30,6 @@ export default (value, stat, mode) => {
       if (value >= 15) return "§2" + value;
       if (value >= 10) return "§a" + value;
       if (value >= 5) return "§f" + value;
-      if (value >= 0) return "§7" + value;
     } else {
       if (value >= 1000) return "§5" + value.toLocaleString("en-US");
       if (value >= 750) return "§d" + value;
@@ -43,7 +40,6 @@ export default (value, stat, mode) => {
       if (value >= 100) return "§2" + value;
       if (value >= 50) return "§a" + value;
       if (value >= 25) return "§f" + value;
-      if (value >= 0) return "§7" + value;
     }
   } else if (stat === "WLR") {
     if (value >= 25) return "§5" + value.toLocaleString("en-US");
@@ -55,7 +51,6 @@ export default (value, stat, mode) => {
     if (value >= 1.5) return "§2" + value;
     if (value >= 1) return "§a" + value;
     if (value >= 0.5) return "§f" + value;
-    if (value >= 0) return "§7" + value;
   } else if (stat === "FKDR") {
     if (value >= 100) return "§5" + value.toLocaleString("en-US");
     if (value >= 50) return "§d" + value;
@@ -66,7 +61,6 @@ export default (value, stat, mode) => {
     if (value >= 3) return "§2" + value;
     if (value >= 2) return "§a" + value;
     if (value >= 1) return "§f" + value;
-    if (value >= 0) return "§7" + value;
   } else if (stat === "BBLR") {
     if (value >= 100) return "§5" + value.toLocaleString("en-US");
     if (value >= 50) return "§d" + value;
@@ -77,6 +71,6 @@ export default (value, stat, mode) => {
     if (value >= 3) return "§2" + value;
     if (value >= 2) return "§a" + value;
     if (value >= 1) return "§f" + value;
-    if (value >= 0) return "§7" + value;
   }
+  return "§7" + value;
 };
