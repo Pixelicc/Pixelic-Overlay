@@ -59,7 +59,7 @@ module.exports = {
 
             setTimeout(() => {
               axios
-                .get(`https://api.pixelic.de/hypixel/v1/player/${playerName}/all`, { headers: { "X-API-Key": key } })
+                .get(`https://api.pixelic.de/hypixel/v1/player/${player}/all`, { headers: { "X-API-Key": key } })
                 .then(async (historical) => {
                   historical = historical.data;
 
