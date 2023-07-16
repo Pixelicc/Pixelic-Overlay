@@ -63,7 +63,13 @@
       <v-row>
         <v-col>
           <v-card><canvas id="monthlyChart"></canvas></v-card>
-        </v-col> </v-row></v-container
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-card><canvas id="alltimeChart"></canvas></v-card>
+        </v-col>
+      </v-row> </v-container
   ></v-app>
 </template>
 
@@ -173,6 +179,10 @@ const updateData = async () => {
     Chart.getChart("monthlyChart").destroy();
   }
 
+  if (Chart.getChart("alltimeChart") !== undefined) {
+    Chart.getChart("alltimeChart").destroy();
+  }
+
   playerFormatted.value = "N/A";
 
   const playerData = await axios.get(`https://api.pixelic.de/hypixel/v1/overlay/player/${playerName}`, { headers: { "X-API-Key": dataStore.get("pixelicKey"), "cache-control": "no-cache" } }).catch((error) => console.error("Invalid Hypixel Player"));
@@ -269,6 +279,16 @@ const updateData = async () => {
       },
       options: {
         maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: "7 Day History",
+            padding: {
+              top: 5,
+              bottom: 0,
+            },
+          },
+        },
       },
     });
 
@@ -348,6 +368,81 @@ const updateData = async () => {
       },
       options: {
         maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: "Current Year History",
+            padding: {
+              top: 5,
+              bottom: 0,
+            },
+          },
+        },
+      },
+    });
+
+    var labelsAlltime = [];
+    var winsAlltime = [];
+    var finalsKillsAlltime = [];
+    var killsAlltime = [];
+    var bedsBrokenAlltime = [];
+
+    for (const datapoint in historical.data) {
+      if (datapoint != historical.data.length - 1) {
+        if (historical.data.length > 365 * 3) if (datapoint % 90 !== 0) continue;
+        if (historical.data.length > 365) if (datapoint % 30 !== 0) continue;
+        if (historical.data.length > 180) if (datapoint % 14 !== 0) continue;
+        if (historical.data.length > 90) if (datapoint % 7 !== 0) continue;
+        if (historical.data.length > 30) if (datapoint % 4 !== 0) continue;
+        if (historical.data.length > 14) if (datapoint % 2 !== 0) continue;
+      }
+
+      labelsAlltime.push(historical.data[datapoint].date);
+      winsAlltime.push(historical.data[datapoint].Bedwars.overall.wins);
+      finalsKillsAlltime.push(historical.data[datapoint].Bedwars.overall.finalKills);
+      killsAlltime.push(historical.data[datapoint].Bedwars.overall.kills);
+      bedsBrokenAlltime.push(historical.data[datapoint].Bedwars.overall.bedsBroken);
+    }
+
+    new Chart(alltimeChart, {
+      type: "line",
+      data: {
+        labels: labelsAlltime,
+        datasets: [
+          {
+            label: "Wins",
+            data: winsAlltime,
+            borderWidth: 2,
+          },
+          {
+            label: "Finals",
+            data: finalsKillsAlltime,
+            borderWidth: 2,
+          },
+          {
+            label: "Kills",
+            data: killsAlltime,
+            borderWidth: 2,
+          },
+          {
+            label: "Beds broken",
+            data: bedsBrokenAlltime,
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: true,
+        plugins: {
+          title: {
+            display: true,
+            text: "Alltime History",
+            padding: {
+              top: 5,
+              bottom: 0,
+            },
+          },
+        },
       },
     });
 
