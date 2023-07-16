@@ -140,14 +140,12 @@ const parseMessage = (msg) => {
     if (dataStore.get("hideIngame") === true) {
       ipcRenderer.send("windowEvent", "show");
     }
-  } else if ((msg.indexOf("joined the lobby!") !== -1 || msg.indexOf("rewards!") !== -1 || (lastMessage.trim().length === 0 && msg.trim().length === 0)) && msg.indexOf(":") === -1) {
-    if (inLobby === false) {
-      clear();
-      if (dataStore.get("hideIngame") === true) {
-        ipcRenderer.send("windowEvent", "show");
-      }
-      inLobby = true;
+  } else if (!inLobby && (msg.indexOf("joined the lobby!") !== -1 || msg.indexOf("rewards!") !== -1 || (lastMessage.trim().length === 0 && msg.trim().length === 0)) && msg.indexOf(":") === -1) {
+    clear();
+    if (dataStore.get("hideIngame") === true) {
+      ipcRenderer.send("windowEvent", "show");
     }
+    inLobby = true;
   } else if ((msg.indexOf("Party Leader:") === 0 || msg.indexOf("Party Members:") === 0 || msg.indexOf("Party Moderators:") === 0) && inLobby) {
     let pmsg = msg.substring(msg.indexOf(":") + 2);
     let who = pmsg.split(" ");
