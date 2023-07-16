@@ -261,20 +261,20 @@ const updateHeaders = () => {
 
   headers.value = [
     { title: "Tags", align: "center", key: "tags", sortable: false, width: "20%" },
-    { title: "Icons", key: "icons", align: " d-none" },
-    { title: "Level", key: "level", align: " d-none" },
-    { title: "FullLevel", key: "fullLevel", align: " d-none" },
+    { key: "icons", align: " d-none" },
+    { key: "level", align: " d-none" },
+    { key: "fullLevel", align: " d-none" },
     { title: "Level", align: "center", key: "levelFormatted", width: "10%" },
-    { title: "FullUsername", key: "fullUsername", align: " d-none" },
+    { key: "fullUsername", align: " d-none" },
     { title: "Name", align: "center", key: "username", sortable: false, width: "25%" },
   ];
 
-  if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "center", key: "WS", width: "8%" }, { title: "WS", key: "WSFormatted", align: " d-none" });
-  if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "center", key: "wins", width: "10%" }, { title: "Wins", key: "winsFormatted", align: " d-none" });
-  if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "center", key: "WLR", width: "10%" }, { title: "WLR", key: "WLRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "center", key: "WS", width: "8%" }, { key: "WSFormatted", align: " d-none" });
+  if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "center", key: "wins", width: "10%" }, { key: "winsFormatted", align: " d-none" });
+  if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "center", key: "WLR", width: "10%" }, { key: "WLRFormatted", align: " d-none" });
   if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "center", key: "finalKills", width: "12%" }, { title: "Finals", key: "finalKillsFormatted", align: " d-none" });
-  if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "center", key: "FKDR", width: "10%" }, { title: "FKDR", key: "FKDRFormatted", align: " d-none" });
-  if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "center", key: "BBLR", width: "10%" }, { title: "BBLR", key: "BBLRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "center", key: "FKDR", width: "10%" }, { key: "FKDRFormatted", align: " d-none" });
+  if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "center", key: "BBLR", width: "10%" }, { key: "BBLRFormatted", align: " d-none" });
 };
 
 updateHeaders();
