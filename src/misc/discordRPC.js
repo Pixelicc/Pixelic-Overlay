@@ -13,7 +13,7 @@ module.exports = {
     }
     active = value;
   },
-  init: (playerName, key) => {
+  init: (player, key) => {
     if (active == false) {
       return;
     }
@@ -23,7 +23,7 @@ module.exports = {
 
       rpc.register("1109792550459539546");
 
-      const setActivity = async (player, key) => {
+      const setActivity = async () => {
         axios
           .get(`https://api.pixelic.de/hypixel/v1/overlay/player/${player}`, { headers: { "X-API-Key": key, "cache-control": "no-cache" } })
           .then(async (res) => {
@@ -149,19 +149,19 @@ module.exports = {
       };
 
       client.on("ready", async () => {
-        setActivity(playerName, key).then(() => {});
+        setActivity().then(() => {});
 
         const interval = setInterval(async () => {
           if (active == false) {
             clearInterval(interval);
           }
-          await setActivity(playerName, key);
+          await setActivity();
         }, 2.5 * 60 * 1000);
       });
 
       client.login({ clientId: "1109792550459539546" }).catch((e) => console.error(e));
     } catch (error) {
-      console.log("Starting RPC failed :", error);
+      console.error(error);
     }
   },
 };
