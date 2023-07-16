@@ -23,9 +23,7 @@ setInterval(async () => {
 }, 5 * 60 * 1000);
 
 export default (UUID) => {
-  if (UUID === undefined) return "";
-  if (customTags[UUID.replace(/-/g, "")] !== undefined) {
-    return customTags[UUID.replace(/-/g, "")];
-  }
-  return "";
+  if (UUID === undefined) return [];
+  if (customTags[UUID.replace(/-/g, "")] !== undefined) return customTags[UUID.replace(/-/g, "")];
+  return [];
 };
