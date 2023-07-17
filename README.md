@@ -52,12 +52,12 @@
 
 ### Overlay Page
 
-![Overlay Page](https://cdn.discordapp.com/attachments/927561825141289043/1129055446012018738/image.png)
+![Overlay Page](https://media.discordapp.net/attachments/927561825141289043/1130635080340090900/image.png)
 
 ### Statistics Page
 
-![Statistics Page 1](https://media.discordapp.net/attachments/927561825141289043/1129055711230435328/image.png)
-![Statistics Page2 ](https://media.discordapp.net/attachments/927561825141289043/1129055822295613570/image.png)
+![Statistics Page 1](https://cdn.discordapp.com/attachments/927561825141289043/1130635529600372917/image.png)
+![Statistics Page2 ](https://cdn.discordapp.com/attachments/927561825141289043/1130635373798756453/image.png)
 
 ## Discord
 
