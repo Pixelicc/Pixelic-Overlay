@@ -30,7 +30,7 @@ axiosRetry(axiosClient, {
   },
 });
 
-var inLobby = false;
+var inLobby = true;
 
 const getRatio = (a, b) => {
   if (a === 0) {
@@ -166,7 +166,7 @@ const parseMessage = (msg) => {
     clear();
   } else if (msg.toLowerCase().indexOf(dataStore.get("player").toLowerCase()) !== -1 && msg.indexOf("Party") === -1 && msg.indexOf(":") > -1 && inLobby) {
     var player = null;
-    if (msg.indexOf("Guild") !== -1 || msg.indexOf("Officer") !== 1) {
+    if (msg.indexOf("Guild") !== -1 || msg.indexOf("Officer") !== -1) {
       var parsedMessage = msg.slice(0, msg.indexOf(":")).split(" ");
       if (parseMessage.length === 5) {
         player = parsedMessage[4];
