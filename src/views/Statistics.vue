@@ -1,76 +1,72 @@
 <template>
   <v-app>
     <v-container>
-      <v-row
-        ><v-col
-          ><v-sheet class="text-center"
-            ><b><span v-html="playerFormatted"></span></b></v-sheet></v-col
-      ></v-row>
+      <v-row>
+        <v-col>
+          <v-sheet class="text-center">
+            <strong><span v-html="playerFormatted"></span></strong> </v-sheet
+        ></v-col>
+      </v-row>
       <v-row dense>
         <v-col>
-          <v-list density="compact">
-            <v-list-subheader><strong>Daily</strong></v-list-subheader>
-
+          <v-list density="small">
+            <v-list-subheader class="pl-4"><strong>Daily</strong></v-list-subheader>
             <v-list-item v-for="(item, i) in historicalData.daily" :key="i" :value="item" base-color="secondary" rounded="xl">
               <v-list-item-title v-text="item.text + ' ' + item.value.toLocaleString('en-US')"></v-list-item-title>
             </v-list-item>
           </v-list>
         </v-col>
         <v-col>
-          <v-list density="compact">
-            <v-list-subheader><strong>Weekly</strong></v-list-subheader>
-
+          <v-list density="small">
+            <v-list-subheader class="pl-4"><strong>Weekly</strong></v-list-subheader>
             <v-list-item v-for="(item, i) in historicalData.weekly" :key="i" :value="item" base-color="secondary" rounded="xl">
               <v-list-item-title v-text="item.text + ' ' + item.value.toLocaleString('en-US')"></v-list-item-title>
             </v-list-item>
           </v-list>
         </v-col>
         <v-col>
-          <v-list density="compact">
-            <v-list-subheader><strong>Monthly</strong></v-list-subheader>
-
+          <v-list density="small">
+            <v-list-subheader class="pl-4"><strong>Monthly</strong></v-list-subheader>
             <v-list-item v-for="(item, i) in historicalData.monthly" :key="i" :value="item" base-color="secondary" rounded="xl">
               <v-list-item-title v-text="item.text + ' ' + item.value.toLocaleString('en-US')"></v-list-item-title>
             </v-list-item>
           </v-list>
-        </v-col> </v-row
-      ><v-row>
-        <v-col>
-          <v-card><canvas id="weeklyChart"></canvas></v-card>
         </v-col>
-      </v-row>
-      <v-row
-        ><v-col class="pr-0">
-          <v-list density="compact">
-            <v-list-subheader
-              ><strong>Yearly {{ resetTime.yearly }}</strong></v-list-subheader
-            >
-            <v-list-item v-for="(item, i) in historicalData.yearly.slice(1, 7)" :key="i" :value="item" base-color="secondary" rounded="xl">
+        <v-col>
+          <v-list density="small">
+            <v-list-subheader class="pl-4">
+              <v-tooltip location="bottom">
+                <template v-slot:activator="{ props }">
+                  <span v-bind="props">
+                    <strong>Yearly - {{ resetTime.yearly }}</strong>
+                  </span>
+                </template>
+                <span>First Datapoint: {{ resetTime.yearly }}</span>
+              </v-tooltip>
+            </v-list-subheader>
+            <v-list-item v-for="(item, i) in historicalData.yearly" :key="i" :value="item" base-color="secondary" rounded="xl">
               <v-list-item-title v-text="item.text + ' ' + item.value.toLocaleString('en-US')"></v-list-item-title>
             </v-list-item>
           </v-list>
         </v-col>
-        <v-col class="pl-0">
-          <v-list density="compact">
-            <v-list-subheader
-              ><strong> Stars gained - {{ historicalData.yearly[0].value }}</strong></v-list-subheader
-            >
-            <v-list-item v-for="(item, i) in historicalData.yearly.slice(7, 13)" :key="i" :value="item" base-color="secondary" rounded="xl">
-              <v-list-item-title v-text="item.text + ' ' + item.value.toLocaleString('en-US')"></v-list-item-title>
-            </v-list-item>
-          </v-list> </v-col
-      ></v-row>
-      <v-row>
+      </v-row>
+      <v-row dense>
+        <v-col>
+          <v-card><canvas id="weeklyChart"></canvas></v-card>
+        </v-col>
+      </v-row>
+      <v-row dense>
         <v-col>
           <v-card><canvas id="monthlyChart"></canvas></v-card>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row dense>
         <v-col>
           <v-card><canvas id="alltimeChart"></canvas></v-card>
         </v-col>
-      </v-row> </v-container
-  ></v-app>
+      </v-row>
+    </v-container>
+  </v-app>
 </template>
 
 <script setup>
@@ -167,7 +163,7 @@ historicalData.value = {
 };
 
 resetTime.value = {
-  yearly: "- First Datapoint: N/A",
+  yearly: "N/A",
 };
 
 const updateData = async () => {
@@ -382,6 +378,7 @@ const updateData = async () => {
     });
 
     var labelsAlltime = [];
+    var levelAlltime = [];
     var winsAlltime = [];
     var finalsKillsAlltime = [];
     var killsAlltime = [];
@@ -398,6 +395,7 @@ const updateData = async () => {
       }
 
       labelsAlltime.push(historical.data[datapoint].date);
+      levelAlltime.push(historical.data[datapoint].Bedwars.level);
       winsAlltime.push(historical.data[datapoint].Bedwars.overall.wins);
       finalsKillsAlltime.push(historical.data[datapoint].Bedwars.overall.finalKills);
       killsAlltime.push(historical.data[datapoint].Bedwars.overall.kills);
@@ -410,22 +408,32 @@ const updateData = async () => {
         labels: labelsAlltime,
         datasets: [
           {
+            label: "Level",
+            yAxisID: "level",
+            data: levelAlltime,
+            borderWidth: 2,
+          },
+          {
             label: "Wins",
+            yAxisID: "stat",
             data: winsAlltime,
             borderWidth: 2,
           },
           {
             label: "Finals",
+            yAxisID: "stat",
             data: finalsKillsAlltime,
             borderWidth: 2,
           },
           {
             label: "Kills",
+            yAxisID: "stat",
             data: killsAlltime,
             borderWidth: 2,
           },
           {
             label: "Beds broken",
+            yAxisID: "stat",
             data: bedsBrokenAlltime,
             borderWidth: 2,
           },
@@ -433,6 +441,32 @@ const updateData = async () => {
       },
       options: {
         maintainAspectRatio: true,
+        scales: {
+          level: {
+            title: {
+              display: true,
+              text: "Level",
+            },
+            type: "linear",
+            display: true,
+            position: "right",
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+          stat: {
+            title: {
+              display: true,
+              text: "Stat",
+            },
+            type: "linear",
+            display: true,
+            position: "left",
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        },
         plugins: {
           title: {
             display: true,
@@ -468,7 +502,7 @@ const updateData = async () => {
       moment.relativeTimeThreshold("h", 24);
 
       if (mode === "yearly") {
-        resetTime.value[mode] = `- First Datapoint: ${modeData.date}`;
+        resetTime.value[mode] = modeData.date;
       }
 
       const historicalBedwars = {
