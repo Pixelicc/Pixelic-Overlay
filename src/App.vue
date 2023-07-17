@@ -262,11 +262,11 @@ const updateHeaders = () => {
   headers.value = [
     { title: "Tags", align: "center", key: "tags", sortable: false, width: "20%" },
     { key: "icons", align: " d-none" },
-    { key: "level", align: " d-none" },
+    { title: "Level", align: "center", key: "level", width: "10%" },
+    { key: "levelFormatted", align: " d-none" },
     { key: "fullLevel", align: " d-none" },
-    { title: "Level", align: "center", key: "levelFormatted", width: "10%" },
-    { key: "fullUsername", align: " d-none" },
     { title: "Name", align: "center", key: "username", sortable: false, width: "25%" },
+    { key: "fullUsername", align: " d-none" },
   ];
 
   if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "center", key: "WS", width: "8%" }, { key: "WSFormatted", align: " d-none" });
