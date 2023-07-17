@@ -165,7 +165,18 @@ const parseMessage = (msg) => {
   } else if ((msg.indexOf("The party was disbanded") !== -1 || msg.indexOf("has disbanded the party!") !== -1) && msg.indexOf(":") === -1 && inLobby) {
     clear();
   } else if (msg.toLowerCase().indexOf(dataStore.get("player").toLowerCase()) !== -1 && msg.indexOf("Party") === -1 && msg.indexOf(":") > -1 && inLobby) {
-    addPlayer(msg.slice(0, msg.indexOf(":")).split(" ").slice(-1)[0], { forced: true, mention: true });
+    var player = null;
+    if (msg.indexOf("Guild") !== -1 || msg.indexOf("Officer") !== 1) {
+      var parsedMessage = msg.slice(0, msg.indexOf(":")).split(" ");
+      if (parseMessage.length === 5) {
+        player = parsedMessage[4];
+      } else {
+        player = parsedMessage[3];
+      }
+    } else {
+      player = msg.slice(0, msg.indexOf(":")).split(" ").slice(-1)[0];
+    }
+    if (player.toLowerCase() !== dataStore.get("player").toLowerCase()) addPlayer(player, { forced: true, mention: true });
   } else if ((msg.indexOf("FINAL KILL") !== -1 || msg.indexOf("disconnected") !== -1) && msg.indexOf(":") === -1) {
     inLobby = false;
     removePlayer(msg.split(" ")[0]);
