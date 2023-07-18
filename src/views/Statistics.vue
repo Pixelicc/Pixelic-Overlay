@@ -532,8 +532,6 @@ onMounted(() => {
   updateData().then(() => {});
 });
 
-setInterval(async () => await updateData(), 15 * 60 * 10000);
-
 ipcRenderer.on("viewStatistics", (event, msg) => {
   playerName = msg;
   updateData();
