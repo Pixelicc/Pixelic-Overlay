@@ -395,7 +395,7 @@ const updateData = async () => {
       }
 
       labelsAlltime.push(historical.data[datapoint].date);
-      levelAlltime.push(historical.data[datapoint].Bedwars.level);
+      levelAlltime.push(historical.data[datapoint].Bedwars.level.toFixed(2));
       winsAlltime.push(historical.data[datapoint].Bedwars.overall.wins);
       finalsKillsAlltime.push(historical.data[datapoint].Bedwars.overall.finalKills);
       killsAlltime.push(historical.data[datapoint].Bedwars.overall.kills);
