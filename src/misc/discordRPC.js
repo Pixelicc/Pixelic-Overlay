@@ -1,5 +1,6 @@
 const axios = require("axios");
 const rpc = require("discord-rpc");
+const PackageJSON = require("../../package.json");
 var client = null;
 
 const startTimestamp = new Date();
@@ -42,7 +43,7 @@ module.exports = {
               state: `Lifetime » Wins: ${res.Bedwars.overall.wins.toLocaleString("en-US")} | Finals: ${res.Bedwars.overall.finalKills.toLocaleString("en-US")} | Beds: ${res.Bedwars.overall.bedsBroken.toLocaleString("en-US")}`,
               startTimestamp,
               largeImageKey: "pixelic",
-              largeImageText: "Pixelic-Overlay",
+              largeImageText: `Pixelic-Overlay v${PackageJSON.version}`,
               smallImageKey: "hypixel",
               smallImageText: "Playing mc.hypixel.net",
               buttons: [
@@ -114,7 +115,7 @@ module.exports = {
                       state: "",
                       startTimestamp,
                       largeImageKey: "pixelic",
-                      largeImageText: "Pixelic-Overlay",
+                      largeImageText: `Pixelic-Overlay v${PackageJSON.version}`,
                       smallImageKey: "hypixel",
                       smallImageText: "Playing mc.hypixel.net",
                       buttons: [
