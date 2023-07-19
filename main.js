@@ -14,10 +14,11 @@ app.on("ready", () => {
     autoHideMenuBar: true,
     width: 800,
     height: 600,
-    minWidth: 800,
+    minWidth: 600,
     minHeight: 400,
     transparent: true,
     frame: false,
+    hasShadow: process.platform !== "darwin",
     icon: "./src/assets/logo.png",
     webPreferences: {
       nodeIntegration: true,
@@ -33,6 +34,15 @@ app.on("ready", () => {
       slashes: true,
     })
   );
+
+  win.on("resize", () => {
+    const width = win.getContentSize()[0];
+    if (width < 800) {
+      win.webContents.setZoomFactor(0.8);
+    } else {
+      win.webContents.setZoomFactor(1);
+    }
+  });
 
   isLatest().then((latest) => {
     if (!latest) {
