@@ -1,6 +1,7 @@
 const ranks = {
   OWNER: "§c[OWNER]",
   ADMIN: "§c[ADMIN]",
+  GAME_MASTER: "§2[GM]",
   YOUTUBER: "§c[§fYOUTUBE§c]",
   PIG_PLUS_PLUS_PLUS: "§d[PIG§b+++§d]",
   MVP: "§b[MVP]",
@@ -11,6 +12,7 @@ const ranks = {
 const ranksSimple = {
   OWNER: "§c",
   ADMIN: "§c",
+  GAME_MASTER: "§2",
   YOUTUBER: "§c",
   PIG_PLUS_PLUS_PLUS: "§d",
   MVP: "§b",
