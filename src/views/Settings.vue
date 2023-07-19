@@ -4,30 +4,33 @@
       <v-container>
         <v-row>
           <v-col class="justify-center">
-            <v-sheet><v-text-field :rules="[validPlayer]" clearable label="Hypixel Username or UUID" persistent-placeholder placeholder="Pixelic or 14727fae-fbdc-4aff-848c-d2713eb9939e" prepend-inner-icon="mdi-account" v-model="getPlayer" return-object @update:modelValue="setPlayer"></v-text-field></v-sheet>
+            <v-card><v-text-field :rules="[validPlayer]" clearable label="Hypixel Username or UUID" persistent-placeholder placeholder="Pixelic or 14727fae-fbdc-4aff-848c-d2713eb9939e" prepend-inner-icon="mdi-account" v-model="getPlayer" return-object @update:modelValue="setPlayer"></v-text-field></v-card>
             <v-divider :thickness="8" class="border-opacity-0"></v-divider>
-            <v-sheet><v-text-field :type="keyShown ? 'text' : 'password'" :append-icon="keyShown ? 'mdi-eye' : 'mdi-eye-off'" @click:append="toggleKeyShow" clearable label="Pixelic-API Key" persistent-placeholder placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" prepend-inner-icon="mdi-key" v-model="getKey" return-object @update:modelValue="setKey" :error-messages="keyErrors"></v-text-field></v-sheet>
+            <v-card class="d-flex justify-center">
+              <v-text-field :type="keyShown ? 'text' : 'password'" :append-icon="keyShown ? 'mdi-eye' : 'mdi-eye-off'" @click:append="toggleKeyShow" clearable label="Pixelic-API Key" persistent-placeholder :placeholder="keyPlaceHolder" prepend-inner-icon="mdi-key" v-model="getKey" return-object @update:modelValue="setKey" :error-messages="keyErrors"></v-text-field>
+              <v-btn class="ml-4 mr-4 mt-4" variant="outlined" elevation="0" rounded="lg" @click="requestDiscordAuth">Get API-Key</v-btn>
+            </v-card>
             <v-divider :thickness="64" class="border-opacity-0"></v-divider>
-            <v-sheet><v-select label="Bedwars Gamemode" :items="modes" prepend-inner-icon="mdi-bed-empty" v-model="getMode" return-object @update:modelValue="setMode"></v-select></v-sheet>
+            <v-card><v-select label="Bedwars Gamemode" :items="modes" prepend-inner-icon="mdi-bed-empty" v-model="getMode" return-object @update:modelValue="setMode"></v-select></v-card>
             <v-divider :thickness="8" class="border-opacity-0"></v-divider>
-            <v-sheet><v-select label="Client / Log File" :items="clients" prepend-inner-icon="mdi-file" v-model="getClient" return-object @update:modelValue="setClient"></v-select></v-sheet>
+            <v-card><v-select label="Client / Log File" :items="clients" prepend-inner-icon="mdi-file" v-model="getClient" return-object @update:modelValue="setClient"></v-select></v-card>
             <v-divider v-if="getClient === 'Custom'" :thickness="8" class="border-opacity-0"></v-divider>
-            <v-sheet v-if="getClient === 'Custom'"><v-text-field clearable label="Custom Log File Location" prepend-inner-icon="mdi-file" v-model="getCustomLogFile" return-object @update:modelValue="setCustomLogFile"></v-text-field></v-sheet>
+            <v-card v-if="getClient === 'Custom'"><v-text-field clearable label="Custom Log File Location" prepend-inner-icon="mdi-file" v-model="getCustomLogFile" return-object @update:modelValue="setCustomLogFile"></v-text-field></v-card>
             <v-divider :thickness="8" class="border-opacity-0"></v-divider>
-            <v-sheet><v-select label="Overlay Stats" :items="colums" prepend-inner-icon="mdi-table-edit" chips multiple v-model="getColums" return-object @update:modelValue="setColums"></v-select></v-sheet>
+            <v-card><v-select label="Overlay Stats" :items="colums" prepend-inner-icon="mdi-table-edit" chips multiple v-model="getColums" return-object @update:modelValue="setColums"></v-select></v-card>
             <v-divider :thickness="4" class="border-opacity-0"></v-divider>
-            <v-sheet><v-switch class="ma-2" v-model="hideIngame" color="info" inset hide-details @change="toggleHideIngame" :label="hideIngame === true ? 'Hide Overlay Ingame : Enabled' : 'Hide Overlay Ingame : Disabled'"></v-switch></v-sheet>
+            <v-card><v-switch class="ma-2" v-model="hideIngame" color="info" inset hide-details @change="toggleHideIngame" :label="hideIngame === true ? 'Hide Overlay Ingame : Enabled' : 'Hide Overlay Ingame : Disabled'"></v-switch></v-card>
             <v-divider :thickness="64" class="border-opacity-0"></v-divider>
-            <v-sheet><v-select label="Theme" :items="themes" prepend-inner-icon="mdi-palette-outline" v-model="currentTheme" return-object @update:modelValue="setTheme"></v-select></v-sheet>
+            <v-card><v-select label="Theme" :items="themes" prepend-inner-icon="mdi-palette-outline" v-model="currentTheme" return-object @update:modelValue="setTheme"></v-select></v-card>
             <v-divider v-if="theme.global.name.value === 'custom'" :thickness="8" class="border-opacity-0"></v-divider>
-            <v-sheet v-if="theme.global.name.value === 'custom'"><v-select label="Component" :items="themeComponents" prepend-inner-icon="mdi-palette-outline" v-model="previewedComponent" return-object @update:modelValue="setThemeComponent"></v-select></v-sheet>
+            <v-card v-if="theme.global.name.value === 'custom'"><v-select label="Component" :items="themeComponents" prepend-inner-icon="mdi-palette-outline" v-model="previewedComponent" return-object @update:modelValue="setThemeComponent"></v-select></v-card>
             <v-divider v-if="theme.global.name.value === 'custom'" :thickness="8" class="border-opacity-0"></v-divider>
             <v-color-picker v-if="theme.global.name.value === 'custom'" return-object @update:modelValue="setThemeComponentColor" hide-inputs mode="hex"></v-color-picker>
             <v-divider v-if="theme.global.name.value === 'custom'" :thickness="8" class="border-opacity-0"></v-divider>
             <v-divider :thickness="64" class="border-opacity-0"></v-divider>
-            <v-sheet><v-switch class="ma-2" v-model="discordRPC" color="info" inset hide-details @change="toggleDiscordRPC" :label="discordRPC === true ? 'Discord RPC : Enabled' : 'Discord RPC: Disabled'"></v-switch></v-sheet>
+            <v-card><v-switch class="ma-2" v-model="discordRPC" color="info" inset hide-details @change="toggleDiscordRPC" :label="discordRPC === true ? 'Discord RPC : Enabled' : 'Discord RPC: Disabled'"></v-switch></v-card>
             <v-divider :thickness="64" class="border-opacity-0"></v-divider>
-            <v-sheet><v-switch class="ma-2" v-model="developerMode" color="info" inset hide-details @change="toggleDeveloperMode" :label="developerMode === true ? 'Developer Mode : Enabled' : 'Developer Mode : Disabled (Do not enable this if you do not know what you are doing!)'"></v-switch></v-sheet>
+            <v-card><v-switch class="ma-2" v-model="developerMode" color="info" inset hide-details @change="toggleDeveloperMode" :label="developerMode === true ? 'Developer Mode : Enabled' : 'Developer Mode : Disabled (Do not enable this if you do not know what you are doing!)'"></v-switch></v-card>
             <v-divider :thickness="64" class="border-opacity-0"></v-divider>
           </v-col>
         </v-row>
@@ -86,6 +89,12 @@ const setPlayer = (player) => {
 
 const getPlayer = ref(0);
 getPlayer.value = dataStore.get("player");
+
+const requestDiscordAuth = () => ipcRenderer.send("discordAuth");
+
+var keyPlaceHolder = ref(0);
+if (dataStore.get("pixelicKey") === "") keyPlaceHolder.value = "An Discord OAuth Page should have opened in your browser! Paste the key here!";
+else keyPlaceHolder.value = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
 var keyShown = ref(0);
 keyShown.value = false;

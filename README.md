@@ -19,8 +19,8 @@
 ## First usage
 
 1. Open the Overlay and select your corresponding Client. <br> _(If you don't have any of the implemented Clients, select Vanilla or select Custom to enter the path for the log file._
-2. Join my [Discord](https://discord.com/invite/2vAuyVvdwj) and use the **/api-new** Command in any Channel to generate an API-Key.
-3. After you generated the API-Key input that key into the **Pixelic-API Key** field and enter your Username in Username field in the Overlay Settings.
+2. If everything went right the Overlay should have opened a new page in your default browser else click on GET API-KEY in the Overlay Settings. After you completed the Discord OAuth you will see an API-Key you can copy paste into the **Pixelic API-Key** field.
+3. Now enter your Username in **Username** field in the Overlay Settings.
 4. Join any Bedwars Game and the Overlay should start to work as expected.
 
 ## Features

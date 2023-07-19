@@ -61,6 +61,10 @@ app.on("ready", () => {
   win.setAlwaysOnTop(true, "screen");
   win.removeMenu();
 
+  ipcMain.on("discordAuth", (event, msg) => {
+    shell.openExternal("https://discord.com/api/oauth2/authorize?client_id=1109792550459539546&redirect_uri=https%3A%2F%2Fapi.pixelic.de%2Fhypixel%2Fv1%2Foverlay%2Fkey&response_type=code&scope=identify");
+  });
+
   ipcMain.on("devTools", (event, msg) => {
     if (msg === true) {
       win.webContents.openDevTools();

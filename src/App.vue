@@ -99,8 +99,14 @@ import rankParser from "./misc/rankParser";
 import starParser from "./misc/starParser";
 import tagsParser from "./misc/tagsParser";
 import statColorParser from "./misc/statColorParser";
+import router from "./router";
 
 const ipcRenderer = useIpcRenderer();
+
+if (dataStore.get("pixelicKey") === "") {
+  router.push("/settings");
+  ipcRenderer.send("discordAuth");
+}
 
 ipcRenderer.send("windowEvent", dataStore.get("windowLocation"));
 
