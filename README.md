@@ -34,6 +34,7 @@
 - Can show nicked players, party members and players that mentioned you in chat
 - Color-coded Stats in terms of skill level
 - Detailed statistics page
+- Report System where you can report players for cheating/sniping and when you are queueing them again you will be warned. In the future past reports may be used to warn other users too.
 
 ### Settings
 
