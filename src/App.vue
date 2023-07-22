@@ -157,7 +157,7 @@ ipcRenderer.send("discordRPC-set", dataStore.get("discordRPC"));
 if (dataStore.get("player") !== "" && dataStore.get("pixelicKey") !== "" && dataStore.get("discordRPC") === true) ipcRenderer.send("discordRPC-init", [dataStore.get("player"), dataStore.get("pixelicKey")]);
 
 var sidebar = ref(0);
-sidebar.value = true;
+sidebar.value = false;
 
 var table = ref(0);
 table.value = true;
