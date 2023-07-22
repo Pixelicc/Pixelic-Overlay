@@ -41,6 +41,10 @@ const store = new Store({
         },
       },
     },
+    opacity: {
+      type: "number",
+      default: 0.75,
+    },
     developerMode: {
       type: "boolean",
       default: false,
@@ -52,6 +56,22 @@ const store = new Store({
     hideIngame: {
       type: "boolean",
       default: false,
+    },
+    gameStartNotification: {
+      type: "boolean",
+      default: false,
+    },
+    queueNotification: {
+      type: "boolean",
+      default: false,
+    },
+    blacklistNotification: {
+      type: "boolean",
+      default: false,
+    },
+    blacklistExpiry: {
+      type: "string",
+      default: "1y",
     },
     colums: {
       type: "array",

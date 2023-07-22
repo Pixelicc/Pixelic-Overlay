@@ -1,37 +1,19 @@
 <template>
   <v-app>
-    <v-toolbar color="transparent" density="compact" style="-webkit-app-region: drag">
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+    <v-toolbar density="compact" style="-webkit-app-region: drag; background-color: rgba(var(--v-theme-background), var(--opacity)) !important">
+      <v-app-bar-nav-icon variant="text" @click.stop="sidebar = !sidebar" style="-webkit-app-region: no-drag"></v-app-bar-nav-icon>
 
-      <v-toolbar-title class="grow">Pixelic Overlay</v-toolbar-title>
+      <v-toolbar-title class="grow"> Pixelic Overlay </v-toolbar-title>
 
-      <router-link to="/" class="v-btn" @click="turnOnTable">
-        <v-btn icon style="-webkit-app-region: no-drag">
-          <v-icon color="primary">mdi-table</v-icon>
-        </v-btn></router-link
-      >
-
-      <router-link to="/statistics" class="v-btn" @click="turnOffTable">
-        <v-btn icon style="-webkit-app-region: no-drag">
-          <v-icon color="primary">mdi-chart-line</v-icon>
-        </v-btn></router-link
-      >
-
-      <router-link to="/settings" class="v-btn" @click="turnOffTable">
-        <v-btn icon style="-webkit-app-region: no-drag">
-          <v-icon color="primary">mdi-settings</v-icon>
-        </v-btn></router-link
-      >
-
-      <v-btn icon @click="refreshPlayers" style="-webkit-app-region: no-drag">
+      <v-btn v-if="table" icon @click="refreshPlayers" style="-webkit-app-region: no-drag">
         <v-icon color="secondary">mdi-refresh</v-icon>
       </v-btn>
 
-      <v-btn icon @click="clear" style="-webkit-app-region: no-drag">
+      <v-btn v-if="table" icon @click="clear" style="-webkit-app-region: no-drag">
         <v-icon color="secondary">mdi-account-multiple-minus</v-icon>
       </v-btn>
 
-      <v-text-field solo dense single-line hide-details prepend-inner-icon="mdi-account-search" persistent-placeholder placeholder="Search player(s)" v-model="searchQuery" @keydown.enter.prevent:modelValue="forceAddPlayer" :error-messages="searchErrors" style="-webkit-app-region: no-drag"></v-text-field>
+      <v-text-field v-if="table || route.path === '/statistics'" class="ml-2" variant="outlined" density="compact" width="" single-line hide-details prepend-inner-icon="mdi-account-search" persistent-placeholder placeholder="Search player(s)" v-model="searchQuery" @keydown.enter.prevent:modelValue="forceAddPlayer" :error-messages="searchErrors" style="-webkit-app-region: no-drag; max-width: 25%"></v-text-field>
 
       <v-btn icon @click="minimizeWindow" style="-webkit-app-region: no-drag">
         <v-icon>mdi-minus</v-icon>
@@ -41,8 +23,30 @@
         <v-icon>mdi-window-close</v-icon>
       </v-btn>
     </v-toolbar>
+    <v-navigation-drawer temporary v-model="sidebar">
+      <v-list nav>
+        <v-list-item prepend-icon="mdi-table" title="Overlay" value="overlay" router-link to="/" @click="turnOnTable"></v-list-item>
+        <v-list-item prepend-icon="mdi-chart-line" title="Statistics" value="statistics" router-link to="/statistics" @click="turnOffTable"></v-list-item>
+        <v-divider :thickness="8" class="border-opacity-0"></v-divider>
+        <v-divider></v-divider>
+        <v-divider :thickness="8" class="border-opacity-0"></v-divider>
+        <v-list-item prepend-icon="mdi-application-outline" title="Basic Settings" value="basic-settings" router-link to="/basic-settings" @click="turnOffTable"></v-list-item>
+        <v-list-item prepend-icon="mdi-format-list-bulleted" title="Blacklist Settings" value="blacklist-settings" router-link to="/blacklist-settings" @click="turnOffTable"></v-list-item>
+        <v-list-item prepend-icon="mdi-palette-outline" title="Appearance Settings" value="appearance-settings" router-link to="/appearance-settings" @click="turnOffTable"></v-list-item>
+        <v-list-item prepend-icon="mdi-view-column-outline" title="Column Settings" value="column-settings" router-link to="/column-settings" @click="turnOffTable"></v-list-item>
+        <v-list-item prepend-icon="mdi-bell-outline" title="Notification Settings" value="notification-settings" router-link to="/notification-settings" @click="turnOffTable"></v-list-item>
+        <v-divider :thickness="8" class="border-opacity-0"></v-divider>
+        <v-divider></v-divider>
+        <v-divider :thickness="8" class="border-opacity-0"></v-divider>
+        <v-list-item> v{{ PackageJSON.version }}</v-list-item>
+        <v-list-item style="position: fixed !important; bottom: 0 !important">
+          <v-btn color="#5865F2" variant="tonal" class="ml-1 mr-2" @click="ipcRenderer.send('openURL', 'https://discord.com/invite/2vAuyVvdwj')">Discord</v-btn>
+          <v-btn color="#6e5494" variant="tonal" class="ml-2 mr-1" @click="ipcRenderer.send('openURL', 'https://github.com/pixelicc/pixelic-overlay')">GitHub</v-btn>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
     <router-view></router-view>
-    <v-data-table v-if="shown" :headers="headers" :items="players" :items-per-page="-1" class="datatable elevation-1" density="compact" no-data-text="No Players found" sort-asc-icon="mdi-chevron-up" sort-desc-icon="mdi-chevron-down">
+    <v-data-table v-if="table" :headers="headers" :items="players" :items-per-page="-1" class="datatable elevation-1" density="compact" no-data-text="No Players found" sort-asc-icon="mdi-chevron-up" sort-desc-icon="mdi-chevron-down">
       <template v-slot:item="{ item }">
         <tr>
           <td class="align-center justify-center">
@@ -70,7 +74,7 @@
           <td>
             <v-tooltip location="bottom">
               <template v-slot:activator="{ props }">
-                <span v-bind="props" v-html="item.columns.username"></span>
+                <span v-bind="props" v-html="item.columns.formattedUsername"></span>
               </template>
               <span v-html="item.columns.fullUsername"></span>
             </v-tooltip>
@@ -81,15 +85,42 @@
           <td v-if="headers.some((h) => h.title === 'Finals')"><span v-html="item.columns.finalKillsFormatted"></span></td>
           <td v-if="headers.some((h) => h.title === 'FKDR')"><span v-html="item.columns.FKDRFormatted"></span></td>
           <td v-if="headers.some((h) => h.title === 'BBLR')"><span v-html="item.columns.BBLRFormatted"></span></td>
+          <td>
+            <v-menu :close-on-content-click="false" v-if="item.columns.UUID !== undefined && item.columns.username.toLowerCase() !== dataStore.get('player').toLowerCase() && item.columns.UUID.toLowerCase() !== dataStore.get('player').replace(/-/g, '').toLowerCase()">
+              <template v-slot:activator="{ props }">
+                <v-btn size="small" variant="text" :ripple="false" icon="mdi-dots-horizontal" v-bind="props"> </v-btn>
+              </template>
+              <v-list>
+                <v-list-item v-if="item.columns.blacklisted === false">
+                  <v-btn prepend-icon="mdi-flag-variant-plus" :loading="sendingCheatingReport" @click="reportPlayer(item.columns.UUID, 'cheater')">
+                    <v-list-item-title>Report for Cheating</v-list-item-title>
+                  </v-btn>
+                </v-list-item>
+                <v-list-item v-if="item.columns.blacklisted === false">
+                  <v-btn prepend-icon="mdi-flag-variant-plus" :loading="sendingSnipingReport" @click="reportPlayer(item.columns.UUID, 'sniper')">
+                    <v-list-item-title>Report for Sniping</v-list-item-title>
+                  </v-btn>
+                </v-list-item>
+                <v-list-item v-if="item.columns.blacklisted === true">
+                  <v-btn prepend-icon="mdi-flag-variant-minus" :loading="revokeReport" @click="revokePlayerReport(item.columns.UUID)">
+                    <v-list-item-title>Remove from Blacklist</v-list-item-title>
+                  </v-btn>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </td>
         </tr>
       </template>
       <template #bottom></template>
     </v-data-table>
+    <v-snackbar :timeout="snackbarTimeout" :color="snackbarColor" :variant="snackbarVariant" v-model="snackbarShown">
+      <v-icon v-if="snackbarIcon !== null">{{ snackbarIcon }}</v-icon>
+      {{ snackbarText }}
+    </v-snackbar>
   </v-app>
 </template>
 
 <script setup>
-import "../app.css";
 import { useIpcRenderer } from "@vueuse/electron";
 import dataStore from "./data/dataStore";
 import { parseMessage, getPlayers, addPlayer, refreshPlayers, clear } from "./misc/overlay";
@@ -98,14 +129,24 @@ import mcColorParser from "./misc/mcColorParser";
 import rankParser from "./misc/rankParser";
 import starParser from "./misc/starParser";
 import tagsParser from "./misc/tagsParser";
+import blacklistParser from "./misc/blacklistParser";
 import statColorParser from "./misc/statColorParser";
+import { snackbarTimeout, snackbarColor, snackbarVariant, snackbarText, snackbarIcon, snackbarShown, sendNotification } from "./misc/snackbarNotification";
 import router from "./router";
+import axios from "axios";
+import PackageJSON from "../package.json";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 const ipcRenderer = useIpcRenderer();
 
 if (dataStore.get("pixelicKey") === "") {
-  router.push("/settings");
+  router.push("/basic-settings");
   ipcRenderer.send("discordAuth");
+  ipcRenderer.on("pixelicKey", (event, msg) => {
+    dataStore.set("pixelicKey", msg);
+  });
 }
 
 ipcRenderer.send("windowEvent", dataStore.get("windowLocation"));
@@ -115,18 +156,21 @@ if (dataStore.get("developerMode") === true) ipcRenderer.send("devTools", true);
 ipcRenderer.send("discordRPC-set", dataStore.get("discordRPC"));
 if (dataStore.get("player") !== "" && dataStore.get("pixelicKey") !== "" && dataStore.get("discordRPC") === true) ipcRenderer.send("discordRPC-init", [dataStore.get("player"), dataStore.get("pixelicKey")]);
 
-var shown = ref(0);
-shown.value = true;
+var sidebar = ref(0);
+sidebar.value = true;
+
+var table = ref(0);
+table.value = true;
 
 const turnOnTable = () => {
-  shown.value = true;
+  table.value = true;
   if (dataStore.get("player") !== "" && dataStore.get("pixelicKey") !== "") {
     addPlayer(dataStore.get("player"), { forced: true });
   }
 };
 
 const turnOffTable = () => {
-  shown.value = false;
+  table.value = false;
 };
 
 var players = ref(0);
@@ -172,7 +216,7 @@ const forceAddPlayer = (player) => {
     }
     if (/[0-9a-fA-F]{12}4[0-9a-fA-F]{19}/.test(player.target["_value"])) {
       searchErrors.value = [];
-      if (shown.value === false) {
+      if (table.value === false) {
         ipcRenderer.send("viewStatistics", dataStore.get("player"));
       } else {
         addPlayer(player.target["_value"], { forced: true });
@@ -183,11 +227,89 @@ const forceAddPlayer = (player) => {
     }
   }
   searchErrors.value = [];
-  if (shown.value === false) {
+  if (table.value === false) {
     ipcRenderer.send("viewStatistics", player.target["_value"]);
   } else {
     addPlayer(player.target["_value"], { forced: true });
   }
+};
+
+var sendingCheatingReport = false;
+var sendingSnipingReport = false;
+
+const reportPlayer = (UUID, reason) => {
+  if (reason === "cheating") sendingCheatingReport = true;
+  if (reason === "sniping") sendingSnipingReport = true;
+  axios
+    .post(
+      "https://api.pixelic.de/hypixel/v1/overlay/reportsystem/report",
+      {},
+      {
+        params: {
+          UUID: UUID,
+          expire: dataStore.get("blacklistExpiry"),
+          reason: reason,
+        },
+        headers: {
+          "X-API-Key": dataStore.get("pixelicKey"),
+        },
+        timeout: 10000,
+      }
+    )
+    .then(() => {
+      if (reason === "cheater") sendingCheatingReport = false;
+      if (reason === "sniper") sendingSnipingReport = false;
+
+      blacklistParser.add(UUID, reason);
+
+      sendNotification({
+        timeout: 5000,
+        color: "success",
+        icon: "mdi-database-plus-outline",
+        text: "Your report was sucessful! The player was also added to your personal blacklist.",
+      });
+    })
+    .catch((error) => {
+      if (reason === "cheater") sendingCheatingReport = false;
+      if (reason === "sniper") sendingSnipingReport = false;
+
+      sendNotification({
+        timeout: 5000,
+        color: "error",
+        icon: "mdi-alert-circle",
+        text: "An error occured whilst submitting your report!",
+      });
+    });
+};
+
+const revokePlayerReport = (UUID) => {
+  axios
+    .delete("https://api.pixelic.de/hypixel/v1/overlay/reportsystem/report", {
+      params: {
+        UUID: UUID,
+      },
+      headers: {
+        "X-API-Key": dataStore.get("pixelicKey"),
+      },
+      timeout: 10000,
+    })
+    .then(() => {
+      blacklistParser.remove(UUID);
+      sendNotification({
+        timeout: 5000,
+        color: "success",
+        icon: "mdi-database-minus-outline",
+        text: "Your report was revoked sucessfully! The player was also removed to your personal blacklist.",
+      });
+    })
+    .catch(() => {
+      sendNotification({
+        timeout: 5000,
+        color: "error",
+        icon: "mdi-alert-circle",
+        text: "An error occured whilst revoking your report!",
+      });
+    });
 };
 
 setInterval(() => {
@@ -196,27 +318,40 @@ setInterval(() => {
     if (Player?.cause) {
       if (Player.cause.toLowerCase() === "invalid uuid or username") {
         Players.push({
-          username: mcColorParser(`§c${Player.username}`),
+          formattedUsername: mcColorParser(`§c${Player.username}`),
           tags: [{ text: "NICKED", tooltip: "This player is hiding their name!", color: "red-lighten-1" }],
         });
       } else if (Player.cause.toLowerCase() === "this player never played hypixel") {
         Players.push({
-          username: mcColorParser(`§c${Player.username}`),
+          formattedUsername: mcColorParser(`§c${Player.username}`),
           tags: [{ text: "NO-DATA", tooltip: "This player never played on Hypixel!", color: "red-lighten-1" }],
         });
       } else if (Player.cause.toLowerCase() === "invalid api-key") {
         Players.push({
-          username: mcColorParser(`§c${Player.username}`),
+          formattedUsername: mcColorParser(`§c${Player.username}`),
           tags: [{ text: "INVALID API-KEY", tooltip: "You are using an invalid API-Key!", color: "red-lighten-1" }],
         });
       } else {
         Players.push({
-          username: mcColorParser(`§4${Player.username}`),
+          formattedUsername: mcColorParser(`§4${Player.username}`),
           tags: [{ text: "FETCHING-FAILED", tooltip: "Some error occured while fetching!", color: "red-lighten-1" }],
         });
       }
     } else {
       var tags = [...tagsParser(Player.UUID)];
+      var blacklisted = false;
+      const blacklistCheck = blacklistParser.check(Player.UUID);
+
+      if (blacklistCheck !== null) {
+        blacklisted = true;
+        if (blacklistCheck === "sniper") {
+          tags.push({ text: "SNIPER", tooltip: "Blacklisted", color: "red-accent-4" });
+        }
+        if (blacklistCheck === "cheater") {
+          tags.push({ text: "CHEATER", tooltip: "Blacklisted", color: "red-accent-4" });
+        }
+      }
+
       if (dataStore.get("developerMode") === true) {
         if (Player.headers["cf-cache-status"] === "HIT") {
           tags.push({ text: "CF", tooltip: "CF-Cache-HIT", color: "green-lighten-1" });
@@ -233,8 +368,11 @@ setInterval(() => {
       }
 
       Players.push({
+        blacklisted: blacklisted,
+        UUID: Player.UUID,
+        username: Player.username,
         fullUsername: mcColorParser(`${rankParser(Player.rank, Player.plusColor, Player.plusPlusColor)[0]} ${Player.username}`),
-        username: mcColorParser(`${rankParser(Player.rank, Player.plusColor, Player.plusPlusColor)[1]} ${Player.username}`),
+        formattedUsername: mcColorParser(`${rankParser(Player.rank, Player.plusColor, Player.plusPlusColor)[1]} ${Player.username}`),
         level: Math.floor(Player.level),
         fullLevel: mcColorParser(starParser(Math.floor(Player.level))[0]),
         levelFormatted: mcColorParser(starParser(Math.floor(Player.level))[1]),
@@ -271,8 +409,11 @@ const updateHeaders = () => {
     { title: "Level", align: "center", key: "level", width: "10%" },
     { key: "levelFormatted", align: " d-none" },
     { key: "fullLevel", align: " d-none" },
-    { title: "Name", align: "center", key: "username", sortable: false, width: "25%" },
+    { title: "Name", align: "center", key: "formattedUsername", sortable: false, width: "25%" },
     { key: "fullUsername", align: " d-none" },
+    { key: "UUID", align: " d-none" },
+    { key: "username", align: " d-none" },
+    { key: "blacklisted", align: " d-none" },
   ];
 
   if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "center", key: "WS", width: "8%" }, { key: "WSFormatted", align: " d-none" });
@@ -281,14 +422,25 @@ const updateHeaders = () => {
   if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "center", key: "finalKills", width: "12%" }, { title: "Finals", key: "finalKillsFormatted", align: " d-none" });
   if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "center", key: "FKDR", width: "10%" }, { key: "FKDRFormatted", align: " d-none" });
   if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "center", key: "BBLR", width: "10%" }, { key: "BBLRFormatted", align: " d-none" });
+
+  headers.value.push({ width: "5%" });
 };
 
 updateHeaders();
 
 setInterval(() => updateHeaders(), 1000);
+
+document.querySelector(":root").style.setProperty("--opacity", dataStore.get("opacity"));
 </script>
 
 <style>
+.v-application {
+  background-color: rgba(var(--v-theme-background), var(--opacity)) !important;
+}
+.v-tooltip .v-overlay__content {
+  background: rgba(var(--v-theme-background), 1) !important;
+}
+
 .datatable table {
   text-align: center;
   table-layout: fixed;

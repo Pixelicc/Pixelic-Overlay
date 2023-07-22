@@ -40,7 +40,7 @@ app.on("ready", () => {
     if (width < 800) {
       win.webContents.setZoomFactor(0.8);
     } else {
-      win.webContents.setZoomFactor(1);
+      win.webContents.setZoomFactor(0.95);
     }
   });
 
@@ -52,7 +52,7 @@ app.on("ready", () => {
         icon: path.join(__dirname, "./src/assets/logo.png"),
       });
       updateNotify.on("click", () => {
-        shell.openExternal("https://github.com/Pixelicc/Pixelic-Overlay/releases/latest");
+        shell.openExternal("https://github.com/pixelicc/pixelic-overlay/releases/latest");
       });
       updateNotify.show();
     }
@@ -61,16 +61,9 @@ app.on("ready", () => {
   win.setAlwaysOnTop(true, "screen");
   win.removeMenu();
 
+  // Open Discord OAuth2
   ipcMain.on("discordAuth", (event, msg) => {
     shell.openExternal("https://discord.com/api/oauth2/authorize?client_id=1109792550459539546&redirect_uri=https%3A%2F%2Fapi.pixelic.de%2Fhypixel%2Fv1%2Foverlay%2Fkey&response_type=code&scope=identify");
-  });
-
-  ipcMain.on("devTools", (event, msg) => {
-    if (msg === true) {
-      win.webContents.openDevTools();
-    } else {
-      win.webContents.closeDevTools();
-    }
   });
 
   ipcMain.once("logPath", (event, msg) => {
@@ -116,6 +109,23 @@ app.on("ready", () => {
     }
   });
 
+  ipcMain.on("notification", (event, msg) => {
+    const notification = new Notification({
+      title: "Pixelic-Overlay",
+      body: msg,
+      icon: path.join(__dirname, "./src/assets/logo.png"),
+    });
+    notification.show();
+  });
+
+  ipcMain.on("devTools", (event, msg) => {
+    if (msg === true) {
+      win.webContents.openDevTools();
+    } else {
+      win.webContents.closeDevTools();
+    }
+  });
+
   ipcMain.on("windowEvent", (event, msg) => {
     if (typeof msg === "object" && Object.keys(msg).length !== 0) {
       win.setBounds(msg);
@@ -148,7 +158,7 @@ app.on("ready", () => {
     discordRPC.set(msg);
   });
 
-  ipcMain.on("socials", (event, msg) => {
+  ipcMain.on("openURL", (event, msg) => {
     shell.openExternal(msg);
   });
 

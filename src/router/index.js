@@ -8,8 +8,24 @@ const router = createRouter({
       component: () => import("../views/Statistics.vue"),
     },
     {
-      path: "/settings",
-      component: () => import("../views/Settings.vue"),
+      path: "/basic-settings",
+      component: () => import("../views/Settings/Basic.vue"),
+    },
+    {
+      path: "/appearance-settings",
+      component: () => import("../views/Settings/Appearance.vue"),
+    },
+    {
+      path: "/column-settings",
+      component: () => import("../views/Settings/Column.vue"),
+    },
+    {
+      path: "/notification-settings",
+      component: () => import("../views/Settings/Notification.vue"),
+    },
+    {
+      path: "/blacklist-settings",
+      component: () => import("../views/Settings/Blacklist.vue"),
     },
   ],
 });

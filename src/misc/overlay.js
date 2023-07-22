@@ -3,6 +3,8 @@ import axiosRetry from "axios-retry";
 import { useIpcRenderer } from "@vueuse/electron";
 
 import dataStore from "../data/dataStore";
+import { sendNotification } from "./snackbarNotification";
+import blacklistParser from "./blacklistParser";
 
 const ipcRenderer = useIpcRenderer();
 
@@ -25,7 +27,17 @@ axiosRetry(axiosClient, {
     return axiosRetry.exponentialDelay(retryCount);
   },
   retryCondition: (error) => {
-    if (error?.response?.status) return error.response.status === 429 || error.response.status === 502 || error.response.status === 503 || error.response.status === 504;
+    if (error?.response?.status && error?.response?.headers?.["x-ratelimit-reset"]) {
+      if (error.response.status === 429) {
+        sendNotification({
+          timeout: 5000,
+          color: "warning",
+          icon: "mdi-speedometer",
+          text: `You are being ratelimited! You can requests further players in ${error.response.headers["x-ratelimit-reset"]} seconds!`,
+        });
+      }
+      return error.response.status === 429 || error.response.status === 502 || error.response.status === 503 || error.response.status === 504;
+    }
     return false;
   },
 });
@@ -76,7 +88,9 @@ const addPlayer = (player, options) => {
           if (dataStore.get("developerMode") === true) {
             Player.headers = data.headers;
           }
-
+          if (blacklistParser.check(Player.UUID) !== null && options.forced === false && dataStore.get("blacklistNotification") === true) {
+            ipcRenderer.send("notification", "A blacklisted player joined your queue!");
+          }
           if (playersInParty.includes(player)) Player.icons.push({ tooltip: "Party", color: "indigo", name: "mdi-account-group" });
           if (options.mention) Player.icons.push({ tooltip: "This person mentioned you!", color: "yellow-lighten-3", name: "mdi-at" });
 
@@ -137,6 +151,9 @@ const parseMessage = (msg) => {
   } else if (msg.indexOf("Sending you") !== -1 && msg.indexOf(":") === -1) {
     inLobby = false;
     clear();
+    if (dataStore.get("queueNotification") === true) {
+      ipcRenderer.send("notification", "You have queued a game!");
+    }
     if (dataStore.get("hideIngame") === true) {
       ipcRenderer.send("windowEvent", "show");
     }
@@ -186,6 +203,9 @@ const parseMessage = (msg) => {
   } else if ((msg.indexOf("The game starts in 1 second!") !== -1 || msg.indexOf("The game is starting in 1 seconds!") !== -1 || msg.indexOf("The game is starting in 0 seconds!") !== -1) && msg.indexOf(":") === -1) {
     if (dataStore.get("hideIngame") === true) {
       ipcRenderer.send("windowEvent", "hide");
+    }
+    if (dataStore.get("gameStartNotification") === true) {
+      ipcRenderer.send("notification", "The game has started!");
     }
   }
   lastMessage = msg;

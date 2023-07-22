@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 
 import { createVuetify } from "vuetify";
-import { VApp, VFooter, VContainer, VRow, VCol, VSpacer, VSheet, VCard, VTextField, VDivider, VSelect, VIcon, VColorPicker, VList, VListItem, VListItemTitle, VListSubheader, VBtn, VToolbar, VToolbarItems, VToolbarTitle, VSwitch, VChip, VTooltip } from "vuetify/components";
+import * as components from "vuetify/components";
 import { VDataTable } from "vuetify/labs/VDataTable";
 
 import dataStore from "./data/dataStore";
@@ -49,31 +49,8 @@ const sakura = {
 
 const vuetify = createVuetify({
   components: {
-    VContainer,
-    VRow,
-    VCol,
-    VSpacer,
-    VApp,
-    VFooter,
+    ...components,
     VDataTable,
-    VSheet,
-    VCard,
-    VTextField,
-    VDivider,
-    VSelect,
-    VIcon,
-    VColorPicker,
-    VList,
-    VListItem,
-    VListItemTitle,
-    VListSubheader,
-    VBtn,
-    VToolbar,
-    VToolbarItems,
-    VToolbarTitle,
-    VSwitch,
-    VChip,
-    VTooltip,
   },
   theme: {
     options: {
