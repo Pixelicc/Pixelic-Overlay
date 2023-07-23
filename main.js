@@ -1,15 +1,41 @@
 const { app, BrowserWindow, ipcMain, shell, Notification } = require("electron");
+const log = require("electron-log");
+const { autoUpdater } = require("electron-updater");
 const fs = require("fs");
 const path = require("path");
 const Store = require("electron-store");
 const Tail = require("tail").Tail;
 const url = require("url");
 const discordRPC = require("./src/misc/discordRPC");
-const { isLatest } = require("./gitUpdate");
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = "info";
+log.info("Pixelic Overlay is starting...");
 
 Store.initRenderer();
 
 app.on("ready", () => {
+  if (process.platform !== "darwin") {
+    autoUpdater.disableWebInstaller = true;
+    autoUpdater.checkForUpdatesAndNotify();
+  } else {
+    // As MacOS requires code signing for auto update mac users are only notified about and update and are required to install it themselves.
+    const { isLatest } = require("./gitUpdate");
+    isLatest().then((latest) => {
+      if (!latest) {
+        const updateNotification = new Notification({
+          title: "Update Available!",
+          body: "An Update is available, to download the lastest version click here!",
+          icon: path.join(__dirname, "./src/assets/logo.png"),
+        });
+        updateNotification.on("click", () => {
+          shell.openExternal("https://github.com/pixelicc/pixelic-overlay/releases/latest");
+        });
+        updateNotification.show();
+      }
+    });
+  }
+
   const win = new BrowserWindow({
     autoHideMenuBar: true,
     width: 800,
@@ -44,25 +70,12 @@ app.on("ready", () => {
     }
   });
 
-  isLatest().then((latest) => {
-    if (!latest) {
-      const updateNotify = new Notification({
-        title: "Update Available!",
-        body: "An Update is available, to download the lastest version click here!",
-        icon: path.join(__dirname, "./src/assets/logo.png"),
-      });
-      updateNotify.on("click", () => {
-        shell.openExternal("https://github.com/pixelicc/pixelic-overlay/releases/latest");
-      });
-      updateNotify.show();
-    }
-  });
-
   win.setAlwaysOnTop(true, "screen");
   win.removeMenu();
 
   // Open Discord OAuth2
   ipcMain.on("discordAuth", (event, msg) => {
+    log.info("Requesting Discord OAuth2...");
     shell.openExternal("https://discord.com/api/oauth2/authorize?client_id=1109792550459539546&redirect_uri=https%3A%2F%2Fapi.pixelic.de%2Fhypixel%2Fv1%2Foverlay%2Fkey&response_type=code&scope=identify");
   });
 
@@ -82,7 +95,7 @@ app.on("ready", () => {
       } else if (process.platform === "linux") {
         path = `${app.getPath("home").replace(/\\/g, "/")}/.minecraft/logs/blclient/minecraft/latest.log`;
       }
-    } else if (client === "Vanilla") {
+    } else if (client === "Default") {
       if (process.platform === "win32") {
         path = `${app.getPath("appData").replace(/\\/g, "/")}/.minecraft/logs/latest.log`;
       } else if (process.platform === "darwin") {
@@ -91,6 +104,8 @@ app.on("ready", () => {
         path = `${app.getPath("home").replace(/\\/g, "/")}/.minecraft/logs/latest.log`;
       }
     }
+
+    log.info(`Selected Client: ${client} | Choosen Path: ${path}`);
 
     if (fs.existsSync(path)) {
       const tail = new Tail(path, {

@@ -12,7 +12,7 @@ const store = new Store({
     },
     client: {
       type: "string",
-      default: "Vanilla",
+      default: "Default",
     },
     customLogFilePath: {
       type: "string",

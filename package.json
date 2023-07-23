@@ -2,7 +2,7 @@
   "name": "pixelic-overlay",
   "description": "",
   "author": "Pixelic",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "main.js",
   "scripts": {
     "start": "vite build && electron .",
@@ -11,9 +11,17 @@
   "build": {
     "productName": "Pixelic Overlay",
     "appId": "pixelic.overlay",
+    "artifactName": "Pixelic-Overlay-Setup-v${buildVersion}-${arch}.${ext}",
     "directories": {
       "output": "builds"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "pixelicc",
+        "repo": "pixelic-overlay"
+      }
+    ],
     "win": {
       "icon": "src/assets/logo.png",
       "target": [
@@ -58,7 +66,9 @@
     "axios": "^1.4.0",
     "axios-retry": "^3.5.1",
     "discord-rpc": "^4.0.1",
+    "electron-log": "^4.4.8",
     "electron-store": "^8.1.0",
+    "electron-updater": "^6.1.1",
     "moment": "^2.29.4",
     "tail": "2.2.6",
     "vue": "^3.2.25",
