@@ -1,11 +1,11 @@
 <div align="center">
     <h1>Pixelic Overlay</h1>
-    <img src="https://wakatime.com/badge/user/fdd9682f-df58-46bb-9b10-374601d7f52d/project/4b12db36-4d51-4adb-bc90-3b45c943c02d.svg" alt="wakatime">
 </div>
 <div align="center">
-        <a href="https://discord.com/invite/2vAuyVvdwj"><img src="https://img.shields.io/discord/926873163411910746?color=blue&label=Discord&logo=discord&style=for-the-badge" alt="Discord"></a>
-        <a href="https://github.com/Pixelicc/Pixelic-Overlay/stargazers"><img src="https://img.shields.io/github/stars/pixelicc/Pixelic-Overlay?style=for-the-badge" alt="Stars"></a>
-    <a href="https://github.com/Pixelicc/Pixelic-Overlay/releases"><img src="https://img.shields.io/github/downloads/pixelicc/Pixelic-Overlay/total?style=for-the-badge" alt="Downloads"></a>
+        <a><img src="https://img.shields.io/github/package-json/v/pixelicc/pixelic-overlay" alt="Version"></a>
+    <a href="https://github.com/Pixelicc/Pixelic-Overlay/releases"><img src="https://img.shields.io/github/downloads/pixelicc/pixelic-overlay/total" alt="Downloads"></a>
+    <a href="https://discord.com/invite/2vAuyVvdwj"><img src="https://img.shields.io/discord/926873163411910746?color=7289DA&label=Discord" alt="Discord"></a>
+    <a><img src="https://wakatime.com/badge/user/fdd9682f-df58-46bb-9b10-374601d7f52d/project/4b12db36-4d51-4adb-bc90-3b45c943c02d.svg" alt="Wakatime"></a>
 </div>
 
 ## Sections
