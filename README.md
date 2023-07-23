@@ -28,7 +28,7 @@
 ### General features
 
 - Shows stats of players in your lobby in seconds
-- Works with Lunarclient, Badlion, Vanilla and any custom selected log file
+- Works with Lunarclient, Badlion, Vanilla or any custom selected log file
 - Resizable, movable, and minimizable
 - Easy to use and setup
 - Can show nicked players, party members and players that mentioned you in chat
@@ -46,19 +46,19 @@
 - Overlay Stats » Allows you to select the Stats you want to be shown in the Overlay. Supported are WS, Wins, WLR, Finals, FKDR and BBLR
 - Hide Overlay Ingame » Automatically hides the Overlay after the game has started. Shows up again once you enter a new Queue.
 - Theme » Allows you to select one of the default themes or set it to custom to fully customize the theme. By default you can choose between Dark, White and Sakura Themes.
-- Discord RPC » Toggle whether to show that you are using the Overlay on Discord.
+- Discord RPC » Toggle whether to show that you are using the Overlay on Discord. Shown stats include lifetime, yearly, monthly, weekly and daily.
 - Developer Mode » Enables the Chrome Dev Tools and shows extra Tags. Those Tags include the CF-Cache-Status and PX-Cache-Status Header for detailed Information about the data fetch.
 
 ## Previews
 
 ### Overlay Page
 
-![Overlay Page](https://media.discordapp.net/attachments/927561825141289043/1130635080340090900/image.png)
+![Overlay Page](https://cdn.discordapp.com/attachments/927561825141289043/1132668941643305051/image.png)
 
 ### Statistics Page
 
-![Statistics Page 1](https://cdn.discordapp.com/attachments/927561825141289043/1130635529600372917/image.png)
-![Statistics Page2 ](https://cdn.discordapp.com/attachments/927561825141289043/1130635373798756453/image.png)
+![Statistics Page 1](https://cdn.discordapp.com/attachments/927561825141289043/1132669221919264850/image.png)
+![Statistics Page2 ](https://cdn.discordapp.com/attachments/927561825141289043/1132669414001610953/image.png)
 
 ## Discord
 
