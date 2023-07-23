@@ -19,7 +19,7 @@ app.on("ready", () => {
     autoUpdater.disableWebInstaller = true;
     autoUpdater.checkForUpdatesAndNotify();
   } else {
-    // As MacOS requires code signing for auto update mac users are only notified about and update and are required to install it themselves.
+    // As MacOS requires code signing for auto update mac users are only notified about an update and are required to install it themselves.
     const { isLatest } = require("./gitUpdate");
     isLatest().then((latest) => {
       if (!latest) {
