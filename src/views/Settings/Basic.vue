@@ -55,7 +55,7 @@
                     <v-switch color="secondary" v-model="developerMode" @change="toggleDeveloperMode" style="display: flex"></v-switch>
                   </template>
                   <v-list-item-title>Developer Mode</v-list-item-title>
-                  <v-list-item-subtitle>Do not enable this if you do not know what you are doing</v-list-item-subtitle>
+                  <v-list-item-subtitle>Do not enable this if you do not know what you are doing!</v-list-item-subtitle>
                 </v-list-item>
               </v-list>
             </div>

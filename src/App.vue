@@ -3,7 +3,8 @@
     <v-toolbar density="compact" style="-webkit-app-region: drag; background-color: rgba(var(--v-theme-background), var(--opacity)) !important">
       <v-app-bar-nav-icon variant="text" @click.stop="sidebar = !sidebar" style="-webkit-app-region: no-drag"></v-app-bar-nav-icon>
 
-      <v-toolbar-title class="grow"> Pixelic Overlay </v-toolbar-title>
+      <v-toolbar-title v-if="!sidebar" class="grow"> Pixelic Overlay </v-toolbar-title>
+      <v-toolbar-title v-if="sidebar" class="grow" style="-webkit-app-region: no-drag"> Pixelic Overlay </v-toolbar-title>
 
       <v-btn v-if="table" icon @click="refreshPlayers" style="-webkit-app-region: no-drag">
         <v-icon color="secondary">mdi-refresh</v-icon>
@@ -46,7 +47,7 @@
       </v-list>
     </v-navigation-drawer>
     <router-view></router-view>
-    <v-data-table v-if="table" :headers="headers" :items="players" :items-per-page="-1" class="datatable elevation-1" density="compact" no-data-text="No Players found" sort-asc-icon="mdi-chevron-up" sort-desc-icon="mdi-chevron-down">
+    <v-data-table v-if="table" :headers="headers" :items="players" :items-per-page="-1" class="datatable elevation-0" density="compact" no-data-text="No Players found" sort-asc-icon="mdi-chevron-up" sort-desc-icon="mdi-chevron-down">
       <template v-slot:item="{ item }">
         <tr>
           <td class="align-center justify-center">
@@ -86,23 +87,28 @@
           <td v-if="headers.some((h) => h.title === 'FKDR')"><span v-html="item.columns.FKDRFormatted"></span></td>
           <td v-if="headers.some((h) => h.title === 'BBLR')"><span v-html="item.columns.BBLRFormatted"></span></td>
           <td>
-            <v-menu :close-on-content-click="false" v-if="item.columns.UUID !== undefined && item.columns.username.toLowerCase() !== dataStore.get('player').toLowerCase() && item.columns.UUID.toLowerCase() !== dataStore.get('player').replace(/-/g, '').toLowerCase()">
+            <v-menu>
               <template v-slot:activator="{ props }">
-                <v-btn size="small" variant="text" :ripple="false" icon="mdi-dots-horizontal" v-bind="props"> </v-btn>
+                <v-btn size="small" variant="text" icon="mdi-dots-horizontal" v-bind="props" style="height: calc(var(--v-btn-height)) !important"> </v-btn>
               </template>
               <v-list>
-                <v-list-item v-if="item.columns.blacklisted === false">
-                  <v-btn prepend-icon="mdi-flag-variant-plus" :loading="sendingCheatingReport" @click="reportPlayer(item.columns.UUID, 'cheater')">
+                <v-list-item>
+                  <v-btn variant="flat" prepend-icon="mdi-chart-timeline-variant-shimmer" router-link to="/statistics" @click="viewStatistics(item.columns.UUID)">
+                    <v-list-item-title>View Statistics</v-list-item-title>
+                  </v-btn>
+                </v-list-item>
+                <v-list-item v-if="!item.columns.blacklisted && !item.columns.isYou">
+                  <v-btn variant="flat" prepend-icon="mdi-flag-variant-plus" @click="reportPlayer(item.columns.UUID, 'cheater')">
                     <v-list-item-title>Report for Cheating</v-list-item-title>
                   </v-btn>
                 </v-list-item>
-                <v-list-item v-if="item.columns.blacklisted === false">
-                  <v-btn prepend-icon="mdi-flag-variant-plus" :loading="sendingSnipingReport" @click="reportPlayer(item.columns.UUID, 'sniper')">
+                <v-list-item v-if="!item.columns.blacklisted && !item.columns.isYou">
+                  <v-btn variant="flat" prepend-icon="mdi-flag-variant-plus" @click="reportPlayer(item.columns.UUID, 'sniper')">
                     <v-list-item-title>Report for Sniping</v-list-item-title>
                   </v-btn>
                 </v-list-item>
-                <v-list-item v-if="item.columns.blacklisted === true">
-                  <v-btn prepend-icon="mdi-flag-variant-minus" :loading="revokeReport" @click="revokePlayerReport(item.columns.UUID)">
+                <v-list-item v-if="item.columns.blacklisted && !item.columns.isYou">
+                  <v-btn variant="flat" prepend-icon="mdi-flag-variant-minus" @click="revokePlayerReport(item.columns.UUID)">
                     <v-list-item-title>Remove from Blacklist</v-list-item-title>
                   </v-btn>
                 </v-list-item>
@@ -234,12 +240,7 @@ const forceAddPlayer = (player) => {
   }
 };
 
-var sendingCheatingReport = false;
-var sendingSnipingReport = false;
-
 const reportPlayer = (UUID, reason) => {
-  if (reason === "cheating") sendingCheatingReport = true;
-  if (reason === "sniping") sendingSnipingReport = true;
   axios
     .post(
       "https://api.pixelic.de/hypixel/v1/overlay/reportsystem/report",
@@ -247,7 +248,7 @@ const reportPlayer = (UUID, reason) => {
       {
         params: {
           UUID: UUID,
-          expire: dataStore.get("blacklistExpiry"),
+          expire: reason === "cheater" ? dataStore.get("blacklistCheaterExpiry") : dataStore.get("blacklistSniperExpiry"),
           reason: reason,
         },
         headers: {
@@ -257,9 +258,6 @@ const reportPlayer = (UUID, reason) => {
       }
     )
     .then(() => {
-      if (reason === "cheater") sendingCheatingReport = false;
-      if (reason === "sniper") sendingSnipingReport = false;
-
       blacklistParser.add(UUID, reason);
 
       sendNotification({
@@ -270,9 +268,6 @@ const reportPlayer = (UUID, reason) => {
       });
     })
     .catch((error) => {
-      if (reason === "cheater") sendingCheatingReport = false;
-      if (reason === "sniper") sendingSnipingReport = false;
-
       sendNotification({
         timeout: 5000,
         color: "error",
@@ -310,6 +305,13 @@ const revokePlayerReport = (UUID) => {
         text: "An error occured whilst revoking your report!",
       });
     });
+};
+
+const viewStatistics = (UUID) => {
+  turnOffTable();
+  setTimeout(() => {
+    ipcRenderer.send("viewStatistics", UUID);
+  }, 1000);
 };
 
 setInterval(() => {
@@ -368,6 +370,7 @@ setInterval(() => {
       }
 
       Players.push({
+        isYou: Player.username.toLowerCase() === dataStore.get("player").toLowerCase() || Player.UUID.toLowerCase() === dataStore.get("player").replace(/-/g, "").toLowerCase(),
         blacklisted: blacklisted,
         UUID: Player.UUID,
         username: Player.username,
@@ -412,7 +415,7 @@ const updateHeaders = () => {
     { title: "Name", align: "center", key: "formattedUsername", sortable: false, width: "25%" },
     { key: "fullUsername", align: " d-none" },
     { key: "UUID", align: " d-none" },
-    { key: "username", align: " d-none" },
+    { key: "isYou", align: " d-none" },
     { key: "blacklisted", align: " d-none" },
   ];
 

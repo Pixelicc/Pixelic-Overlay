@@ -39,8 +39,8 @@ module.exports = {
 
             client.setActivity({
               instance: false,
-              details: `[${level}${star}] ${res.username}`,
-              state: `Lifetime » Wins: ${res.Bedwars.overall.wins.toLocaleString("en-US")} | Finals: ${res.Bedwars.overall.finalKills.toLocaleString("en-US")} | Beds: ${res.Bedwars.overall.bedsBroken.toLocaleString("en-US")}`,
+              details: `Lifetime » [${level}${star}] ${res.username}`,
+              state: `Wins: ${res.Bedwars.overall.wins.toLocaleString("en-US")} | Finals: ${res.Bedwars.overall.finalKills.toLocaleString("en-US")} | Beds: ${res.Bedwars.overall.bedsBroken.toLocaleString("en-US")}`,
               startTimestamp,
               largeImageKey: "pixelic",
               largeImageText: `Pixelic-Overlay v${PackageJSON.version}`,
@@ -131,11 +131,11 @@ module.exports = {
                     };
 
                     if (Object.keys(modeData).length === 0) {
-                      activity.details = `[0.00✫] ${res.username}`;
-                      activity.state = `${mode} » Wins: 0 | Finals: 0 | Beds: 0`;
+                      activity.details = `${mode} » [0.00✫] ${res.username}`;
+                      activity.state = `Wins: 0 | Finals: 0 | Beds: 0`;
                     } else {
-                      activity.details = `[${(res.Bedwars.level - modeData.Bedwars.level).toFixed(2)}✫] ${res.username}`;
-                      activity.state = `${mode} » Wins: ${(res.Bedwars.overall.wins - modeData.Bedwars.overall.wins).toLocaleString("en-US")} | Finals: ${(res.Bedwars.overall.finalKills - modeData.Bedwars.overall.finalKills).toLocaleString("en-US")} | Beds: ${(res.Bedwars.overall.bedsBroken - modeData.Bedwars.overall.bedsBroken).toLocaleString("en-US")}`;
+                      activity.details = `${mode} » [${(res.Bedwars.level - modeData.Bedwars.level).toFixed(2)}✫] ${res.username}`;
+                      activity.state = `Wins: ${(res.Bedwars.overall.wins - modeData.Bedwars.overall.wins).toLocaleString("en-US")} | Finals: ${(res.Bedwars.overall.finalKills - modeData.Bedwars.overall.finalKills).toLocaleString("en-US")} | Beds: ${(res.Bedwars.overall.bedsBroken - modeData.Bedwars.overall.bedsBroken).toLocaleString("en-US")}`;
                     }
 
                     client.setActivity(activity);

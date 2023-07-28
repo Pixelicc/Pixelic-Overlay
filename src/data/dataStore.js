@@ -69,9 +69,26 @@ const store = new Store({
       type: "boolean",
       default: false,
     },
-    blacklistExpiry: {
+    blacklistCheaterExpiry: {
       type: "string",
       default: "1y",
+    },
+    blacklistSniperExpiry: {
+      type: "string",
+      default: "30d",
+    },
+    blacklists: {
+      type: "array",
+      default: [
+        {
+          name: "Global",
+          enabled: false,
+        },
+        {
+          name: "Personal",
+          enabled: true,
+        },
+      ],
     },
     colums: {
       type: "array",

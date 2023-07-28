@@ -38,7 +38,7 @@
                     <v-switch color="secondary" v-model="blacklistNotification" @change="toggleBlacklistNotification" style="display: flex"></v-switch>
                   </template>
                   <v-list-item-title>Cheater/Sniper</v-list-item-title>
-                  <v-list-item-subtitle>Triggered once a blacklisted player enters your queue</v-list-item-subtitle>
+                  <v-list-item-subtitle>Triggered once a blacklisted player enters your queue.</v-list-item-subtitle>
                 </v-list-item>
               </v-list>
             </div>
