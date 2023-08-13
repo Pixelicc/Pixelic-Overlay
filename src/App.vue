@@ -93,7 +93,7 @@
               </template>
               <v-list>
                 <v-list-item>
-                  <v-btn variant="flat" prepend-icon="mdi-chart-timeline-variant-shimmer" router-link to="/statistics" @click="viewStatistics(item.columns.UUID)">
+                  <v-btn variant="flat" prepend-icon="mdi-chart-timeline-variant-shimmer" router-link to="/statistics" @click="viewStatistics(item.columns.username)">
                     <v-list-item-title>View Statistics</v-list-item-title>
                   </v-btn>
                 </v-list-item>
@@ -149,6 +149,7 @@ const ipcRenderer = useIpcRenderer();
 
 if (dataStore.get("pixelicKey") === "") {
   router.push("/basic-settings");
+  turnOffTable();
   ipcRenderer.send("discordAuth");
   ipcRenderer.on("pixelicKey", (event, msg) => {
     dataStore.set("pixelicKey", msg);
@@ -307,10 +308,10 @@ const revokePlayerReport = (UUID) => {
     });
 };
 
-const viewStatistics = (UUID) => {
+const viewStatistics = (player) => {
   turnOffTable();
   setTimeout(() => {
-    ipcRenderer.send("viewStatistics", UUID);
+    ipcRenderer.send("viewStatistics", player);
   }, 1000);
 };
 
@@ -414,6 +415,7 @@ const updateHeaders = () => {
     { key: "fullLevel", align: " d-none" },
     { title: "Name", align: "center", key: "formattedUsername", sortable: false, width: "25%" },
     { key: "fullUsername", align: " d-none" },
+    { key: "username", align: " d-none" },
     { key: "UUID", align: " d-none" },
     { key: "isYou", align: " d-none" },
     { key: "blacklisted", align: " d-none" },
