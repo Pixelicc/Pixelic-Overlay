@@ -185,10 +185,10 @@ const parseMessage = (msg) => {
     var player = null;
     if (msg.indexOf("Guild") !== -1 || msg.indexOf("Officer") !== -1) {
       var parsedMessage = msg.slice(0, msg.indexOf(":")).split(" ");
-      if (parseMessage.length === 5) {
-        player = parsedMessage[4];
-      } else {
+      if (parsedMessage.length === 5) {
         player = parsedMessage[3];
+      } else {
+        player = parsedMessage[4];
       }
     } else {
       player = msg.slice(0, msg.indexOf(":")).split(" ").slice(-1)[0];
