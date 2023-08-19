@@ -14,7 +14,7 @@
         <v-icon color="secondary">mdi-account-multiple-minus</v-icon>
       </v-btn>
 
-      <v-text-field v-if="table || route.path === '/statistics'" class="ml-2" variant="outlined" density="compact" width="" single-line hide-details prepend-inner-icon="mdi-account-search" persistent-placeholder placeholder="Search player(s)" v-model="searchQuery" @keydown.enter.prevent:modelValue="forceAddPlayer" :error-messages="searchErrors" style="-webkit-app-region: no-drag; max-width: 25%"></v-text-field>
+      <v-text-field v-if="table || route.path === '/statistics'" class="ml-2" variant="outlined" density="compact" single-line hide-details prepend-inner-icon="mdi-account-search" persistent-placeholder placeholder="Search player(s)" v-model="searchQuery" @keydown.enter.prevent:modelValue="forceAddPlayer" :error-messages="searchErrors" style="-webkit-app-region: no-drag; max-width: 25%"></v-text-field>
 
       <v-btn icon @click="minimizeWindow" style="-webkit-app-region: no-drag">
         <v-icon>mdi-minus</v-icon>
@@ -209,35 +209,25 @@ searchErrors.value = [];
 const forceAddPlayer = (player) => {
   searchQuery.value = "";
 
-  if (player.target["_value"] === "" || player.target["_value"] === undefined) {
-    searchErrors.value = [];
-    ipcRenderer.send("viewStatistics", dataStore.get("player"));
-    return;
-  }
-
-  if (!/^[a-zA-Z0-9_]{2,16}$/gm.test(player.target["_value"])) {
-    player.target["_value"] = player.target["_value"].replace(/-/g, "");
-    if (player.target["_value"].length !== 32) {
-      searchErrors.value = ["Invalid Hypixel UUID"];
+  if (/^[a-zA-Z0-9_]{2,16}$/gm.test(player.target["_value"])) {
+    if (!table.value) {
+      ipcRenderer.send("viewStatistics", player.target["_value"]);
       return;
-    }
-    if (/[0-9a-fA-F]{12}4[0-9a-fA-F]{19}/.test(player.target["_value"])) {
-      searchErrors.value = [];
-      if (table.value === false) {
-        ipcRenderer.send("viewStatistics", dataStore.get("player"));
-      } else {
-        addPlayer(player.target["_value"], { forced: true });
-      }
     } else {
-      searchErrors.value = ["Invalid Hypixel Username"];
+      addPlayer(player.target["_value"], { forced: true });
       return;
     }
-  }
-  searchErrors.value = [];
-  if (table.value === false) {
-    ipcRenderer.send("viewStatistics", player.target["_value"]);
+  } else if (player.target["_value"] === "") {
+    if (!table.value) {
+      ipcRenderer.send("viewStatistics", dataStore.get("player"));
+      return;
+    }
   } else {
-    addPlayer(player.target["_value"], { forced: true });
+    searchErrors.value = ["Invalid Username!"];
+    setTimeout(() => {
+      searchErrors.value = [];
+    }, 500);
+    return;
   }
 };
 
