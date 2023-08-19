@@ -10,7 +10,7 @@
         <v-col>
           <v-card title="General">
             <div class="ml-4 mr-4 mt-4">
-              <v-text-field :rules="[validPlayer]" variant="outlined" clearable label="Username / UUID" persistent-placeholder placeholder="Pixelic or 14727fae-fbdc-4aff-848c-d2713eb9939e" prepend-icon="mdi-account" v-model="getPlayer" return-object @update:modelValue="setPlayer"></v-text-field>
+              <v-text-field :rules="[validPlayer]" variant="outlined" clearable label="Username" persistent-placeholder placeholder="Pixelic" prepend-icon="mdi-account" v-model="getPlayer" return-object @update:modelValue="setPlayer"></v-text-field>
               <v-divider :thickness="8" class="border-opacity-0"></v-divider>
               <v-select label="Client / Log File" variant="outlined" :items="clients" prepend-icon="mdi-file" v-model="getClient" return-object @update:modelValue="setClient"></v-select>
               <v-divider v-if="getClient === 'Custom'" :thickness="8" class="border-opacity-0"></v-divider>
@@ -82,14 +82,9 @@ const getPlayer = ref(0);
 getPlayer.value = dataStore.get("player");
 
 const validPlayer = (value) => {
-  if (value === undefined) return "To get the best experience using this Overlay you should enter your Hypixel Username or UUID!";
+  if (value === undefined) return "To get the best experience using this Overlay you should enter your Username!";
   if (/^[a-zA-Z0-9_]{2,16}$/gm.test(value)) return true;
-  value = value.replace(/-/g, "");
-  if (value.length !== 32) {
-    return "Invalid Username or UUID!";
-  }
-  if (/[0-9a-fA-F]{12}4[0-9a-fA-F]{19}/.test(value)) return true;
-  return "Invalid Username or UUID!";
+  return "Invalid Username!";
 };
 
 const clients = ["Default (Vanilla/LabyMod/Forge)", "Lunar", "Badlion", "Custom (Requires restart after location change)"];
