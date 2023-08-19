@@ -71,7 +71,6 @@
 
 <script setup>
 import axios from "axios";
-import moment from "moment";
 import { ref, onMounted } from "vue";
 import { useIpcRenderer } from "@vueuse/electron";
 import mcColorParser from "../misc/mcColorParser";
@@ -496,10 +495,6 @@ const updateData = async () => {
       }
 
       if (Object.keys(modeData).length === 0) continue;
-
-      moment.relativeTimeThreshold("w", 5);
-      moment.relativeTimeThreshold("d", 7);
-      moment.relativeTimeThreshold("h", 24);
 
       if (mode === "yearly") {
         resetTime.value[mode] = modeData.date;

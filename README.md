@@ -33,21 +33,8 @@
 - Easy to use and setup
 - Can show nicked players, party members and players that mentioned you in chat
 - Color-coded Stats in terms of skill level
-- Detailed statistics page
-- Report System where you can report players for cheating/sniping and when you are queueing them again you will be warned. In the future past reports may be used to warn other users too.
-
-### Settings
-
-- Hypixel Username or UUID » Needed to show your Stats by default in the Overlay and Statistics Page
-- Pixelic-API Key » Required to access Data
-- Bedwars Gamemode » Allows you to set the Gamemode which Stats should be shown. Supported are Overall, Cores, Solos, Doubles, Threes, Fours and 4v4
-- Client » Allows you to set the Client to automatically find you log file
-- Custom Log File » Only shows up when the Client is set to Custom. This field allows you to enter a path for your custom log file
-- Overlay Stats » Allows you to select the Stats you want to be shown in the Overlay. Supported are WS, Wins, WLR, Finals, FKDR and BBLR
-- Hide Overlay Ingame » Automatically hides the Overlay after the game has started. Shows up again once you enter a new Queue.
-- Theme » Allows you to select one of the default themes or set it to custom to fully customize the theme. By default you can choose between Dark, White and Sakura Themes.
-- Discord RPC » Toggle whether to show that you are using the Overlay on Discord. Shown stats include lifetime, yearly, monthly, weekly and daily.
-- Developer Mode » Enables the Chrome Dev Tools and shows extra Tags. Those Tags include the CF-Cache-Status and PX-Cache-Status Header for detailed Information about the data fetch.
+- Detailed statistics page showing daily, weekly, monthly, yearly, alltime data/graphs (data is based on players checked by other players or yourself)
+- Report System where you can report players for cheating/sniping and when you are queueing them again you will be warned
 
 ## Previews
 
