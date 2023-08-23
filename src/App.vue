@@ -147,6 +147,20 @@ const route = useRoute();
 
 const ipcRenderer = useIpcRenderer();
 
+var table = ref(0);
+table.value = true;
+
+const turnOnTable = () => {
+  table.value = true;
+  if (dataStore.get("player") !== "" && dataStore.get("pixelicKey") !== "") {
+    addPlayer(dataStore.get("player"), { forced: true });
+  }
+};
+
+const turnOffTable = () => {
+  table.value = false;
+};
+
 if (dataStore.get("pixelicKey") === "") {
   router.push("/basic-settings");
   turnOffTable();
@@ -165,20 +179,6 @@ if (dataStore.get("player") !== "" && dataStore.get("pixelicKey") !== "" && data
 
 var sidebar = ref(0);
 sidebar.value = false;
-
-var table = ref(0);
-table.value = true;
-
-const turnOnTable = () => {
-  table.value = true;
-  if (dataStore.get("player") !== "" && dataStore.get("pixelicKey") !== "") {
-    addPlayer(dataStore.get("player"), { forced: true });
-  }
-};
-
-const turnOffTable = () => {
-  table.value = false;
-};
 
 var players = ref(0);
 players.value = [];
