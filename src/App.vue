@@ -302,7 +302,7 @@ const viewStatistics = (player) => {
   turnOffTable();
   setTimeout(() => {
     ipcRenderer.send("viewStatistics", player);
-  }, 1000);
+  }, 250);
 };
 
 setInterval(() => {

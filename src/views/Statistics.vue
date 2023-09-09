@@ -165,18 +165,15 @@ resetTime.value = {
   yearly: "N/A",
 };
 
+var updating = false;
+
 const updateData = async () => {
-  if (Chart.getChart("weeklyChart") !== undefined) {
-    Chart.getChart("weeklyChart").destroy();
-  }
+  if (updating) return setTimeout(updateData(), 1000);
+  updating = true;
 
-  if (Chart.getChart("monthlyChart") !== undefined) {
-    Chart.getChart("monthlyChart").destroy();
-  }
-
-  if (Chart.getChart("alltimeChart") !== undefined) {
-    Chart.getChart("alltimeChart").destroy();
-  }
+  if (Chart.getChart("weeklyChart") !== undefined) Chart.getChart("weeklyChart").destroy();
+  if (Chart.getChart("monthlyChart") !== undefined) Chart.getChart("monthlyChart").destroy();
+  if (Chart.getChart("alltimeChart") !== undefined) Chart.getChart("alltimeChart").destroy();
 
   playerFormatted.value = "N/A";
 
@@ -521,6 +518,7 @@ const updateData = async () => {
       }
     }
   });
+  updating = false;
 };
 
 onMounted(() => {
