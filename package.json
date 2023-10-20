@@ -71,7 +71,7 @@
     "electron-updater": "^6.1.4",
     "moment": "^2.29.4",
     "tail": "2.2.6",
-    "vue": "^3.2.25",
+    "vue": "^3.3.5",
     "vue-router": "^4.2.5",
     "vuetify": "^3.3.22"
   },
