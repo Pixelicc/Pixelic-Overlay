@@ -79,7 +79,7 @@
     "@vitejs/plugin-vue": "^2.3.4",
     "electron": "^27.0.2",
     "electron-builder": "^24.6.4",
-    "sass": "^1.69.4",
+    "sass": "^1.69.5",
     "vite": "^2.9.16"
   }
 }
