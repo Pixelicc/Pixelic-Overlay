@@ -73,7 +73,7 @@
     "tail": "2.2.6",
     "vue": "^3.3.7",
     "vue-router": "^4.2.5",
-    "vuetify": "^3.3.22"
+    "vuetify": "^3.3.23"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.4",
