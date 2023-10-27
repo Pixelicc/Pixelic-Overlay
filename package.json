@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@vueuse/electron": "^10.5.0",
-    "axios": "^1.5.1",
+    "axios": "^1.6.0",
     "axios-retry": "^3.8.1",
     "discord-rpc": "^4.0.1",
     "electron-log": "^5.0.0",
