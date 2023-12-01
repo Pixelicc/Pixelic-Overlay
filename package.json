@@ -76,7 +76,7 @@
     "vuetify": "^3.4.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.5.0",
+    "@vitejs/plugin-vue": "^4.5.1",
     "electron": "^27.1.2",
     "electron-builder": "^24.6.4",
     "sass": "^1.69.5",
