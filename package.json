@@ -80,6 +80,6 @@
     "electron": "^27.1.3",
     "electron-builder": "^24.9.1",
     "sass": "^1.69.5",
-    "vite": "^5.0.4"
+    "vite": "^5.0.6"
   }
 }
