@@ -1,0 +1,56 @@
+{
+  "productName": "Pixelic Overlay",
+  "appId": "pixelic.overlay",
+  "artifactName": "Pixelic-Overlay-Setup-v${buildVersion}-${arch}.${ext}",
+  "directories": {
+    "output": "builds/${version}"
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "pixelicc",
+      "repo": "pixelic-overlay"
+    }
+  ],
+  "win": {
+    "icon": "src/assets/logo.png",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "license": "license.txt",
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
+  },
+  "linux": {
+    "icon": "src/assets/logo.png",
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": [
+          "x64"
+        ]
+      }
+    ]
+  },
+  "mac": {
+    "icon": "src/assets/logo.png",
+    "target": [
+      {
+        "target": "dmg",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
+    ]
+  }
+}

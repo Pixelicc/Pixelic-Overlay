@@ -1,0 +1,15 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/dist/**": true,
+    "**/dist-electron/**": true,
+    "**/.nuxt/**": true,
+    "**/.output/**": true,
+    "**/node_modules/**": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
+}

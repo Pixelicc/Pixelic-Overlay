@@ -1,85 +1,37 @@
 {
   "name": "pixelic-overlay",
-  "description": "",
+  "description": "Your Next Gen Open-Source Bedwars Overlay",
   "author": "Pixelic",
-  "version": "1.1.5",
-  "main": "main.js",
-  "scripts": {
-    "start": "vite build && electron .",
-    "build": "electron-builder"
+  "version": "2.0.0",
+  "private": true,
+  "main": "dist-electron/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pixelicc/pixelic-overlay.git"
   },
-  "build": {
-    "productName": "Pixelic Overlay",
-    "appId": "pixelic.overlay",
-    "artifactName": "Pixelic-Overlay-Setup-v${buildVersion}-${arch}.${ext}",
-    "directories": {
-      "output": "builds"
-    },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "pixelicc",
-        "repo": "pixelic-overlay"
-      }
-    ],
-    "win": {
-      "icon": "src/assets/logo.png",
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "license": "license.txt"
-    },
-    "linux": {
-      "icon": "src/assets/logo.png",
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    "mac": {
-      "icon": "src/assets/logo.png",
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
-      ]
-    }
+  "scripts": {
+    "dev": "nuxi dev --port 5000",
+    "build": "nuxi build --prerender && electron-builder"
   },
   "dependencies": {
-    "@vueuse/electron": "^10.7.0",
+    "@mdi/font": "^7.3.67",
     "axios": "^1.6.2",
-    "axios-retry": "^4.0.0",
+    "bufferutil": "^4.0.8",
     "discord-rpc": "^4.0.1",
-    "electron-log": "^5.0.1",
-    "electron-store": "^8.1.0",
     "electron-updater": "^6.1.7",
-    "moment": "^2.29.4",
-    "tail": "2.2.6",
-    "vue": "^3.3.13",
-    "vue-router": "^4.2.5",
-    "vuetify": "^3.4.8"
+    "tail": "^2.2.6",
+    "utf-8-validate": "^6.0.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.5.2",
-    "electron": "^28.0.0",
+    "electron": "^28.1.0",
     "electron-builder": "^24.9.1",
-    "sass": "^1.69.5",
-    "vite": "^5.0.10"
+    "electron-log": "^5.0.2",
+    "electron-store": "^8.1.0",
+    "nuxt": "^3.9.0",
+    "nuxt-electron": "^0.7.0",
+    "vite-plugin-electron": "^0.15.5",
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "vite-plugin-vuetify": "^2.0.1",
+    "vuetify": "^3.4.8"
   }
 }
