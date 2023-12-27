@@ -1,0 +1,11 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  font-family: "Roboto";
+}
+
+.v-application {
+  background-color: rgba(var(--v-theme-background), var(--opacity)) !important;
+}
