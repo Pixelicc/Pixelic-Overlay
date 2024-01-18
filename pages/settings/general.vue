@@ -18,6 +18,10 @@
               <v-divider v-if="client === 'Custom'" :thickness="8" class="border-opacity-0"></v-divider>
               <div v-if="client === 'Custom'"><v-text-field clearable label="Custom Log File Location" variant="outlined" prepend-icon="mdi-file-edit" v-model="customLogPath" @update:model-value="setCustomLogPath" :rules="[validatePath]"></v-text-field></div>
               <v-divider :thickness="8" class="border-opacity-0"></v-divider>
+              <div class="d-flex justify-center">
+                <v-text-field :rules="[validateAPIKey]" variant="outlined" clearable label="Pixelic API-Key" persistent-placeholder placeholder="00000000-0000-0000-0000-000000000000" prepend-icon="mdi-cloud-key" v-model="APIKey" @update:model-value="setAPIKey"></v-text-field>
+                <v-btn class="ml-8 mt-2" variant="outlined" @click="ipcRenderer.send('link', 'https://api.pixelic.de/oauth/discord?action=user.create')">Get API-Key</v-btn>
+              </div>
             </div>
           </v-card>
         </v-col>
@@ -34,7 +38,7 @@
       <v-row>
         <v-col>
           <v-card title="Other">
-            <div class="ml-4 mr-4 mt-4">
+            <div class="ml-4 mr-4">
               <v-list density="compact">
                 <v-list-item>
                   <template v-slot:prepend>
@@ -96,6 +100,26 @@ const setCustomLogPath = async () => {
     dataStore.set("customLogPath", customLogPath.value);
     ipcRenderer.send("mcLogStopTailing");
     ipcRenderer.send("mcLogInitTailing", { client: client.value.toUpperCase(), customLogPath: customLogPath.value });
+  }
+};
+
+const APIKey = ref("");
+APIKey.value = dataStore.get("APIKey");
+
+const validateAPIKey = async (key: string) => {
+  if (!validateUUID(key)) return false;
+  const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v1/user`, {
+    headers: {
+      "X-API-Key": dataStore.get("APIKey"),
+    },
+  });
+  if (error.value) return false;
+  return (data.value as any).success;
+};
+
+const setAPIKey = () => {
+  if (validateUUID(APIKey.value)) {
+    dataStore.set("APIKey", formatUUID(APIKey.value));
   }
 };
 

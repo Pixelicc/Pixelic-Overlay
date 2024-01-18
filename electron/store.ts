@@ -3,7 +3,7 @@ import type { ThemeDefinition } from "vuetify/lib/framework.mjs";
 
 const store = new Store<{
   player: string;
-  pixelicKey: string;
+  APIKey: string;
   client: "LUNAR" | "BADLION" | "DEFAULT" | "CUSTOM";
   customLogPath: string;
   mode: string;
@@ -26,7 +26,7 @@ const store = new Store<{
       type: "string",
       default: "",
     },
-    pixelicKey: {
+    APIKey: {
       type: "string",
       default: "",
     },

@@ -32,7 +32,7 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
 
       const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/proxy/hypixel/player/${UUID}`, {
         headers: {
-          "X-API-Key": dataStore.get("pixelicKey"),
+          "X-API-Key": dataStore.get("APIKey"),
         },
         async onResponse(context) {
           context.response.headers.forEach((value: string, key: string) => {

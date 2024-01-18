@@ -96,7 +96,7 @@ const validateBlacklistID = async (ID: string) => {
   const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/${ID}`, {
     key: `Blacklist:${ID}`,
     headers: {
-      "X-API-Key": dataStore.get("pixelicKey"),
+      "X-API-Key": dataStore.get("APIKey"),
     },
   });
   if (error.value) return false;

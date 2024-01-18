@@ -19,7 +19,7 @@ const updatePersonalBlacklist = async () => {
     const timer = Date.now();
     const { data } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/personal`, {
       headers: {
-        "X-API-Key": dataStore.get("pixelicKey"),
+        "X-API-Key": dataStore.get("APIKey"),
       },
     });
     console.log(`%c[BlacklistSystem] Synced Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
@@ -47,7 +47,7 @@ const updateCustomBlacklists = async () => {
     for (const blacklist of blacklists) {
       const { data } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/${blacklist.ID}`, {
         headers: {
-          "X-API-Key": dataStore.get("pixelicKey"),
+          "X-API-Key": dataStore.get("APIKey"),
         },
       });
       if (data.value) {
@@ -61,7 +61,7 @@ const updateCustomBlacklists = async () => {
 updateCustomBlacklists();
 setInterval(() => updateCustomBlacklists(), 300 * 1000);
 
-const getStatus = (UUID: string): { reason?: string; timestamp?: number } => {
+const getStatus = (UUID: string): { personal?: boolean; reason?: string; timestamp?: number } => {
   if (Object.hasOwn(personalBlacklist, formatUUID(UUID))) return { personal: true, ...personalBlacklist?.[formatUUID(UUID)] };
   const customQuery = customBlacklists.find((blacklist) => Object.hasOwn(blacklist, formatUUID(UUID)));
   if (!customQuery) return {};
@@ -76,7 +76,7 @@ const removeEntries = async (UUIDs: string[]) => {
     method: "delete",
     body: JSON.stringify(UUIDs),
     headers: {
-      "X-API-Key": dataStore.get("pixelicKey"),
+      "X-API-Key": dataStore.get("APIKey"),
     },
   });
   console.log(`%c[BlacklistSystem] Removed ${UUIDs.join(", ")} from your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
@@ -86,7 +86,7 @@ const addEntry = async (player: string, reason: "CHEATING" | "SNIPING"): Promise
   try {
     const timer = Date.now();
     const UUID = await parseUUID(player);
-    const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("pixelicKey") } });
+    const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("APIKey") } });
     console.log(`%c[BlacklistSystem] Added ${player} to your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
   } catch {}
 };

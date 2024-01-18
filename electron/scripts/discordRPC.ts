@@ -15,7 +15,7 @@ export default {
 
       const setActivity = async () => {
         axios
-          .get(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/proxy/hypixel/player/${UUID}`, { headers: { "X-API-Key": dataStore.get("pixelicKey"), "User-Agent": `Pixelic-Overlay/${PackageJSON.version} (DiscordRPC)` } })
+          .get(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/proxy/hypixel/player/${UUID}`, { headers: { "X-API-Key": dataStore.get("APIKey"), "User-Agent": `Pixelic-Overlay/${PackageJSON.version} (DiscordRPC)` } })
           .then(async (res) => {
             const level = Math.floor(res.data.player.stats.Bedwars.level);
             var star = "✫";
