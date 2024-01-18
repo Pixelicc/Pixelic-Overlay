@@ -16,7 +16,7 @@ const updateTags = async () => {
 };
 
 updateTags();
-setInterval(() => updateTags(), 300 * 60 * 1000);
+setInterval(() => updateTags(), 300 * 1000);
 
 const getTags = (UUID: string) => {
   return tags?.[formatUUID(UUID)] || [];
