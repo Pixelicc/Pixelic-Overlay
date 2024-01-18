@@ -22,6 +22,36 @@
                     <v-btn v-if="blacklist?.type !== 'PERSONAL'" icon variant="text" @click="removeBlacklist(blacklist)" style="display: flex">
                       <v-icon color="primary">mdi-delete</v-icon>
                     </v-btn>
+                    <v-dialog v-if="blacklist?.type === 'PERSONAL'" v-model="editPersonalBlacklistDialog">
+                      <template v-slot:activator="{ props }">
+                        <v-btn
+                          icon
+                          variant="text"
+                          color="primary"
+                          v-bind="props"
+                          @click="
+                            editPersonalBlacklistDialogLoadPersonalBlacklist();
+                            editPersonalBlacklistDialog = true;
+                          ">
+                          <v-icon>mdi-pencil</v-icon></v-btn
+                        >
+                      </template>
+                      <v-container>
+                        <v-row>
+                          <v-col>
+                            <v-card title="Edit Blacklist">
+                              <div class="ml-4 mr-4 mt-4">
+                                <v-data-table-virtual :headers="editPersonalBlacklistDialogHeaders" :items="editPersonalBlacklistDialogItems" v-model="editPersonalBlacklistDialogSelectedItems" item-value="UUID" show-select class="edittable" height="475"> </v-data-table-virtual>
+                                <v-card-actions class="justify-center">
+                                  <v-btn variant="outlined" prepend-icon="mdi-delete" color="error" @click="editPersonalBlacklistDialogDeleteSelection">Delete Selection</v-btn>
+                                  <v-btn variant="outlined" prepend-icon="mdi-cancel" color="warning" @click="editPersonalBlacklistDialog = false">Cancel</v-btn>
+                                </v-card-actions>
+                              </div>
+                            </v-card>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-dialog>
                     <v-checkbox v-model="blacklist.enabled" color="primary" @update:model-value="saveBlacklists()" style="display: flex"></v-checkbox>
                   </template>
                   <v-list-item-title v-if="blacklist?.type !== 'PERSONAL'">ID: {{ blacklist.ID }}</v-list-item-title>
@@ -56,6 +86,7 @@
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
 import dataStore from "../../electron/store";
 
 type Blacklist = { enabled: boolean; type?: string; ID: string };
@@ -83,6 +114,29 @@ const saveBlacklists = () => {
   dataStore.set("blacklists", blacklists.value);
 };
 
+const editPersonalBlacklistDialog = ref(false);
+
+const editPersonalBlacklistDialogHeaders: globalThis.Ref<any[]> = ref([]);
+editPersonalBlacklistDialogHeaders.value = [
+  { title: "UUID", align: "center", key: "UUID" },
+  { title: "Reason", align: "center", key: "reason" },
+  { title: "Time added", align: "center", key: "timestamp" },
+];
+
+const editPersonalBlacklistDialogItems: globalThis.Ref<any[]> = ref([]);
+
+const editPersonalBlacklistDialogSelectedItems: globalThis.Ref<any[]> = ref([]);
+
+const editPersonalBlacklistDialogLoadPersonalBlacklist = async () => {
+  await blacklistSystem.updatePersonalBlacklist();
+  editPersonalBlacklistDialogItems.value = Object.entries(blacklistSystem.getPersonalBlacklist()).map(([UUID, obj]) => ({ UUID, ...{ reason: obj.reason, timestamp: moment(obj.timestamp * 1000).fromNow() } }));
+};
+
+const editPersonalBlacklistDialogDeleteSelection = async () => {
+  await blacklistSystem.removeEntries(editPersonalBlacklistDialogSelectedItems.value);
+  editPersonalBlacklistDialog.value = false;
+};
+
 const addBlacklistDialog = ref(false);
 const addBlacklistQuery = ref("");
 
@@ -104,3 +158,23 @@ const removeBlacklist = (blacklist: Blacklist) => {
   }
 };
 </script>
+
+<style>
+.edittable {
+  text-align: center;
+  background-color: transparent;
+  font-size: 16px;
+}
+
+.edittable th {
+  height: 30px !important;
+}
+
+.edittable tbody tr {
+  height: 0px !important;
+}
+
+.edittable tbody td {
+  height: 0px !important;
+}
+</style>
