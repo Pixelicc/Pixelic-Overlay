@@ -50,12 +50,26 @@
                 <v-list-item v-if="item.player?.UUID">
                   <v-btn prepend-icon="mdi-chart-timeline-variant-shimmer" size="small" variant="tonal" color="secondary" @click="navigateTo({ path: '/statistics', query: { username: item.player.username, UUID: item.player.UUID } })">Open Statistics</v-btn>
                 </v-list-item>
-                <v-divider v-if="item.player.username !== dataStore.get('player') && item.player?.UUID" class="ma-2"></v-divider>
-                <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID">
-                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="playerHandler.reportPlayer(item.player.UUID, 'CHEATING')">Report Player (Cheating)</v-btn>
+                <v-divider v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && !item?.custom?.blacklistStatus?.reason" class="ma-2"></v-divider>
+                <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && !item?.custom?.blacklistStatus?.reason">
+                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="blacklistSystem.addEntry(item.player.UUID, 'CHEATING')">Report Player (Cheating)</v-btn>
                 </v-list-item>
-                <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID">
-                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="playerHandler.reportPlayer(item.player.UUID, 'SNIPING')">Report Player (Sniping)</v-btn>
+                <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && !item?.custom?.blacklistStatus?.reason">
+                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="blacklistSystem.addEntry(item.player.UUID, 'SNIPING')">Report Player (Sniping)</v-btn>
+                </v-list-item>
+                <v-divider v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && item?.custom?.blacklistStatus?.personal" class="ma-2"></v-divider>
+                <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && item?.custom?.blacklistStatus?.personal">
+                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="error" @click="blacklistSystem.removeEntries([item.player.UUID])">Remove Report</v-btn>
+                </v-list-item>
+                <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && !item?.custom?.blacklistStatus?.personal && item?.custom?.blacklistStatus?.reason">
+                  <v-tooltip location="bottom">
+                    <template v-slot:activator="{ props }">
+                      <span v-bind="props">
+                        <v-btn :disabled="true" prepend-icon="mdi-account-cancel" size="small">Remove Report</v-btn>
+                      </span>
+                    </template>
+                    <span style="color: rgba(var(--v-theme-primary))">This Player is blacklisted on another extra Blacklist you've added!</span>
+                  </v-tooltip>
                 </v-list-item>
               </v-list>
             </v-card>
@@ -110,6 +124,7 @@ setInterval(() => {
       blacklistStatus,
       tags: player.cause === "Invalid UUID" ? [{ text: "NICKED", tooltip: "This Player is hiding their real Name", color: getMCColor("e"), appendIcon: "mdi-incognito" }] : blacklistStatus?.reason ? [{ text: blacklistStatus?.reason === "CHEATING" ? "CHEATER" : "SNIPER", tooltip: "This Player is on one of your Blacklists", color: getMCColor("c"), appendIcon: "mdi-account-alert" }, ...tagSystem.getTags(player.player?.UUID || "")] : tagSystem.getTags(player.player?.UUID || ""),
       custom: {
+        blacklistStatus,
         rankData: player.cause === "Invalid UUID" ? { full: "§e[NICK]", shortened: "§e" } : parseRank(player.player?.rank || null, player.player?.plusColor || null, player.player?.plusPlusColor || null),
       },
     });

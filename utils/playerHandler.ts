@@ -68,14 +68,6 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
   });
 };
 
-const reportPlayer = async (player: string, reason: "CHEATING" | "SNIPING"): Promise<void> => {
-  try {
-    const UUID = await parseUUID(player);
-
-    const { data, error } = await useFetch(`http://localhost:3000/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("pixelicKey") } });
-  } catch {}
-};
-
 var refreshing = false;
 
 const refreshPlayers = () => {
@@ -84,6 +76,7 @@ const refreshPlayers = () => {
     for (const player of players) {
       addPlayer(player.player.username, { force: true });
     }
+    console.log(`%c[PlayerHandler] Refreshed ${players.length} Players`, "color: #d09292");
     setTimeout(() => {
       refreshing = false;
     }, 1000);
@@ -109,6 +102,7 @@ const removeDuplicates = () => {
 };
 
 const clearPlayers = () => {
+  console.log(`%c[PlayerHandler] Cleared ${players.length - 1} Players`, "color: #d09292");
   players = [];
   playersInQueue = [];
   playersInParty = [];
@@ -117,7 +111,10 @@ const clearPlayers = () => {
 
 const getInLobby = () => inLobby;
 const setInLobby = (bool: boolean) => {
-  inLobby = bool;
+  if (bool !== inLobby) {
+    console.log(`%c[PlayerHandler] Player now located ${bool ? "in the Lobby" : "in a Minigame"}`, "color: #d09292");
+    inLobby = bool;
+  }
 };
 const getPlayers = () => players;
 const getPlayersInQueue = () => playersInQueue;
@@ -130,7 +127,6 @@ export default {
   getPlayersInQueue,
   getPlayersInParty,
   addPlayer,
-  reportPlayer,
   refreshPlayers,
   removePlayer,
   clearPlayers,
