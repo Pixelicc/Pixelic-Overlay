@@ -123,7 +123,7 @@ app.whenReady().then(() => {
   });
 
   win.on("close", () => {
-    win.webContents.send("window", win.getBounds());
+    dataStore.set("windowLocation", win.getBounds());
   });
 });
 

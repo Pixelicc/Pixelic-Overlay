@@ -9,10 +9,6 @@ export default defineNuxtPlugin({
       console.log(`%c[Pixelic-Overlay] Loaded in ${process.env.VITE_DEV_SERVER_URL ? "DEV" : "PROD"} Mode`, "color: #c094cc");
 
       ipcRenderer.send("window", dataStore.get("windowLocation"));
-      ipcRenderer.on("window", (event, msg) => {
-        if (typeof msg === "object" && Object.keys(msg).length !== 0) dataStore.set("window", msg);
-      });
-
       ipcRenderer.on("mcChatMessage", (event, msg) => {
         messageHandler.submitMessage(msg);
       });
