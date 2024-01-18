@@ -57,7 +57,7 @@
                 <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && !item?.custom?.blacklistStatus?.reason">
                   <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="blacklistSystem.addEntry(item.player.UUID, 'SNIPING')">Report Player (Sniping)</v-btn>
                 </v-list-item>
-                <v-divider v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && item?.custom?.blacklistStatus?.personal" class="ma-2"></v-divider>
+                <v-divider v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && item?.custom?.blacklistStatus?.reason" class="ma-2"></v-divider>
                 <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && item?.custom?.blacklistStatus?.personal">
                   <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="error" @click="blacklistSystem.removeEntries([item.player.UUID])">Remove Report</v-btn>
                 </v-list-item>
