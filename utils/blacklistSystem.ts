@@ -16,7 +16,7 @@ var customBlacklists: {
 
 const updatePersonalBlacklist = async () => {
   if (dataStore.get("blacklists").some((blacklist) => blacklist.type === "PERSONAL" && blacklist.enabled)) {
-    const { data } = await useFetch("https://api.pixelic.de/v2/pixelic-overlay/blacklist/personal", {
+    const { data } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/personal`, {
       headers: {
         "X-API-Key": dataStore.get("pixelicKey"),
       },
@@ -42,7 +42,7 @@ const updateCustomBlacklists = async () => {
     }[] = [];
 
     for (const blacklist of blacklists) {
-      const { data } = await useFetch(`https://api.pixelic.de/v2/pixelic-overlay/blacklist/${blacklist.ID}`, {
+      const { data } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/${blacklist.ID}`, {
         headers: {
           "X-API-Key": dataStore.get("pixelicKey"),
         },
@@ -67,7 +67,7 @@ const getStatus = (UUID: string): { reason?: string; timestamp?: number } => {
 const getPersonalBlacklist = () => personalBlacklist;
 
 const removeEntries = async (UUIDs: string[]) => {
-  const { data, error } = await useFetch("https://api.pixelic.de/v2/pixelic-overlay/blacklist/personal", {
+  const { data, error } = await useFetch("http://localhost:3000/v2/pixelic-overlay/blacklist/personal", {
     method: "delete",
     body: JSON.stringify(UUIDs),
     headers: {

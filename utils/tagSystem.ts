@@ -9,7 +9,7 @@ var tags: {
 } = {};
 
 const updateTags = async () => {
-  const { data } = await useFetch("https://api.pixelic.de/v2/pixelic-overlay/tags");
+  const { data } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/tags`);
   if (data.value) {
     tags = (data.value as any)?.tags || {};
   }

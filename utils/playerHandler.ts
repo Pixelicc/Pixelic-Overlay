@@ -29,7 +29,8 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
       if (options?.mention) icons.push({ tooltip: "This person mentioned you!", color: "yellow-lighten-3", name: "mdi-at" });
 
       const headers: { [key: string]: string } = {};
-      const { data, error } = await useFetch(`https://api.pixelic.de/v2/pixelic-overlay/proxy/hypixel/player/${UUID}`, {
+
+      const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/proxy/hypixel/player/${UUID}`, {
         headers: {
           "X-API-Key": dataStore.get("pixelicKey"),
         },
@@ -71,7 +72,7 @@ const reportPlayer = async (player: string, reason: "CHEATING" | "SNIPING"): Pro
   try {
     const UUID = await parseUUID(player);
 
-    const { data, error } = await useFetch(`https://api.pixelic.de/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("pixelicKey") } });
+    const { data, error } = await useFetch(`http://localhost:3000/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("pixelicKey") } });
   } catch {}
 };
 
