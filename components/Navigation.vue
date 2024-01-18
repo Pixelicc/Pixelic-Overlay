@@ -33,7 +33,7 @@
     </v-btn>
   </v-toolbar>
   <v-navigation-drawer temporary v-model="sidebar">
-    <v-list nav>
+    <v-list nav color="secondary">
       <v-list-item prepend-icon="mdi-table" title="Overlay" value="overlay" nuxt-link to="/"></v-list-item>
       <v-list-item prepend-icon="mdi-chart-line" title="Statistics" value="statistics" nuxt-link to="/statistics"></v-list-item>
       <v-divider :thickness="8" class="border-opacity-0"></v-divider>
@@ -49,8 +49,8 @@
       <v-divider :thickness="8" class="border-opacity-0"></v-divider>
       <v-list-item>v{{ PackageJSON.version }}</v-list-item>
       <v-list-item style="position: fixed !important; bottom: 0 !important">
-        <v-btn color="#5865F2" variant="tonal" class="ml-1 mr-2" @click="ipcRenderer.send('link', 'https://discord.com/invite/2vAuyVvdwj')">Discord</v-btn>
-        <v-btn color="#6e5494" variant="tonal" class="ml-2 mr-1" @click="ipcRenderer.send('link', 'https://github.com/pixelicc/pixelic-overlay')">GitHub</v-btn>
+        <v-btn color="primary" variant="tonal" class="ml-1 mr-2" @click="ipcRenderer.send('link', 'https://discord.com/invite/2vAuyVvdwj')">Discord</v-btn>
+        <v-btn color="secondary" variant="tonal" class="ml-2 mr-1" @click="ipcRenderer.send('link', 'https://github.com/pixelicc/pixelic-overlay')">GitHub</v-btn>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
