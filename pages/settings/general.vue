@@ -50,6 +50,16 @@
                   </template>
                   <v-list-item-title>Discord Rich Presence</v-list-item-title>
                 </v-list-item>
+                <v-list-item>
+                  <template v-slot:prepend>
+                    <v-icon>mdi-cloud-braces</v-icon>
+                  </template>
+                  <template v-slot:append>
+                    <v-switch color="secondary" v-model="advancedMode" @update:model-value="setAdvancedMode" style="display: flex"></v-switch>
+                  </template>
+                  <v-list-item-title>Advanced Mode (Developer Mode)</v-list-item-title>
+                  <v-list-item-subtitle>Gives you access to restricted Features &mdash; DO NOT ENABLE THIS IF YOU DO NOT KNOW WHAT YOU ARE DOING</v-list-item-subtitle>
+                </v-list-item>
               </v-list>
             </div>
           </v-card>
@@ -152,6 +162,16 @@ const setDiscordRPC = async (DiscordRPC: boolean | null) => {
     dataStore.set("discordRPC", DiscordRPC);
     discordRPC.value = dataStore.get("discordRPC");
     if (discordRPC) ipcRenderer.send("discordRPCInit", await parseUUID(dataStore.get("player")));
+  }
+};
+
+const advancedMode = ref(false);
+advancedMode.value = dataStore.get("advancedMode");
+
+const setAdvancedMode = async (AdvancedMode: boolean | null) => {
+  if (AdvancedMode === true || AdvancedMode === false) {
+    dataStore.set("advancedMode", AdvancedMode);
+    advancedMode.value = dataStore.get("advancedMode");
   }
 };
 </script>

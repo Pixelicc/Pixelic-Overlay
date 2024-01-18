@@ -10,7 +10,7 @@ const store = new Store<{
   selectedTheme: string;
   customTheme: ThemeDefinition;
   opacity: string;
-  developerMode: boolean;
+  advancedMode: boolean;
   discordRPC: boolean;
   hideIngame: boolean;
   gameStartNotification: boolean;
@@ -65,7 +65,7 @@ const store = new Store<{
       type: "string",
       default: "0.75",
     },
-    developerMode: {
+    advancedMode: {
       type: "boolean",
       default: false,
     },

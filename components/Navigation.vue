@@ -40,6 +40,7 @@
       <v-divider></v-divider>
       <v-divider :thickness="8" class="border-opacity-0"></v-divider>
       <v-list-item prepend-icon="mdi-application-outline" title="Basic Settings" value="basic-settings" nuxt-link to="/settings/general"></v-list-item>
+      <v-list-item v-if="dataStore.get('advancedMode')" prepend-icon="mdi-cloud-braces" title="Advanced Settings" value="advanced-settings" nuxt-link to="/settings/advanced"></v-list-item>
       <v-list-item prepend-icon="mdi-format-list-bulleted" title="Blacklist Settings" value="blacklist-settings" nuxt-link to="/settings/blacklist"></v-list-item>
       <v-list-item prepend-icon="mdi-palette-outline" title="Appearance Settings" value="appearance-settings" nuxt-link to="/settings/appearance"></v-list-item>
       <v-list-item prepend-icon="mdi-view-column-outline" title="Column Settings" value="column-settings" nuxt-link to="/settings/column"></v-list-item>
