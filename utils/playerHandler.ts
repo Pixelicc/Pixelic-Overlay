@@ -13,7 +13,7 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
     if (!UUID) {
       players.push({
         success: false,
-        cause: "Invalid UUID or Username",
+        cause: "Invalid UUID",
         player: {
           UUID: null,
           username: player,
