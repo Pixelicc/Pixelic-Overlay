@@ -47,7 +47,7 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
           /**
            * Needed if there is an actual real Player called like a Hypixel Nickname but has never played on Hypixel themselves
            */
-          if (error.value.statusCode === 404 && inLobby === false) error.value.data.cause = "Invalid UUID or Username";
+          if (error.value.statusCode === 404 && inLobby === false) error.value.data.cause = "Invalid UUID";
           players.push({
             success: false,
             cause: error.value.data.cause,
@@ -65,6 +65,14 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
     }
     removeDuplicates();
   });
+};
+
+const reportPlayer = async (player: string, reason: "CHEATING" | "SNIPING"): Promise<void> => {
+  try {
+    const UUID = await parseUUID(player);
+
+    const { data, error } = await useFetch(`https://api.pixelic.de/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("pixelicKey") } });
+  } catch {}
 };
 
 var refreshing = false;
@@ -121,6 +129,7 @@ export default {
   getPlayersInQueue,
   getPlayersInParty,
   addPlayer,
+  reportPlayer,
   refreshPlayers,
   removePlayer,
   clearPlayers,
