@@ -18,7 +18,7 @@
 
 ## First usage
 
-1. Open the Overlay and select your corresponding Client. <br> _(If you don't have any of the implemented Clients, select Vanilla or select Custom to enter the path for the log file._
+1. Open the Overlay and select your corresponding Client. _(If you don't have any of the implemented Clients, select Vanilla or select Custom to enter the path for the log file.)_
 2. If everything went right the Overlay should have opened a new page in your default browser else click on GET API-KEY in the Overlay Settings. After you completed the Discord OAuth you will see an API-Key you can copy paste into the **Pixelic API-Key** field.
 3. Now enter your Username in **Username** field in the Overlay Settings.
 4. Join any Bedwars Game and the Overlay should start to work as expected.
@@ -27,14 +27,14 @@
 
 ### General features
 
-- Shows stats of players in your lobby in seconds
+- Shows stats of players in your game in seconds
 - Works with Lunarclient, Badlion, Vanilla or any custom selected log file
 - Resizable, movable, and minimizable
 - Easy to use and setup
 - Can show nicked players, party members and players that mentioned you in chat
 - Color-coded Stats in terms of skill level
-- Detailed statistics page showing daily, weekly, monthly, yearly, alltime data/graphs (data is based on players checked by other players or yourself)
 - Report System where you can report players for cheating/sniping and when you are queueing them again you will be warned
+- Blacklist System that allows you to add the Report Lists of other users with ease
 
 ## Previews
 
