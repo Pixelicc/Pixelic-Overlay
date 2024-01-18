@@ -39,11 +39,26 @@
         <td v-if="headers.some((h) => h.title === 'FKDR')"><span v-html="parseMCColor(parseStatColor((item.player?.stats?.Bedwars?.[mode]?.FKDR || 0).toFixed(2), 'FKDR', mode))"></span></td>
         <td v-if="headers.some((h) => h.title === 'BBLR')"><span v-html="parseMCColor(parseStatColor((item.player?.stats?.Bedwars?.[mode]?.BBLR || 0).toFixed(2), 'BBLR', mode))"></span></td>
         <td>
-          <v-menu>
+          <v-menu :close-on-content-click="false" location="end">
             <template v-slot:activator="{ props }">
-              <v-btn size="small" variant="text" icon="mdi-dots-horizontal" v-bind="props" style="height: calc(var(--v-btn-height)) !important"> </v-btn>
+              <v-btn icon variant="plain" :ripple="false" v-bind="props" style="height: 25px !important">
+                <v-icon>mdi-dots-horizontal</v-icon>
+              </v-btn>
             </template>
-            <v-list> </v-list>
+            <v-card min-width="200">
+              <v-list density="compact">
+                <v-list-item v-if="item.player?.UUID">
+                  <v-btn prepend-icon="mdi-chart-timeline-variant-shimmer" size="small" variant="tonal" color="secondary" @click="navigateTo({ path: '/statistics', query: { username: item.player.username, UUID: item.player.UUID } })">Open Statistics</v-btn>
+                </v-list-item>
+                <v-divider v-if="item.player.username !== dataStore.get('player') && item.player?.UUID" class="ma-2"></v-divider>
+                <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID">
+                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="playerHandler.reportPlayer(item.player.UUID, 'CHEATING')">Report Player (Cheating)</v-btn>
+                </v-list-item>
+                <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID">
+                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="playerHandler.reportPlayer(item.player.UUID, 'SNIPING')">Report Player (Sniping)</v-btn>
+                </v-list-item>
+              </v-list>
+            </v-card>
           </v-menu>
         </td>
       </tr>
@@ -89,11 +104,13 @@ const players: globalThis.Ref<any[]> = ref([]);
 setInterval(() => {
   const Players: any[] = [];
   for (const player of playerHandler.getPlayers()) {
+    const blacklistStatus = blacklistSystem.getStatus(player.player?.UUID || "");
     Players.push({
       ...player,
-      tags: player.cause === "Invalid UUID or Username" ? [{ text: "NICKED", tooltip: "This Player is hiding their real Name", color: getMCColor("c"), appendIcon: "mdi-incognito" }] : tagSystem.getTags(player.player?.UUID || ""),
+      blacklistStatus,
+      tags: player.cause === "Invalid UUID" ? [{ text: "NICKED", tooltip: "This Player is hiding their real Name", color: getMCColor("e"), appendIcon: "mdi-incognito" }] : blacklistStatus?.reason ? [{ text: blacklistStatus?.reason === "CHEATING" ? "CHEATER" : "SNIPER", tooltip: "This Player is on one of your Blacklists", color: getMCColor("c"), appendIcon: "mdi-account-alert" }, ...tagSystem.getTags(player.player?.UUID || "")] : tagSystem.getTags(player.player?.UUID || ""),
       custom: {
-        rankData: player.cause === "Invalid UUID or Username" ? { full: "§c[NICK]", shortened: "§c" } : parseRank(player.player?.rank || null, player.player?.plusColor || null, player.player?.plusPlusColor || null),
+        rankData: player.cause === "Invalid UUID" ? { full: "§e[NICK]", shortened: "§e" } : parseRank(player.player?.rank || null, player.player?.plusColor || null, player.player?.plusPlusColor || null),
       },
     });
   }
