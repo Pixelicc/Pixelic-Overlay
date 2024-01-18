@@ -4,27 +4,27 @@
     <v-toolbar-title v-if="!sidebar" class="grow">Pixelic Overlay</v-toolbar-title>
     <v-toolbar-title v-if="sidebar" class="grow" style="-webkit-app-region: no-drag">Pixelic Overlay</v-toolbar-title>
     <v-btn v-if="useRoute().path === '/'" icon @click="playerHandler.refreshPlayers" style="-webkit-app-region: no-drag">
-      <v-icon color="secondary">mdi-refresh</v-icon>
+      <v-icon color="primary">mdi-refresh</v-icon>
     </v-btn>
     <v-btn v-if="useRoute().path === '/'" icon @click="playerHandler.clearPlayers" style="-webkit-app-region: no-drag">
-      <v-icon color="secondary">mdi-account-multiple-minus</v-icon>
+      <v-icon color="primary">mdi-account-multiple-minus</v-icon>
     </v-btn>
     <v-menu v-if="useRoute().path === '/'" v-model="quickSettings" :close-on-content-click="false" location="end">
       <template v-slot:activator="{ props }">
         <v-btn icon class="mr-4" v-bind="props" style="-webkit-app-region: no-drag">
-          <v-icon color="secondary">mdi-tune-vertical</v-icon>
+          <v-icon color="primary">mdi-tune-vertical</v-icon>
         </v-btn>
       </template>
       <v-card min-width="300">
         <v-list>
           <v-list-item>
-            <v-select class="mt-2" label="Gamemode" variant="outlined" :items="Object.keys(modes)" v-model="mode" return-object @update:modelValue="setMode"></v-select>
+            <v-select class="mt-2" label="Gamemode" variant="outlined" color="primary" :items="Object.keys(modes)" v-model="mode" return-object @update:modelValue="setMode"></v-select>
           </v-list-item>
         </v-list>
       </v-card>
     </v-menu>
-    <v-text-field v-if="useRoute().path === '/'" variant="outlined" density="compact" single-line hide-details prepend-inner-icon="mdi-account-search" persistent-placeholder placeholder="Search player(s)" v-model="playerSearchQuery" @keydown.enter.prevent="addPlayerFromQuery" :rules="[validateQuery]" style="-webkit-app-region: no-drag; max-width: 25%"></v-text-field>
-    <v-text-field v-if="useRoute().path === '/statistics'" variant="outlined" density="compact" single-line hide-details prepend-inner-icon="mdi-account-search" persistent-placeholder placeholder="Search player(s)" v-model="playerStatisticsSearchQuery" @keydown.enter.prevent="openStatsticsFromQuery" :rules="[validateQuery]" style="-webkit-app-region: no-drag; max-width: 25%"></v-text-field>
+    <v-text-field v-if="useRoute().path === '/'" variant="outlined" color="primary" density="compact" single-line hide-details prepend-inner-icon="mdi-account-search" persistent-placeholder placeholder="Search player(s)" v-model="playerSearchQuery" @keydown.enter.prevent="addPlayerFromQuery" :rules="[validateQuery]" style="-webkit-app-region: no-drag; max-width: 25%"></v-text-field>
+    <v-text-field v-if="useRoute().path === '/statistics'" variant="outlined" color="primary" density="compact" single-line hide-details prepend-inner-icon="mdi-account-search" persistent-placeholder placeholder="Search player(s)" v-model="playerStatisticsSearchQuery" @keydown.enter.prevent="openStatsticsFromQuery" :rules="[validateQuery]" style="-webkit-app-region: no-drag; max-width: 25%"></v-text-field>
     <v-btn icon @click="minimizeWindow" style="-webkit-app-region: no-drag">
       <v-icon>mdi-minus</v-icon>
     </v-btn>

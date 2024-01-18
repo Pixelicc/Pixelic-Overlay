@@ -12,7 +12,7 @@
         <v-col>
           <v-card>
             <div class="ml-4 mr-4 mt-4">
-              <v-select label="Stats" variant="outlined" :items="colums" prepend-inner-icon="mdi-table-edit" chips multiple v-model="selectedColums" return-object @update:modelValue="setColums"></v-select>
+              <v-select label="Stats" variant="outlined" color="secondary" :items="colums" prepend-inner-icon="mdi-table-edit" chips multiple v-model="selectedColums" return-object @update:modelValue="setColums"></v-select>
             </div>
           </v-card>
         </v-col>

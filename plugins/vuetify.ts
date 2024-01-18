@@ -43,6 +43,19 @@ const sakura = {
   },
 };
 
+const kawaii = {
+  dark: false,
+  colors: {
+    background: "#F5F5F5",
+    primary: "#F57EB6",
+    secondary: "#C1A7E2",
+    error: "#c21e56",
+    info: "#DDE5ED",
+    success: "#F8BED6",
+    warning: "#e9c4ac",
+  },
+};
+
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     components: {
@@ -58,6 +71,7 @@ export default defineNuxtPlugin((app) => {
         light,
         dark,
         sakura,
+        kawaii,
         custom: dataStore.get("customTheme"),
       },
     },

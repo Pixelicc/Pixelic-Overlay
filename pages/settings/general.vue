@@ -12,15 +12,15 @@
         <v-col>
           <v-card title="Basic">
             <div class="ml-4 mr-4 mt-4">
-              <v-text-field :rules="[validateUsername]" variant="outlined" clearable label="Username" persistent-placeholder placeholder="Pixelic" prepend-icon="mdi-account" v-model="player" @update:model-value="setPlayer"></v-text-field>
+              <v-text-field :rules="[validateUsername]" variant="outlined" color="secondary" clearable label="Username" persistent-placeholder placeholder="Pixelic" prepend-icon="mdi-account" v-model="player" @update:model-value="setPlayer"></v-text-field>
               <v-divider :thickness="8" class="border-opacity-0"></v-divider>
-              <v-select label="Client / Log File" variant="outlined" :items="clients" prepend-icon="mdi-file" v-model="client" return-object @update:model-value="setClient"></v-select>
+              <v-select label="Client / Log File" variant="outlined" color="secondary" :items="clients" prepend-icon="mdi-file" v-model="client" return-object @update:model-value="setClient"></v-select>
               <v-divider v-if="client === 'Custom'" :thickness="8" class="border-opacity-0"></v-divider>
-              <div v-if="client === 'Custom'"><v-text-field clearable label="Custom Log File Location" variant="outlined" prepend-icon="mdi-file-edit" v-model="customLogPath" @update:model-value="setCustomLogPath" :rules="[validatePath]"></v-text-field></div>
+              <div v-if="client === 'Custom'"><v-text-field clearable label="Custom Log File Location" variant="outlined" color="secondary" prepend-icon="mdi-file-edit" v-model="customLogPath" @update:model-value="setCustomLogPath" :rules="[validatePath]"></v-text-field></div>
               <v-divider :thickness="8" class="border-opacity-0"></v-divider>
               <div class="d-flex justify-center">
-                <v-text-field :rules="[validateAPIKey]" variant="outlined" clearable label="Pixelic API-Key" persistent-placeholder placeholder="00000000-0000-0000-0000-000000000000" prepend-icon="mdi-cloud-key" v-model="APIKey" @update:model-value="setAPIKey"></v-text-field>
-                <v-btn class="ml-8 mt-2" variant="outlined" @click="ipcRenderer.send('link', 'https://api.pixelic.de/oauth/discord?action=user.create')">Get API-Key</v-btn>
+                <v-text-field :rules="[validateAPIKey]" variant="outlined" color="secondary" clearable label="Pixelic API-Key" persistent-placeholder placeholder="00000000-0000-0000-0000-000000000000" prepend-icon="mdi-cloud-key" v-model="APIKey" @update:model-value="setAPIKey"></v-text-field>
+                <v-btn class="ml-8 mt-2" variant="outlined" color="secondary" @click="ipcRenderer.send('link', 'https://api.pixelic.de/oauth/discord?action=user.create')">Get API-Key</v-btn>
               </div>
             </div>
           </v-card>
@@ -30,7 +30,7 @@
         <v-col>
           <v-card title="Bedwars">
             <div class="ml-4 mr-4 mt-4">
-              <v-select label="Gamemode" variant="outlined" :items="Object.keys(modes)" prepend-icon="mdi-bed-empty" v-model="mode" return-object @update:modelValue="setMode"></v-select>
+              <v-select label="Gamemode" variant="outlined" color="secondary" :items="Object.keys(modes)" prepend-icon="mdi-bed-empty" v-model="mode" return-object @update:modelValue="setMode"></v-select>
             </div>
           </v-card>
         </v-col>

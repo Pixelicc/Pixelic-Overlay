@@ -20,14 +20,14 @@
                   </template>
                   <template v-slot:append>
                     <v-btn v-if="blacklist?.type !== 'PERSONAL'" icon variant="text" @click="removeBlacklist(blacklist)" style="display: flex">
-                      <v-icon color="primary">mdi-delete</v-icon>
+                      <v-icon color="secondary">mdi-delete</v-icon>
                     </v-btn>
                     <v-dialog v-if="blacklist?.type === 'PERSONAL'" v-model="editPersonalBlacklistDialog">
                       <template v-slot:activator="{ props }">
                         <v-btn
                           icon
                           variant="text"
-                          color="primary"
+                          color="secondary"
                           v-bind="props"
                           @click="
                             editPersonalBlacklistDialogLoadPersonalBlacklist();
@@ -52,7 +52,7 @@
                         </v-row>
                       </v-container>
                     </v-dialog>
-                    <v-checkbox v-model="blacklist.enabled" color="primary" @update:model-value="saveBlacklists()" style="display: flex"></v-checkbox>
+                    <v-checkbox v-model="blacklist.enabled" color="secondary" @update:model-value="saveBlacklists()" style="display: flex"></v-checkbox>
                   </template>
                   <v-list-item-title v-if="blacklist?.type !== 'PERSONAL'">ID: {{ blacklist.ID }}</v-list-item-title>
                   <v-list-item-title v-if="blacklist?.type === 'PERSONAL'">Personal Blacklist</v-list-item-title>
@@ -63,14 +63,14 @@
             <div class="ma-4">
               <v-dialog v-model="addBlacklistDialog">
                 <template v-slot:activator="{ props }">
-                  <v-btn variant="outlined" color="primary" v-bind="props" @click="addBlacklistDialog = true">Add Blacklist</v-btn>
+                  <v-btn variant="outlined" color="secondary" v-bind="props" @click="addBlacklistDialog = true">Add Blacklist</v-btn>
                 </template>
                 <v-container>
                   <v-row>
                     <v-col>
                       <v-card title="Paste Blacklist ID">
                         <div class="ml-4 mr-4 mt-4">
-                          <v-text-field :rules="[validateBlacklistID]" variant="outlined" color="primary" label="Blacklist ID" prepend-icon="mdi-content-paste" clearable v-model="addBlacklistQuery" @keydown.enter.prevent:model-value="addBlacklist"></v-text-field>
+                          <v-text-field :rules="[validateBlacklistID]" variant="outlined" color="secondary" label="Blacklist ID" prepend-icon="mdi-content-paste" clearable v-model="addBlacklistQuery" @keydown.enter.prevent:model-value="addBlacklist"></v-text-field>
                         </div>
                       </v-card>
                     </v-col>
