@@ -49,6 +49,10 @@ export default defineNuxtPlugin((app) => {
       ...components,
     },
     theme: {
+      // @ts-ignore
+      options: {
+        customProperties: true,
+      },
       defaultTheme: dataStore.get("selectedTheme"),
       themes: {
         light,
