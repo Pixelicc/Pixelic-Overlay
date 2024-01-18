@@ -10,7 +10,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-card titel="Basic">
+          <v-card title="Basic">
             <div class="ml-4 mr-4 mt-4">
               <v-text-field :rules="[validateUsername]" variant="outlined" clearable label="Username" persistent-placeholder placeholder="Pixelic" prepend-icon="mdi-account" v-model="player" @update:model-value="setPlayer"></v-text-field>
               <v-divider :thickness="8" class="border-opacity-0"></v-divider>
