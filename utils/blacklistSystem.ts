@@ -80,6 +80,7 @@ const removeEntries = async (UUIDs: string[]) => {
     },
   });
   console.log(`%c[BlacklistSystem] Removed ${UUIDs.join(", ")} from your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
+  updatePersonalBlacklist();
 };
 
 const addEntry = async (player: string, reason: "CHEATING" | "SNIPING"): Promise<void> => {
@@ -88,6 +89,7 @@ const addEntry = async (player: string, reason: "CHEATING" | "SNIPING"): Promise
     const UUID = await parseUUID(player);
     const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("APIKey") } });
     console.log(`%c[BlacklistSystem] Added ${player} to your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
+    updatePersonalBlacklist();
   } catch {}
 };
 
