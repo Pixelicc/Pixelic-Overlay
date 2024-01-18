@@ -6,13 +6,13 @@ export const requestUUID = async (username: string): Promise<string | null> => {
     return cache;
   }
 
-  const { data } = await useFetch(`https://api.mojang.com/users/profiles/minecraft/${username}`, {
+  const { data } = await useFetch(`https://playerdb.co/api/player/minecraft/${username}`, {
     key: `Mojang:Cache:UUIDs:${username}`,
     timeout: 5000,
-    transform: (data: { id: string; name: string }) => formatUUID(data.id),
+    transform: (data: any) => formatUUID(data.data.player.id),
   });
 
-  if (data) {
+  if (data.value) {
     return data.value as string;
   } else {
     return null;
