@@ -2,7 +2,7 @@
     <h1>Pixelic Overlay</h1>
 </div>
 <div align="center">
-        <a><img src="https://img.shields.io/github/package-json/v/pixelicc/pixelic-overlay" alt="Version"></a>
+    <a><img src="https://img.shields.io/github/package-json/v/pixelicc/pixelic-overlay" alt="Version"></a>
     <a href="https://github.com/Pixelicc/Pixelic-Overlay/releases"><img src="https://img.shields.io/github/downloads/pixelicc/pixelic-overlay/total" alt="Downloads"></a>
     <a href="https://discord.com/invite/2vAuyVvdwj"><img src="https://img.shields.io/discord/926873163411910746?color=7289DA&label=Discord" alt="Discord"></a>
     <a><img src="https://wakatime.com/badge/user/fdd9682f-df58-46bb-9b10-374601d7f52d/project/4b12db36-4d51-4adb-bc90-3b45c943c02d.svg" alt="Wakatime"></a>
@@ -40,14 +40,9 @@
 
 ### Overlay Page
 
-![Overlay Page](https://cdn.discordapp.com/attachments/927561825141289043/1132668941643305051/image.png)
-
-### Statistics Page
-
-![Statistics Page 1](https://cdn.discordapp.com/attachments/927561825141289043/1132669221919264850/image.png)
-![Statistics Page2 ](https://cdn.discordapp.com/attachments/927561825141289043/1132669414001610953/image.png)
+![Overlay Page](https://github.com/Pixelicc/Pixelic-Overlay/assets/69585766/2d602b0f-adbc-416e-8026-b7886c7bcdb0)
 
 ## Discord
 
-The Pixelic Overlay is made by Pixelic. <br>
-Join the [Discord](https://discord.com/invite/2vAuyVvdwj) to stay updated or to ask any questions. <br>
+The Pixelic Overlay is made by Pixelic.
+Join the [Discord](https://discord.com/invite/2vAuyVvdwj) to stay updated or to ask any questions.
