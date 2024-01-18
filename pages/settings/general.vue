@@ -20,7 +20,8 @@
               <v-divider :thickness="8" class="border-opacity-0"></v-divider>
               <div class="d-flex justify-center">
                 <v-text-field :rules="[validateAPIKey]" variant="outlined" color="secondary" clearable label="Pixelic API-Key" persistent-placeholder placeholder="00000000-0000-0000-0000-000000000000" prepend-icon="mdi-cloud-key" v-model="APIKey" @update:model-value="setAPIKey"></v-text-field>
-                <v-btn class="ml-8 mt-2" variant="outlined" color="secondary" @click="ipcRenderer.send('link', 'https://api.pixelic.de/oauth/discord?action=user.create')">Get API-Key</v-btn>
+                <v-btn class="ml-8 mt-2" variant="outlined" color="secondary" @click="ipcRenderer.send('link', 'https://discord.com/api/oauth2/authorize?client_id=1176611079560904744&response_type=code&redirect_uri=https%3A%2F%2Fapi.pixelic.de%2Foauth%2Fdiscord%3Faction%3Duser.create&scope=identify')">Get API-Key</v-btn>
+                <v-btn class="ml-8 mt-2" variant="outlined" color="warning" @click="ipcRenderer.send('link', 'https://discord.com/api/oauth2/authorize?client_id=1176611079560904744&response_type=code&redirect_uri=https%3A%2F%2Fapi.pixelic.de%2Foauth%2Fdiscord%3Faction%3Duser.key.regenerate&scope=identify')">Regenerate API-Key</v-btn>
               </div>
             </div>
           </v-card>

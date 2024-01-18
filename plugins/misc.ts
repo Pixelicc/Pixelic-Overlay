@@ -8,6 +8,11 @@ export default defineNuxtPlugin({
     "app:created"() {
       console.log(`%c[Pixelic-Overlay] Loaded in ${process.env.VITE_DEV_SERVER_URL ? "DEV" : "PROD"} Mode`, "color: #c094cc");
 
+      if (dataStore.get("APIKey").length === 0) {
+        ipcRenderer.send("link", "https://discord.com/api/oauth2/authorize?client_id=1176611079560904744&response_type=code&redirect_uri=https%3A%2F%2Fapi.pixelic.de%2Foauth%2Fdiscord%3Faction%3Duser.create&scope=identify");
+        navigateTo("/settings/general");
+      }
+
       ipcRenderer.send("window", dataStore.get("windowLocation"));
       ipcRenderer.on("mcChatMessage", (event, msg) => {
         messageHandler.submitMessage(msg);
