@@ -72,7 +72,7 @@ const getPersonalBlacklist = () => personalBlacklist;
 
 const removeEntries = async (UUIDs: string[]) => {
   const timer = Date.now();
-  const { data, error } = await useFetch("http://localhost:3000/v2/pixelic-overlay/blacklist/personal", {
+  const { data, error } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/personal`, {
     method: "delete",
     body: JSON.stringify(UUIDs),
     headers: {
