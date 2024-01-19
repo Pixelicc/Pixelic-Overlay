@@ -26,14 +26,14 @@ class NotificationQueue {
     this.running = false;
   }
 
-  public async enqueue(func: () => Promise<any>): Promise<any> {
+  public enqueue(func: () => Promise<any>): Promise<any> {
     return new Promise((resolve) => {
       this.queue.push({ func, resolve });
-      this.runQueue();
+      this.run();
     });
   }
 
-  private async runQueue(): Promise<void> {
+  private async run(): Promise<void> {
     if (this.running) return;
     this.running = true;
 
