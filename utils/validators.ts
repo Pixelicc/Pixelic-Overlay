@@ -13,3 +13,17 @@ export const validateUsername = (username: string) => {
 export const validateHexID = (ID: string, length: number) => {
   return new RegExp(`^[a-fA-F0-9]{${length}}$`).test(ID);
 };
+
+export const validateURL = (URLString: string) => {
+  try {
+    const URLObject = new URL(URLString);
+    return URLObject.protocol === "http:" || URLObject.protocol === "https:";
+  } catch (err) {
+    return false;
+  }
+};
+
+export const validateJSONPath = (path: string) => {
+  if (typeof path !== "string") return false;
+  return /^(\$|(\.[a-zA-Z_$][a-zA-Z0-9_$]*|\['[^']*'\]|\[\d+\]))+$/.test(path);
+};

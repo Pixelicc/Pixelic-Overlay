@@ -17,7 +17,7 @@ var customBlacklists: {
 const updatePersonalBlacklist = async () => {
   if (dataStore.get("blacklists").some((blacklist) => blacklist.type === "PERSONAL" && blacklist.enabled)) {
     const timer = Date.now();
-    const { data } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/personal`, {
+    const { data } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/personal`, {
       headers: {
         "X-API-Key": dataStore.get("APIKey"),
       },
@@ -45,7 +45,7 @@ const updateCustomBlacklists = async () => {
 
     const timer = Date.now();
     for (const blacklist of blacklists) {
-      const { data } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/${blacklist.ID}`, {
+      const { data } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/${blacklist.ID}`, {
         headers: {
           "X-API-Key": dataStore.get("APIKey"),
         },
@@ -87,7 +87,7 @@ const addEntry = async (player: string, reason: "CHEATING" | "SNIPING"): Promise
   try {
     const timer = Date.now();
     const UUID = await parseUUID(player);
-    const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("APIKey") } });
+    const { data, error } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("APIKey") } });
     console.log(`%c[BlacklistSystem] Added ${player} to your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
     updatePersonalBlacklist();
   } catch {}

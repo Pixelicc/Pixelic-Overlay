@@ -4,6 +4,9 @@ import type { ThemeDefinition } from "vuetify/lib/framework.mjs";
 const store = new Store<{
   player: string;
   APIKey: string;
+  APIInstance: string;
+  translationServers: string[];
+  customTranslationServer: { URLs: { UUID: string; username: string }; paths: { UUID: string; username: string } };
   client: "LUNAR" | "BADLION" | "DEFAULT" | "CUSTOM";
   customLogPath: string;
   mode: string;
@@ -29,6 +32,27 @@ const store = new Store<{
     APIKey: {
       type: "string",
       default: "",
+    },
+    APIInstance: {
+      type: "string",
+      default: "",
+    },
+    translationServers: {
+      type: "array",
+      default: ["MOJANG"],
+    },
+    customTranslationServer: {
+      type: "object",
+      default: {
+        URLs: {
+          UUID: "",
+          username: "",
+        },
+        paths: {
+          UUID: "",
+          username: "",
+        },
+      },
     },
     client: {
       type: "string",

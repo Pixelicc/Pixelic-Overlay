@@ -30,7 +30,7 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
 
       const headers: { [key: string]: string } = {};
 
-      const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v2/pixelic-overlay/proxy/hypixel/player/${UUID}`, {
+      const { data, error } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/proxy/hypixel/player/${UUID}`, {
         headers: {
           "X-API-Key": dataStore.get("APIKey"),
         },
@@ -51,7 +51,7 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
           if (error.value.statusCode === 404 && inLobby === false) error.value.data.cause = "Invalid UUID";
           players.push({
             success: false,
-            cause: error.value.data.cause,
+            cause: error.value.data?.cause || "Invalid UUID",
             headers,
             icons,
             player: {

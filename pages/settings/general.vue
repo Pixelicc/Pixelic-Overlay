@@ -119,7 +119,7 @@ APIKey.value = dataStore.get("APIKey");
 
 const validateAPIKey = async (key: string) => {
   if (!validateUUID(key)) return false;
-  const { data, error } = await useFetch(`${process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de"}/v1/user`, {
+  const { data, error } = await useFetch(`${getAPIInstance()}/v1/user`, {
     headers: {
       "X-API-Key": dataStore.get("APIKey"),
     },
