@@ -82,6 +82,7 @@
         </v-col>
       </v-row>
     </v-container>
+    <Notification />
   </v-app>
 </template>
 
