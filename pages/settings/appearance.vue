@@ -83,17 +83,6 @@ const setTheme = (selectedTheme: string) => {
   theme.global.name.value = dataStore.get("selectedTheme");
 };
 
-var reloadingTheme = false;
-
-const reloadTheme = () => {
-  theme.global.name.value = "dark";
-  theme.global.name.value = "custom";
-
-  new Promise((r) => setTimeout(r, 100)).then(() => {
-    reloadingTheme = false;
-  });
-};
-
 const themeComponents = ["Background", "Primary", "Secondary", "Error", "Info", "Success", "Warning"];
 const selectedComponent = ref("");
 const previewedComponent = ref("");
@@ -109,14 +98,7 @@ setThemeComponent("Background");
 const setThemeComponentColor = (selectedColor: string) => {
   if (selectedColor === undefined) return;
 
-  // @ts-ignore
-  theme.global.current["_value"].colors[selectedComponent.value] = selectedColor;
-
+  theme.themes.value.custom.colors[selectedComponent.value] = selectedColor;
   dataStore.set("customTheme", { ...dataStore.get("customTheme"), colors: { ...dataStore.get("customTheme").colors, [selectedComponent.value]: selectedColor } });
-
-  if (!reloadingTheme) {
-    reloadingTheme = true;
-    reloadTheme();
-  }
 };
 </script>
