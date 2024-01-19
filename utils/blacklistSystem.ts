@@ -85,11 +85,13 @@ const removeEntries = async (UUIDs: string[]) => {
   });
   if (data?.value) {
     console.log(`%c[BlacklistSystem] Removed ${UUIDs.length === 1 ? UUIDs[0] : UUIDs.join(", ")} from your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
+    sendNotification({ icon: "mdi-database-minus", text: "Successfully removed the player(s) from your Personal Blacklist!", color: "success" });
     for (const UUID of UUIDs) {
       delete personalBlacklist[UUID];
     }
   } else {
     console.error(`%c[BlacklistSystem] Failed removing ${UUIDs.length === 1 ? UUIDs[0] : UUIDs.join(", ")} from your Personal Blacklist`, "color: #a4b6dd");
+    sendNotification({ icon: "mdi-database-alert", text: "Failed removing the Player(s) from your Personal Blacklist!", color: "success" });
   }
 };
 
@@ -103,9 +105,11 @@ const addEntry = async (player: string, reason: "CHEATING" | "SNIPING"): Promise
   });
   if (data?.value && UUID) {
     console.log(`%c[BlacklistSystem] Added ${player} to your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
+    sendNotification({ icon: "mdi-database-plus", text: "Successfully added this Player to your Personal Blacklist!", color: "success" });
     personalBlacklist[UUID] = { reason, timestamp: Math.floor(Date.now() / 1000) };
   } else {
     console.error(`%c[BlacklistSystem] Failed adding ${player} to your Personal Blacklist`, "color: #a4b6dd");
+    sendNotification({ icon: "mdi-database-alert", text: "An error occured while trying to add this Plaer to your Personal Blacklist!", color: "error" });
   }
 };
 
