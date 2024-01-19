@@ -3,7 +3,7 @@ export default {
     props: {
       ID: "MOJANG",
       title: "Mojang",
-      subtitle: "Official",
+      subtitle: "Official (100-250ms Response Time » Very Fast)",
     },
     URLs: {
       UUID: "https://api.mojang.com/users/profiles/minecraft/{USERNAME}",
@@ -18,7 +18,7 @@ export default {
     props: {
       ID: "MOWOJANG",
       title: "Mowojang",
-      subtitle: "3rd Party",
+      subtitle: "3rd Party (150-250ms Response Time » Fast)",
     },
     URLs: {
       UUID: "https://mowojang.matdoes.dev/{USERNAME}",
@@ -33,7 +33,7 @@ export default {
     props: {
       ID: "PLAYERDB",
       title: "PlayerDB",
-      subtitle: "3rd Party",
+      subtitle: "3rd Party (300-500ms Response Time » Decent)",
     },
     URLs: {
       UUID: "https://playerdb.co/api/player/minecraft/{USERNAME}",
@@ -48,7 +48,7 @@ export default {
     props: {
       ID: "ASHCON",
       title: "Ashcon",
-      subtitle: "3rd Party",
+      subtitle: "3rd Party (1000-2000ms Response Time » Slow)",
     },
     URLs: {
       UUID: "https://api.ashcon.app/mojang/v2/user/{USERNAME}",
