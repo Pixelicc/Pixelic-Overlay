@@ -55,13 +55,13 @@ export const sendNotification = ({ icon, text, color, variant, duration }: { ico
       textRef.value = text;
       colorRef.value = color;
       variantRef.value = variant || "outlined";
-      durationRef.value = duration || 1000;
+      durationRef.value = duration || 5000;
 
       shownRef.value = true;
       setTimeout(() => {
         shownRef.value = false;
         resolve();
-      }, duration || 1000);
+      }, duration || 5000);
     });
   });
 };
