@@ -26,7 +26,7 @@ class NotificationQueue {
     this.running = false;
   }
 
-  public enqueue(func: () => Promise<any>): Promise<any> {
+  public async enqueue(func: () => Promise<any>): Promise<any> {
     return new Promise((resolve) => {
       this.queue.push({ func, resolve });
       this.run();
