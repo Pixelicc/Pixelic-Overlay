@@ -58,6 +58,11 @@ const kawaii = {
 
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
+    defaults: {
+      VCard: {
+        rounded: "lg",
+      },
+    },
     components: {
       ...components,
     },
