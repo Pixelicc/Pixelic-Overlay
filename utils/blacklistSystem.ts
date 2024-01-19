@@ -22,9 +22,11 @@ const updatePersonalBlacklist = async () => {
         "X-API-Key": dataStore.get("APIKey"),
       },
     });
-    console.log(`%c[BlacklistSystem] Synced Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
-    if (data.value) {
+    if (data?.value) {
+      console.log(`%c[BlacklistSystem] Synced Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
       personalBlacklist = (data.value as any)?.entries || {};
+    } else {
+      console.error("%c[BlacklistSystem] Failed syncing Personal Blacklist", "color: #a4b6dd");
     }
   }
 };
@@ -50,8 +52,10 @@ const updateCustomBlacklists = async () => {
           "X-API-Key": dataStore.get("APIKey"),
         },
       });
-      if (data.value) {
+      if (data?.value) {
         fetchedBlacklists.push((data.value as any)?.entries || {});
+      } else {
+        console.error(`%c[BlacklistSystem] Failed syncing extra Blacklist (ID: ${blacklist.ID})`, "color: #a4b6dd");
       }
     }
     console.log(`%c[BlacklistSystem] Synced extra Blacklists in ${Date.now() - timer}ms`, "color:	#a4b6dd");
@@ -72,25 +76,33 @@ const getPersonalBlacklist = () => personalBlacklist;
 
 const removeEntries = async (UUIDs: string[]) => {
   const timer = Date.now();
-  const { data, error } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/personal`, {
+  const { data } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/personal`, {
     method: "delete",
     body: JSON.stringify(UUIDs),
     headers: {
       "X-API-Key": dataStore.get("APIKey"),
     },
   });
-  console.log(`%c[BlacklistSystem] Removed ${UUIDs.join(", ")} from your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
-  updatePersonalBlacklist();
+  if (data?.value) {
+    console.log(`%c[BlacklistSystem] Removed ${UUIDs.length === 1 ? UUIDs[0] : UUIDs.join(", ")} from your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
+    for (const UUID of UUIDs) {
+      delete personalBlacklist[UUID];
+    }
+  } else {
+    console.error(`%c[BlacklistSystem] Failed removing ${UUIDs.length === 1 ? UUIDs[0] : UUIDs.join(", ")} from your Personal Blacklist`, "color: #a4b6dd");
+  }
 };
 
 const addEntry = async (player: string, reason: "CHEATING" | "SNIPING"): Promise<void> => {
-  try {
-    const timer = Date.now();
-    const UUID = await parseUUID(player);
-    const { data, error } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("APIKey") } });
+  const timer = Date.now();
+  const UUID = await parseUUID(player);
+  const { data } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("APIKey") } });
+  if (data?.value && UUID) {
     console.log(`%c[BlacklistSystem] Added ${player} to your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
-    updatePersonalBlacklist();
-  } catch {}
+    personalBlacklist[UUID] = { reason, timestamp: Math.floor(Date.now() / 1000) };
+  } else {
+    console.error(`%c[BlacklistSystem] Failed adding ${player} to your Personal Blacklist`, "color: #a4b6dd");
+  }
 };
 
 export default {
