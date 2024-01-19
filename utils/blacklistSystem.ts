@@ -96,7 +96,11 @@ const removeEntries = async (UUIDs: string[]) => {
 const addEntry = async (player: string, reason: "CHEATING" | "SNIPING"): Promise<void> => {
   const timer = Date.now();
   const UUID = await parseUUID(player);
-  const { data } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/personal`, { method: "post", body: JSON.stringify({ UUID, reason }), headers: { "X-API-Key": dataStore.get("APIKey") } });
+  const { data } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/personal`, {
+    method: "post",
+    body: JSON.stringify({ UUID, reason }),
+    headers: { "X-API-Key": dataStore.get("APIKey") },
+  });
   if (data?.value && UUID) {
     console.log(`%c[BlacklistSystem] Added ${player} to your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
     personalBlacklist[UUID] = { reason, timestamp: Math.floor(Date.now() / 1000) };
