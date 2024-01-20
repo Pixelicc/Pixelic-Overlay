@@ -30,8 +30,6 @@ const updatePersonalBlacklist = async () => {
     }
   }
 };
-updatePersonalBlacklist();
-setInterval(() => updatePersonalBlacklist(), 300 * 1000);
 
 const updateCustomBlacklists = async () => {
   var blacklists = dataStore.get("blacklists");
@@ -62,8 +60,6 @@ const updateCustomBlacklists = async () => {
     customBlacklists = fetchedBlacklists;
   }
 };
-updateCustomBlacklists();
-setInterval(() => updateCustomBlacklists(), 300 * 1000);
 
 const getStatus = (UUID: string): { personal?: boolean; reason?: string; timestamp?: number } => {
   if (Object.hasOwn(personalBlacklist, formatUUID(UUID))) return { personal: true, ...personalBlacklist?.[formatUUID(UUID)] };

@@ -24,6 +24,15 @@ export default defineNuxtPlugin({
         parseUUID(dataStore.get("player")).then((UUID) => ipcRenderer.send("discordRPCInit", UUID));
       }
 
+      tagSystem.updateTags();
+      setInterval(() => tagSystem.updateTags(), 300 * 1000);
+
+      blacklistSystem.updatePersonalBlacklist();
+      setInterval(() => blacklistSystem.updatePersonalBlacklist(), 300 * 1000);
+
+      blacklistSystem.updatePersonalBlacklist();
+      setInterval(() => blacklistSystem.updatePersonalBlacklist(), 300 * 1000);
+
       (document.querySelector(":root") as HTMLElement).style.setProperty("--opacity", dataStore.get("opacity"));
     },
   },
