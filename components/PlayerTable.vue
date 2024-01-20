@@ -84,53 +84,29 @@
 <script setup lang="ts">
 import dataStore from "../electron/store";
 
-const mode = ref("");
-mode.value = dataStore.get("mode").toLowerCase();
+const mode = ref(dataStore.get("mode").toLowerCase());
 setInterval(() => {
   mode.value = dataStore.get("mode").toLowerCase();
 }, 1000);
 
 playerHandler.addPlayer(dataStore.get("player"));
 
-const headers: globalThis.Ref<any[]> = ref([]);
+const headers: globalThis.Ref<any[]> = ref([
+  { title: "Tags", align: "center", key: "tags", sortable: false, width: "20%" },
+  { title: "Name", align: "center", key: "player.username", sortable: true, width: "25%" },
+  { title: "Level", align: "center", key: "player.stats.Bedwars.level", width: "10%" },
+]);
 
-setInterval(() => {
-  const selectedHeaders = dataStore.get("colums");
+const selectedHeaders = dataStore.get("colums");
+if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "center", key: `player.stats.Bedwars.${mode}.winstreak`, width: "6%" });
+if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "center", key: `player.stats.Bedwars.${mode}.wins`, width: "10%" });
+if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "center", key: `player.stats.Bedwars.${mode}.WLR`, width: "10%" });
+if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "center", key: `player.stats.Bedwars.${mode}.finalKills`, width: "12%" });
+if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "center", key: `player.stats.Bedwars.${mode}.FKDR`, width: "10%" });
+if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "center", key: `player.stats.Bedwars.${mode}.BBLR`, width: "10%" });
+headers.value.push({ width: "0%" });
 
-  headers.value = [
-    { title: "Tags", align: "center", key: "tags", sortable: false, width: "20%" },
-    { title: "Name", align: "center", key: "player.username", sortable: true, width: "25%" },
-    { title: "Level", align: "center", key: "player.stats.Bedwars.level", width: "10%" },
-  ];
-
-  if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "center", key: `player.stats.Bedwars.${mode}.winstreak`, width: "6%" });
-  if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "center", key: `player.stats.Bedwars.${mode}.wins`, width: "10%" });
-  if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "center", key: `player.stats.Bedwars.${mode}.WLR`, width: "10%" });
-  if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "center", key: `player.stats.Bedwars.${mode}.finalKills`, width: "12%" });
-  if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "center", key: `player.stats.Bedwars.${mode}.FKDR`, width: "10%" });
-  if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "center", key: `player.stats.Bedwars.${mode}.BBLR`, width: "10%" });
-
-  headers.value.push({ width: "0%" });
-}, 1000);
-
-const players: globalThis.Ref<any[]> = ref([]);
-
-setInterval(() => {
-  const Players: any[] = [];
-  for (const player of playerHandler.getPlayers()) {
-    const blacklistStatus = blacklistSystem.getStatus(player.player?.UUID || "");
-    Players.push({
-      ...player,
-      blacklistStatus,
-      tags: player.cause === "Invalid UUID" ? [{ text: "NICKED", tooltip: "This Player is hiding their real Name", color: getMCColor("e"), appendIcon: "mdi-incognito" }] : blacklistStatus?.reason ? [{ text: blacklistStatus?.reason === "CHEATING" ? "CHEATER" : "SNIPER", tooltip: "This Player is on one of your Blacklists", color: getMCColor("c"), appendIcon: "mdi-account-alert" }, ...tagSystem.getTags(player.player?.UUID || "")] : tagSystem.getTags(player.player?.UUID || ""),
-      custom: {
-        blacklistStatus,
-        rankData: player.cause === "Invalid UUID" ? { full: "§e[NICK]", shortened: "§e" } : parseRank(player.player?.rank || null, player.player?.plusColor || null, player.player?.plusPlusColor || null),
-      },
-    });
-  }
-  players.value = Players;
-}, 250);
+const players = playerHandler.players;
 </script>
 
 <style>
