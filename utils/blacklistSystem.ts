@@ -1,18 +1,20 @@
 import dataStore from "../electron/store";
 
-var personalBlacklist: {
+var personalBlacklist: Ref<{
   [key: string]: {
     reason: string;
     timestamp: number;
   };
-} = {};
+}> = ref({});
 
-var customBlacklists: {
-  [key: string]: {
-    reason: string;
-    timestamp: number;
-  };
-}[] = [];
+var customBlacklists: Ref<
+  {
+    [key: string]: {
+      reason: string;
+      timestamp: number;
+    };
+  }[]
+> = ref([]);
 
 const updatePersonalBlacklist = async () => {
   if (dataStore.get("blacklists").some((blacklist) => blacklist.type === "PERSONAL" && blacklist.enabled)) {
@@ -24,7 +26,7 @@ const updatePersonalBlacklist = async () => {
     });
     if (data?.value) {
       console.log(`%c[BlacklistSystem] Synced Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
-      personalBlacklist = (data.value as any)?.entries || {};
+      personalBlacklist.value = (data.value as any)?.entries || {};
     } else {
       console.error("%c[BlacklistSystem] Failed syncing Personal Blacklist", "color: #a4b6dd");
     }
@@ -57,13 +59,13 @@ const updateCustomBlacklists = async () => {
       }
     }
     console.log(`%c[BlacklistSystem] Synced extra Blacklists in ${Date.now() - timer}ms`, "color:	#a4b6dd");
-    customBlacklists = fetchedBlacklists;
+    customBlacklists.value = fetchedBlacklists;
   }
 };
 
 const getStatus = (UUID: string): { personal?: boolean; reason?: string; timestamp?: number } => {
-  if (Object.hasOwn(personalBlacklist, formatUUID(UUID))) return { personal: true, ...personalBlacklist?.[formatUUID(UUID)] };
-  const customQuery = customBlacklists.find((blacklist) => Object.hasOwn(blacklist, formatUUID(UUID)));
+  if (Object.hasOwn(personalBlacklist, formatUUID(UUID))) return { personal: true, ...personalBlacklist.value?.[formatUUID(UUID)] };
+  const customQuery = customBlacklists.value.find((blacklist) => Object.hasOwn(blacklist, formatUUID(UUID)));
   if (!customQuery) return {};
   return { personal: false, ...customQuery[formatUUID(UUID)] };
 };
@@ -83,7 +85,7 @@ const removeEntries = async (UUIDs: string[]) => {
     console.log(`%c[BlacklistSystem] Removed ${UUIDs.length === 1 ? UUIDs[0] : UUIDs.join(", ")} from your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
     sendNotification({ icon: "mdi-database-minus", text: "Successfully removed the player(s) from your Personal Blacklist!", color: "success" });
     for (const UUID of UUIDs) {
-      delete personalBlacklist[UUID];
+      delete personalBlacklist.value[UUID];
     }
   } else {
     console.error(`%c[BlacklistSystem] Failed removing ${UUIDs.length === 1 ? UUIDs[0] : UUIDs.join(", ")} from your Personal Blacklist`, "color: #a4b6dd");
@@ -102,7 +104,7 @@ const addEntry = async (player: string, reason: "CHEATING" | "SNIPING"): Promise
   if (data?.value && UUID) {
     console.log(`%c[BlacklistSystem] Added ${player} to your Personal Blacklist in ${Date.now() - timer}ms`, "color: #a4b6dd");
     sendNotification({ icon: "mdi-database-plus", text: "Successfully added this Player to your Personal Blacklist!", color: "success" });
-    personalBlacklist[UUID] = { reason, timestamp: Math.floor(Date.now() / 1000) };
+    personalBlacklist.value[UUID] = { reason, timestamp: Math.floor(Date.now() / 1000) };
   } else {
     console.error(`%c[BlacklistSystem] Failed adding ${player} to your Personal Blacklist`, "color: #a4b6dd");
     sendNotification({ icon: "mdi-database-alert", text: "An error occured whilst trying to add this Player to your Personal Blacklist!", color: "error" });
