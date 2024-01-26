@@ -21,14 +21,16 @@
 1. Open the Overlay and select your corresponding Client. _(If you don't have any of the implemented Clients, select Vanilla or select Custom to enter the path for the log file.)_
 2. If everything went right the Overlay should have opened a new page in your default browser else click on GET API-KEY in the Overlay Settings. After you completed the Discord OAuth you will see an API-Key you can copy paste into the **Pixelic API-Key** field.
 3. Now enter your Username in **Username** field in the Overlay Settings.
-4. Join any Bedwars Game and the Overlay should start to work as expected.
+4. Select your Hypixel Gamemode and its Mode.
+5. Join any Bedwars, Skywars or MurderMystery Game and the Overlay should start to work as expected.
 
 ## Features
 
 ### General features
 
 - Shows stats of players in your game in seconds
-- Works with Lunarclient, Badlion, Vanilla or any custom selected log file
+- Supports Bedwars, Skywars, MurderMystery and Duels (Duels does not provide the ability to show queued players -> Just exist for a quick overview)
+- Works with Lunarclient, Badlion, Vanilla or any other custom selected log file
 - Resizable, movable, and minimizable
 - Easy to use and setup
 - Can show nicked players, party members and players that mentioned you in chat
