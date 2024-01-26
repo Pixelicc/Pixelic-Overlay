@@ -150,5 +150,8 @@ export const parseStat = (value: number, stat: string, hypixelMode: "BEDWARS" | 
   if (stat === "MURDERER_CHANCE") return "§c" + value + "%";
   if (stat === "DETECTIVE_CHANCE") return "§b" + value + "%";
   if (stat === "TIMES_HERO") return "§3" + value.toLocaleString("en-US");
+  if (stat === "LEVEL") return "§3" + Number(value.toFixed(2)).toLocaleString("en-US");
+  if (stat === "KARMA") return "§d" + formatNumber(value, 2);
+  if (stat === "ACHIEVEMENT_POINTS") return "§e" + value.toLocaleString("en-US");
   return "§7" + value;
 };

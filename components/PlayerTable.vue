@@ -25,15 +25,20 @@
           </v-tooltip>
         </td>
         <td v-for="header in headers.slice(2, -1)">
-          <v-tooltip v-if="header.title.includes('Level')" location="bottom">
+          <v-tooltip v-if="header.title === 'Level'" location="bottom">
             <template v-slot:activator="{ props }">
+              <!-- @vue-skip -->
               <span v-if="GamemodeManager.hypixelMode.value === 'BEDWARS'" v-bind="props" v-html="parseMCColor(parseBedwarsStar(item.player?.stats?.Bedwars?.level || 0).shortened)"></span>
+              <!-- @vue-skip -->
               <span v-if="GamemodeManager.hypixelMode.value === 'SKYWARS'" v-bind="props" v-html="parseMCColor(parseSkywarsStar(item.player?.stats?.Skywars?.level || 0).shortened)"></span>
             </template>
+            <!-- @vue-skip -->
             <span v-if="GamemodeManager.hypixelMode.value === 'BEDWARS'" v-html="parseMCColor(parseBedwarsStar(item.player?.stats?.Bedwars?.level || 0).full)"></span>
+            <!-- @vue-skip -->
             <span v-if="GamemodeManager.hypixelMode.value === 'SKYWARS'" v-html="parseMCColor(parseSkywarsStar(item.player?.stats?.Skywars?.level || 0).full)"></span>
           </v-tooltip>
-          <span v-if="!header.title.includes('Level')" v-html="parseMCColor(parseStat(queryJSONPath(item, `$.${header.key.replace('{MODE}', GamemodeManager.minigameMode.value.toLowerCase())}`, 0), header.custom.ID, GamemodeManager.hypixelMode, GamemodeManager.minigameMode))"></span>
+          <!-- @vue-skip-->
+          <span v-if="header.title !== 'Level'" v-html="parseMCColor(parseStat(queryJSONPath(item, `$.${header.key.replace('{MODE}', GamemodeManager.minigameMode.value.toLowerCase())}`, 0), header.custom.ID, GamemodeManager.hypixelMode, GamemodeManager.minigameMode))"></span>
         </td>
         <td>
           <v-menu :close-on-content-click="false" location="end">
@@ -99,7 +104,9 @@ const updateHeaders = () => {
   headers.value = [...defaultHeaders];
 
   hypixelColumns.forEach((column) => {
-    headers.value.push(Constants.overlay.headers.hypixel[column]);
+    const header: any = Constants.overlay.headers.hypixel[column];
+    header.custom = { ID: column };
+    headers.value.push(header);
   });
 
   if (GamemodeManager.hypixelMode.value === "BEDWARS")
