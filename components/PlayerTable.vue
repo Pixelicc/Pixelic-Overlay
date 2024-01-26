@@ -24,20 +24,17 @@
             <span v-html="parseMCColor(`${item.custom.rankData.full.length === 0 ? item.custom.rankData.shortened : item.custom.rankData.full + ' '}${item.player.username}`)"></span>
           </v-tooltip>
         </td>
-        <td>
-          <v-tooltip location="bottom">
+        <td v-for="header in headers.slice(2, -1)">
+          <v-tooltip v-if="header.title.includes('Level')" location="bottom">
             <template v-slot:activator="{ props }">
-              <span v-bind="props" v-html="parseMCColor(parseBedwarsStar(item.player?.stats?.Bedwars?.level || 0).shortened)"></span>
+              <span v-if="GamemodeManager.hypixelMode.value === 'BEDWARS'" v-bind="props" v-html="parseMCColor(parseBedwarsStar(item.player?.stats?.Bedwars?.level || 0).shortened)"></span>
+              <span v-if="GamemodeManager.hypixelMode.value === 'SKYWARS'" v-bind="props" v-html="parseMCColor(parseSkywarsStar(item.player?.stats?.Skywars?.level || 0).shortened)"></span>
             </template>
-            <span v-html="parseMCColor(parseBedwarsStar(item.player?.stats?.Bedwars?.level || 0).full)"></span>
+            <span v-if="GamemodeManager.hypixelMode.value === 'BEDWARS'" v-html="parseMCColor(parseBedwarsStar(item.player?.stats?.Bedwars?.level || 0).full)"></span>
+            <span v-if="GamemodeManager.hypixelMode.value === 'SKYWARS'" v-html="parseMCColor(parseSkywarsStar(item.player?.stats?.Skywars?.level || 0).full)"></span>
           </v-tooltip>
+          <span v-if="!header.title.includes('Level')" v-html="parseMCColor(parseStat(queryJSONPath(item, `$.${header.key.replace('{MODE}', GamemodeManager.minigameMode.value.toLowerCase())}`, 0), header.custom.ID, GamemodeManager.hypixelMode, GamemodeManager.minigameMode))"></span>
         </td>
-        <td v-if="headers.some((h) => h.title === 'WS')"><span v-html="parseMCColor(parseStatColor(item.player?.stats?.Bedwars?.[mode]?.winstreak || 0, 'winstreak', mode))"></span></td>
-        <td v-if="headers.some((h) => h.title === 'Wins')"><span v-html="parseMCColor(parseStatColor(item.player?.stats?.Bedwars?.[mode]?.wins || 0, 'wins', mode))"></span></td>
-        <td v-if="headers.some((h) => h.title === 'WLR')"><span v-html="parseMCColor(parseStatColor((item.player?.stats?.Bedwars?.[mode]?.WLR || 0).toFixed(2), 'WLR', mode))"></span></td>
-        <td v-if="headers.some((h) => h.title === 'Finals')"><span v-html="parseMCColor(parseStatColor(item.player?.stats?.Bedwars?.[mode]?.finalKills || 0, 'finalKills', mode))"></span></td>
-        <td v-if="headers.some((h) => h.title === 'FKDR')"><span v-html="parseMCColor(parseStatColor((item.player?.stats?.Bedwars?.[mode]?.FKDR || 0).toFixed(2), 'FKDR', mode))"></span></td>
-        <td v-if="headers.some((h) => h.title === 'BBLR')"><span v-html="parseMCColor(parseStatColor((item.player?.stats?.Bedwars?.[mode]?.BBLR || 0).toFixed(2), 'BBLR', mode))"></span></td>
         <td>
           <v-menu :close-on-content-click="false" location="end">
             <template v-slot:activator="{ props }">
@@ -52,14 +49,14 @@
                 </v-list-item>
                 <v-divider v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && !item?.custom?.blacklistStatus?.reason" class="ma-2"></v-divider>
                 <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && !item?.custom?.blacklistStatus?.reason">
-                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="blacklistSystem.addEntry(item.player.UUID, 'CHEATING')">Report Player (Cheating)</v-btn>
+                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="BlacklistManager.addEntry(item.player.UUID, 'CHEATING')">Report Player (Cheating)</v-btn>
                 </v-list-item>
                 <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && !item?.custom?.blacklistStatus?.reason">
-                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="blacklistSystem.addEntry(item.player.UUID, 'SNIPING')">Report Player (Sniping)</v-btn>
+                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="warning" @click="BlacklistManager.addEntry(item.player.UUID, 'SNIPING')">Report Player (Sniping)</v-btn>
                 </v-list-item>
                 <v-divider v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && item?.custom?.blacklistStatus?.reason" class="ma-2"></v-divider>
                 <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && item?.custom?.blacklistStatus?.personal">
-                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="error" @click="blacklistSystem.removeEntries([item.player.UUID])">Remove Report</v-btn>
+                  <v-btn prepend-icon="mdi-account" size="small" variant="tonal" color="error" @click="BlacklistManager.removeEntries([item.player.UUID])">Remove Report</v-btn>
                 </v-list-item>
                 <v-list-item v-if="item.player.username !== dataStore.get('player') && item.player?.UUID && !item?.custom?.blacklistStatus?.personal && item?.custom?.blacklistStatus?.reason">
                   <v-tooltip location="bottom">
@@ -84,29 +81,61 @@
 <script setup lang="ts">
 import dataStore from "../electron/store";
 
-const mode = ref(dataStore.get("mode").toLowerCase());
-setInterval(() => {
-  mode.value = dataStore.get("mode").toLowerCase();
-}, 1000);
+PlayerManager.addPlayer(dataStore.get("overlaySettings").username);
 
-playerHandler.addPlayer(dataStore.get("player"));
+const hypixelColumns = dataStore.get("columnSettings").columns;
+const bedwarsColumns = dataStore.get("columnSettings").bedwarsSettings.columns;
+const skywarsColumns = dataStore.get("columnSettings").skywarsSettings.columns;
+const duelsColumns = dataStore.get("columnSettings").duelsSettings.columns;
+const murderMysteryColumns = dataStore.get("columnSettings").murderMysterySettings.columns;
 
-const headers: globalThis.Ref<any[]> = ref([
+const defaultHeaders = [
   { title: "Tags", align: "center", key: "tags", sortable: false, width: "20%" },
   { title: "Name", align: "center", key: "player.username", sortable: true, width: "25%" },
-  { title: "Level", align: "center", key: "player.stats.Bedwars.level", width: "10%" },
-]);
+];
+const headers: Ref<any[]> = ref([...defaultHeaders]);
 
-const selectedHeaders = dataStore.get("colums");
-if (selectedHeaders.includes("WS")) headers.value.push({ title: "WS", align: "center", key: `player.stats.Bedwars.${mode}.winstreak`, width: "6%" });
-if (selectedHeaders.includes("Wins")) headers.value.push({ title: "Wins", align: "center", key: `player.stats.Bedwars.${mode}.wins`, width: "10%" });
-if (selectedHeaders.includes("WLR")) headers.value.push({ title: "WLR", align: "center", key: `player.stats.Bedwars.${mode}.WLR`, width: "10%" });
-if (selectedHeaders.includes("Finals")) headers.value.push({ title: "Finals", align: "center", key: `player.stats.Bedwars.${mode}.finalKills`, width: "12%" });
-if (selectedHeaders.includes("FKDR")) headers.value.push({ title: "FKDR", align: "center", key: `player.stats.Bedwars.${mode}.FKDR`, width: "10%" });
-if (selectedHeaders.includes("BBLR")) headers.value.push({ title: "BBLR", align: "center", key: `player.stats.Bedwars.${mode}.BBLR`, width: "10%" });
-headers.value.push({ width: "0%" });
+const updateHeaders = () => {
+  headers.value = [...defaultHeaders];
 
-const players = playerHandler.players;
+  hypixelColumns.forEach((column) => {
+    headers.value.push(Constants.overlay.headers.hypixel[column]);
+  });
+
+  if (GamemodeManager.hypixelMode.value === "BEDWARS")
+    bedwarsColumns.forEach((column) => {
+      const header: any = Constants.overlay.headers.bedwars[column];
+      header.custom = { ID: column };
+      headers.value.push(header);
+    });
+
+  if (GamemodeManager.hypixelMode.value === "SKYWARS")
+    skywarsColumns.forEach((column) => {
+      const header: any = Constants.overlay.headers.skywars[column];
+      header.custom = { ID: column };
+      headers.value.push(header);
+    });
+  if (GamemodeManager.hypixelMode.value === "DUELS")
+    duelsColumns.forEach((column) => {
+      const header: any = Constants.overlay.headers.duels[column];
+      header.custom = { ID: column };
+      headers.value.push(header);
+    });
+  if (GamemodeManager.hypixelMode.value === "MURDER_MYSTERY")
+    murderMysteryColumns.forEach((column) => {
+      const header: any = Constants.overlay.headers.murderMystery[column];
+      header.custom = { ID: column };
+      headers.value.push(header);
+    });
+
+  // Empty Row for the management Button
+  headers.value.push({ width: "0%" });
+};
+updateHeaders();
+
+watch(GamemodeManager.hypixelMode, () => updateHeaders());
+
+const players = PlayerManager.players;
 </script>
 
 <style>

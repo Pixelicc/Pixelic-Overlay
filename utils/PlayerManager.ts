@@ -1,13 +1,13 @@
 import dataStore from "../electron/store";
 
-var inLobby = true;
+var inLobby = ref(true);
 var players: Ref<any[]> = ref([]);
 var playersInQueue: Ref<string[]> = ref([]);
 var playersInParty: Ref<string[]> = ref([]);
 
 const addPlayer = (player: string, options?: { force?: boolean; party?: boolean; mention?: boolean }) => {
   parseUUID(player).then(async (UUID) => {
-    if (!options?.force && !inLobby) playersInQueue.value.push(player);
+    if (!options?.force && !inLobby.value) playersInQueue.value.push(player);
     if (options?.party) playersInParty.value.push(player);
 
     if (!UUID) {
@@ -17,6 +17,19 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
         player: {
           UUID: null,
           username: player,
+        },
+      });
+      players.value.push({
+        player: {
+          UUID: null,
+          username: player,
+        },
+        headers: [],
+        icons: [],
+        tags: [{ text: "NICKED", tooltip: "This Player is hiding their real Name", color: getMCColor("e"), appendIcon: "mdi-incognito" }],
+        custom: {
+          blacklistStatus: {},
+          rankData: { full: "§e[NICK]", shortened: "§e" },
         },
       });
       removeDuplicates();
@@ -30,15 +43,9 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
 
       const headers: { [key: string]: string } = {};
 
-      const retries = ref(5);
-      const retryDelay = ref(5000);
-
-      const { data, error } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/proxy/hypixel/player/${UUID}`, {
-        headers: {
-          "X-API-Key": dataStore.get("APIKey"),
-        },
-        retry: retries,
-        retryDelay,
+      const { data, error } = await PixelicAPI(`/v2/pixelic-overlay/proxy/hypixel/player/${UUID}`, {
+        retry: 5,
+        retryDelay: 20000,
         async onResponse(context) {
           context.response.headers.forEach((value: string, key: string) => {
             headers[key] = value;
@@ -46,53 +53,43 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
         },
       });
 
-      if (options?.force || (playersInQueue.value.includes(player) && inLobby !== true)) {
+      if (options?.force || (playersInQueue.value.includes(player) && inLobby.value !== true)) {
         if (error?.value) {
-          if (error.value.statusCode === 429) {
-            if (headers["X-RateLimit-Reset"]) {
-              retryDelay.value = Number(headers["X-RateLimit-Reset"]) * 1000;
-              sendNotification({ icon: "mdi-cloud-alert", text: `You are being ratelimited! New Players will appear in ${headers["X-RateLimit-Reset"]} seconds!`, color: "warning" });
-            }
-
-            return;
-          }
           /**
            * Needed if there is an actual real Player called like a Hypixel Nickname but has never played on Hypixel themselves
            */
-          if (error.value.statusCode === 404 && inLobby === false) error.value.data.cause = "Invalid UUID";
-          const blacklistStatus = blacklistSystem.getStatus((data.value as any)?.UUID || "");
+          if (error.value.statusCode === 404 && inLobby.value === false) error.value.data.cause = "Invalid UUID";
+          const blacklistStatus = BlacklistManager.getPlayerBlacklistStatus((data.value as any)?.UUID || "");
           players.value.push({
             player: {
               UUID: null,
               username: player,
             },
-            blacklistStatus,
             headers,
             icons,
             tags:
               (error.value.data?.cause || "Invalid UUID") === "Invalid UUID"
                 ? [{ text: "NICKED", tooltip: "This Player is hiding their real Name", color: getMCColor("e"), appendIcon: "mdi-incognito" }]
                 : blacklistStatus?.reason
-                ? [{ text: blacklistStatus?.reason === "CHEATING" ? "CHEATER" : "SNIPER", tooltip: "This Player is on one of your Blacklists", color: getMCColor("c"), appendIcon: "mdi-account-alert" }, ...tagSystem.getTags((data.value as any).player?.UUID || "")]
-                : tagSystem.getTags((data.value as any).player?.UUID || ""),
+                ? [{ text: blacklistStatus?.reason === "CHEATING" ? "CHEATER" : "SNIPER", tooltip: "This Player is on one of your Blacklists", color: getMCColor("c"), appendIcon: "mdi-account-alert" }, ...TagManager.getPlayerTags((data.value as any).player?.UUID || "")]
+                : TagManager.getPlayerTags((data.value as any).player?.UUID || ""),
             custom: {
               blacklistStatus,
               rankData: (error.value.data?.cause || "Invalid UUID") === "Invalid UUID" ? { full: "§e[NICK]", shortened: "§e" } : parseRank((data.value as any).player?.rank || null, (data.value as any).player?.plusColor || null, (data.value as any).player?.plusPlusColor || null),
             },
           });
         } else {
-          const blacklistStatus = blacklistSystem.getStatus((data.value as any)?.UUID || "");
+          const blacklistStatus = BlacklistManager.getPlayerBlacklistStatus((data.value as any)?.UUID || "");
           players.value.push({
             ...(data.value as any),
-            blacklistStatus,
             headers,
             icons,
             tags:
               (data.value as any).cause === "Invalid UUID"
                 ? [{ text: "NICKED", tooltip: "This Player is hiding their real Name", color: getMCColor("e"), appendIcon: "mdi-incognito" }]
                 : blacklistStatus?.reason
-                ? [{ text: blacklistStatus?.reason === "CHEATING" ? "CHEATER" : "SNIPER", tooltip: "This Player is on one of your Blacklists", color: getMCColor("c"), appendIcon: "mdi-account-alert" }, ...tagSystem.getTags((data.value as any).player?.UUID || "")]
-                : tagSystem.getTags((data.value as any).player?.UUID || ""),
+                ? [{ text: blacklistStatus?.reason === "CHEATING" ? "CHEATER" : "SNIPER", tooltip: "This Player is on one of your Blacklists", color: getMCColor("c"), appendIcon: "mdi-account-alert" }, ...TagManager.getPlayerTags((data.value as any).player?.UUID || "")]
+                : TagManager.getPlayerTags((data.value as any).player?.UUID || ""),
             custom: {
               blacklistStatus,
               rankData: (data.value as any).cause === "Invalid UUID" ? { full: "§e[NICK]", shortened: "§e" } : parseRank((data.value as any).player?.rank || null, (data.value as any).player?.plusColor || null, (data.value as any).player?.plusPlusColor || null),
@@ -113,7 +110,7 @@ const refreshPlayers = () => {
     for (const player of players.value) {
       addPlayer(player.player.username, { force: true });
     }
-    console.log(`%c[PlayerHandler] Refreshed ${players.value.length} Players`, "color: #d09292");
+    console.log(`%c[PlayerManager] Refreshed ${players.value.length} Player(s)`, "color: #d09292");
     setTimeout(() => {
       refreshing = false;
     }, 1000);
@@ -135,37 +132,24 @@ const removePlayer = (player: string) => {
 const removeDuplicates = () => {
   playersInQueue.value = [...new Set(playersInQueue.value)];
   playersInParty.value = [...new Set(playersInParty.value)];
-  players.value = [...new Map(players.value.map((player: any) => [player.player.username.toLowerCase(), player])).values()];
+  players.value = [...new Map(players.value.map((player: any) => [player.player?.username?.toLowerCase(), player])).values()];
 };
 
 const clearPlayers = () => {
-  console.log(`%c[PlayerHandler] Cleared ${players.value.length - 1} Players`, "color: #d09292");
+  if (players.value.length > 1) console.log(`%c[PlayerManager] Cleared ${players.value.length - 1} Player(s)`, "color: #d09292");
   players.value = [];
   playersInQueue.value = [];
   playersInParty.value = [];
-  addPlayer(dataStore.get("player"), { force: true });
+  addPlayer(dataStore.get("overlaySettings").username, { force: true });
 };
-
-const getInLobby = () => inLobby;
-const setInLobby = (bool: boolean) => {
-  if (bool !== inLobby) {
-    console.log(`%c[PlayerHandler] Player now located ${bool ? "in the Lobby" : "in a Minigame"}`, "color: #d09292");
-    inLobby = bool;
-  }
-};
-const getPlayers = () => players.value;
-const getPlayersInQueue = () => playersInQueue.value;
-const getPlayersInParty = () => playersInParty.value;
 
 export default {
-  getInLobby,
-  setInLobby,
-  getPlayers,
-  getPlayersInQueue,
-  getPlayersInParty,
+  inLobby,
+  players,
+  playersInQueue,
+  playersInParty,
   addPlayer,
   refreshPlayers,
   removePlayer,
   clearPlayers,
-  players,
 };

@@ -10,20 +10,21 @@ const tags: Ref<{
 
 const updateTags = async () => {
   const timer = Date.now();
-  const { data } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/tags`);
+  const { data } = await PixelicAPI("/v2/pixelic-overlay/tags");
   if (data?.value) {
-    console.log(`%c[TagSystem] Updated Tags in ${Date.now() - timer}ms`, "color: #a2d0c0");
+    console.log(`%c[TagManager] Updated Tags in ${Date.now() - timer}ms`, "color: #a2d0c0");
     tags.value = (data.value as any)?.tags || {};
   } else {
-    console.error(`%c[TagSystem] Failed updating Tags`, "color: #a2d0c0");
+    console.error(`%c[TagManager] Failed updating Tags`, "color: #a2d0c0");
   }
 };
 
-const getTags = (UUID: string) => {
+const getPlayerTags = (UUID: string) => {
   return tags.value?.[formatUUID(UUID)] || [];
 };
 
 export default {
   updateTags,
-  getTags,
+  tags,
+  getPlayerTags,
 };

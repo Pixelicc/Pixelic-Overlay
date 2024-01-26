@@ -14,7 +14,7 @@
             <div class="ml-4 mr-4 mt-4">
               <v-text-field :rules="[validateUsername]" variant="outlined" color="secondary" clearable label="Username" persistent-placeholder placeholder="Pixelic" prepend-icon="mdi-account" v-model="player" @update:model-value="setPlayer"></v-text-field>
               <v-divider :thickness="8" class="border-opacity-0"></v-divider>
-              <v-select label="Client / Log File" variant="outlined" color="secondary" :items="clients" prepend-icon="mdi-file" v-model="client" return-object @update:model-value="setClient"></v-select>
+              <v-select label="Client / Log File" variant="outlined" color="secondary" :items="Object.values(Constants.overlay.supportedClients)" prepend-icon="mdi-file" v-model="client" return-object @update:model-value="setClient"></v-select>
               <v-divider v-if="client === 'Custom'" :thickness="8" class="border-opacity-0"></v-divider>
               <div v-if="client === 'Custom'"><v-text-field clearable label="Custom Log File Location" variant="outlined" color="secondary" prepend-icon="mdi-file-edit" v-model="customLogPath" @update:model-value="setCustomLogPath" :rules="[validatePath]"></v-text-field></div>
               <v-divider :thickness="8" class="border-opacity-0"></v-divider>
@@ -29,9 +29,21 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-card title="Bedwars">
+          <v-card title="Hypixel Gamemode">
             <div class="ml-4 mr-4 mt-4">
-              <v-select label="Gamemode" variant="outlined" color="secondary" :items="Object.keys(modes)" prepend-icon="mdi-bed-empty" v-model="mode" return-object @update:modelValue="setMode"></v-select>
+              <v-select variant="outlined" color="secondary" :items="Object.values(Constants.overlay.supportedModes.hypixel)" prepend-icon="mdi-table-search" v-model="hypixelMode" return-object @update:modelValue="setHypixelMode"></v-select>
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-card title="Minigame Gamemode">
+            <div class="ml-4 mr-4 mt-4">
+              <v-select label="Bedwars" variant="outlined" color="secondary" :items="Object.values(Constants.overlay.supportedModes.bedwars)" prepend-icon="mdi-bed" v-model="bedwarsMode" return-object @update:modelValue="setBedwarsMode"></v-select>
+              <v-select label="Skywars" variant="outlined" color="secondary" :items="Object.values(Constants.overlay.supportedModes.skywars)" prepend-icon="mdi-weather-cloudy" v-model="skywarsMode" return-object @update:modelValue="setSkywarsMode"></v-select>
+              <v-select label="Duels" variant="outlined" color="secondary" :items="Object.values(Constants.overlay.supportedModes.duels)" prepend-icon="mdi-fencing" v-model="duelsMode" return-object @update:modelValue="setDuelsMode"></v-select>
+              <v-select label="Murder Mystery" variant="outlined" color="secondary" :items="Object.values(Constants.overlay.supportedModes.murderMystery)" prepend-icon="mdi-coffin" v-model="murderMysteryMode" return-object @update:modelValue="setMurderMysteryMode"></v-select>
             </div>
           </v-card>
         </v-col>
@@ -48,7 +60,7 @@
                   <template v-slot:append>
                     <v-switch color="secondary" v-model="discordRPC" @update:model-value="setDiscordRPC" style="display: flex"></v-switch>
                   </template>
-                  <v-list-item-title>Discord Rich Presence</v-list-item-title>
+                  <v-list-item-title>Discord Rich Presence (RPC)</v-list-item-title>
                 </v-list-item>
                 <v-list-item>
                   <template v-slot:prepend>
@@ -58,7 +70,7 @@
                     <v-switch color="secondary" v-model="advancedMode" @update:model-value="setAdvancedMode" style="display: flex"></v-switch>
                   </template>
                   <v-list-item-title>Advanced Mode (Developer Mode)</v-list-item-title>
-                  <v-list-item-subtitle>Gives you access to restricted Features &mdash; DO NOT ENABLE THIS IF YOU DO NOT KNOW WHAT YOU ARE DOING</v-list-item-subtitle>
+                  <v-list-item-subtitle> Gives you access to restricted Features (DO NOT ENABLE THIS IF YOU DO NOT KNOW WHAT YOU ARE DOING) </v-list-item-subtitle>
                 </v-list-item>
               </v-list>
             </div>
@@ -74,25 +86,18 @@
 import { ipcRenderer } from "electron";
 import dataStore from "../../electron/store";
 
-const player = ref("");
-player.value = dataStore.get("player");
-
+const player = ref(dataStore.get("overlaySettings").username);
 const setPlayer = () => {
   if (validateUsername(player.value)) {
-    dataStore.set("player", player.value);
+    dataStore.set("overlaySettings.username", player.value);
   }
 };
 
-const clients = ["Default", "Lunar", "Badlion", "Custom"];
-
-const client = ref("");
-client.value = dataStore.get("client").charAt(0) + dataStore.get("client").toLowerCase().slice(1);
-
-const setClient = (Client: string) => {
-  dataStore.set("client", Client.toUpperCase());
-  client.value = dataStore.get("client").charAt(0) + dataStore.get("client").toLowerCase().slice(1);
+const client = ref(Constants.overlay.supportedClients[dataStore.get("overlaySettings").client]);
+const setClient = () => {
+  dataStore.set("overlaySettings.client", reverseObject(Constants.overlay.supportedClients)[client.value]);
   ipcRenderer.send("mcLogStopTailing");
-  ipcRenderer.send("mcLogInitTailing", { client: client.value.toUpperCase(), customLogPath: customLogPath.value });
+  ipcRenderer.send("mcLogInitTailing", { client: dataStore.get("overlaySettings").client, customLogPath: dataStore.get("overlaySettings").customLogPath });
 };
 
 const validatePath = async (Path: string): Promise<boolean> => {
@@ -104,75 +109,62 @@ const validatePath = async (Path: string): Promise<boolean> => {
   });
 };
 
-const customLogPath = ref("");
-customLogPath.value = dataStore.get("customLogPath");
-
+const customLogPath = ref(dataStore.get("overlaySettings").customLogPath);
 const setCustomLogPath = async () => {
   if (await validatePath(customLogPath.value)) {
-    dataStore.set("customLogPath", customLogPath.value);
+    dataStore.set("overlaySettings.customLogPath", customLogPath.value);
     ipcRenderer.send("mcLogStopTailing");
-    ipcRenderer.send("mcLogInitTailing", { client: client.value.toUpperCase(), customLogPath: customLogPath.value });
+    ipcRenderer.send("mcLogInitTailing", { client: dataStore.get("overlaySettings").client, customLogPath: dataStore.get("overlaySettings").customLogPath });
   }
 };
 
-const APIKey = ref("");
-APIKey.value = dataStore.get("APIKey");
-
 const validateAPIKey = async (key: string) => {
   if (!validateUUID(key)) return false;
-  const { data, error } = await useFetch(`${getAPIInstance()}/v1/user`, {
-    headers: {
-      "X-API-Key": dataStore.get("APIKey"),
-    },
-  });
+  const { data, error } = await PixelicAPI("/v1/user");
   if (error.value) return false;
   return (data.value as any).success;
 };
 
+const APIKey = ref(dataStore.get("APISettings").key);
 const setAPIKey = () => {
   if (validateUUID(APIKey.value)) {
-    dataStore.set("APIKey", formatUUID(APIKey.value));
+    dataStore.set("APISettings.key", formatUUID(APIKey.value));
   }
 };
 
-const modes: { [key: string]: string } = {
-  Overall: "overall",
-  Cores: "cores",
-  Solo: "solo",
-  Doubles: "doubles",
-  Threes: "threes",
-  Fours: "fours",
-  "4v4": "4v4",
+const hypixelMode = ref(Constants.overlay.supportedModes.hypixel[GamemodeManager.hypixelMode.value]);
+const setHypixelMode = () => {
+  dataStore.set("hypixelSettings.mode", reverseObject(Constants.overlay.supportedModes.hypixel)[hypixelMode.value]);
+};
+// @ts-ignore
+const bedwarsMode = ref(Constants.overlay.supportedModes.bedwars[GamemodeManager.bedwarsMode.value]);
+const setBedwarsMode = () => {
+  dataStore.set("hypixelSettings.bedwarsSettings.mode", reverseObject(Constants.overlay.supportedModes.bedwars)[bedwarsMode.value]);
+};
+// @ts-ignore
+const skywarsMode = ref(Constants.overlay.supportedModes.skywars[GamemodeManager.skywarsMode.value]);
+const setSkywarsMode = () => {
+  dataStore.set("hypixelSettings.skywarsSettings.mode", reverseObject(Constants.overlay.supportedModes.skywars)[skywarsMode.value]);
+};
+// @ts-ignore
+const duelsMode = ref(Constants.overlay.supportedModes.duels[GamemodeManager.duelsMode.value]);
+const setDuelsMode = () => {
+  dataStore.set("hypixelSettings.duelsSettings.mode", reverseObject(Constants.overlay.supportedModes.duels)[duelsMode.value]);
+};
+// @ts-ignore
+const murderMysteryMode = ref(Constants.overlay.supportedModes.murderMystery[GamemodeManager.murderMysteryMode.value]);
+const setMurderMysteryMode = () => {
+  dataStore.set("hypixelSettings.murderMysterySettings.mode", reverseObject(Constants.overlay.supportedModes.murderMystery)[murderMysteryMode.value]);
 };
 
-const reversedModes = reverseObject(modes);
-
-const mode = ref("");
-mode.value = reversedModes[dataStore.get("mode")];
-
-const setMode = (Mode: string) => {
-  dataStore.set("mode", modes[Mode]);
-  mode.value = Mode;
+const discordRPC = ref(dataStore.get("overlaySettings").discordRPC);
+const setDiscordRPC = async () => {
+  dataStore.set("overlaySettings.discordRPC", discordRPC.value);
+  if (discordRPC.value) ipcRenderer.send("discordRPC", await parseUUID(dataStore.get("overlaySettings").username));
 };
 
-const discordRPC = ref(false);
-discordRPC.value = dataStore.get("discordRPC");
-
-const setDiscordRPC = async (DiscordRPC: boolean | null) => {
-  if (DiscordRPC === true || DiscordRPC === false) {
-    dataStore.set("discordRPC", DiscordRPC);
-    discordRPC.value = dataStore.get("discordRPC");
-    if (discordRPC) ipcRenderer.send("discordRPCInit", await parseUUID(dataStore.get("player")));
-  }
-};
-
-const advancedMode = ref(false);
-advancedMode.value = dataStore.get("advancedMode");
-
-const setAdvancedMode = async (AdvancedMode: boolean | null) => {
-  if (AdvancedMode === true || AdvancedMode === false) {
-    dataStore.set("advancedMode", AdvancedMode);
-    advancedMode.value = dataStore.get("advancedMode");
-  }
+const advancedMode = ref(dataStore.get("overlaySettings").advancedMode);
+const setAdvancedMode = async () => {
+  dataStore.set("overlaySettings.advancedMode", advancedMode.value);
 };
 </script>

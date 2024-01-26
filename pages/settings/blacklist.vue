@@ -94,11 +94,8 @@ type Blacklist = { enabled: boolean; type?: string; ID: string };
 
 const validateBlacklistID = async (ID: string) => {
   if (!validateHexID(ID, 10)) return false;
-  const { data, error } = await useFetch(`${getAPIInstance()}/v2/pixelic-overlay/blacklist/${ID}`, {
+  const { data, error } = await PixelicAPI(`/v2/pixelic-overlay/blacklist/${ID}`, {
     key: `Blacklist:${ID}`,
-    headers: {
-      "X-API-Key": dataStore.get("APIKey"),
-    },
   });
   if (error.value) return false;
   return (data.value as any).success;
@@ -107,12 +104,12 @@ const validateBlacklistID = async (ID: string) => {
 const blacklists: globalThis.Ref<Blacklist[]> = ref([]);
 
 const updateBlacklists = () => {
-  blacklists.value = dataStore.get("blacklists");
+  blacklists.value = dataStore.get("blacklistSettings").blacklists;
 };
 updateBlacklists();
 
 const saveBlacklists = () => {
-  dataStore.set("blacklists", blacklists.value);
+  dataStore.set("blacklistSettings.blacklists", blacklists.value);
 };
 
 const editPersonalBlacklistDialog = ref(false);
@@ -129,12 +126,12 @@ const editPersonalBlacklistDialogItems: globalThis.Ref<any[]> = ref([]);
 const editPersonalBlacklistDialogSelectedItems: globalThis.Ref<any[]> = ref([]);
 
 const editPersonalBlacklistDialogLoadPersonalBlacklist = async () => {
-  await blacklistSystem.updatePersonalBlacklist();
-  editPersonalBlacklistDialogItems.value = Object.entries(blacklistSystem.getPersonalBlacklist()).map(([UUID, obj]) => ({ UUID, ...{ reason: obj.reason, timestamp: moment(obj.timestamp * 1000).fromNow() } }));
+  await BlacklistManager.updatePersonalBlacklist();
+  editPersonalBlacklistDialogItems.value = Object.entries(BlacklistManager.personalBlacklist.value).map(([UUID, obj]) => ({ UUID, ...{ reason: obj.reason, timestamp: moment(obj.timestamp * 1000).fromNow() } }));
 };
 
 const editPersonalBlacklistDialogDeleteSelection = async () => {
-  await blacklistSystem.removeEntries(editPersonalBlacklistDialogSelectedItems.value);
+  await BlacklistManager.removeEntries(editPersonalBlacklistDialogSelectedItems.value);
   editPersonalBlacklistDialog.value = false;
 };
 

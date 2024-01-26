@@ -248,5 +248,60 @@ export const parseBedwarsStar = (star: number) => {
   ];
 
   const index = prestigeColors.findIndex(({ req }, index, arr) => (star >= req && arr[index + 1] && star < arr[index + 1].req) || !arr[index + 1]);
-  return { full: prestigeColors[index].parse(star), shortened: prestigeColors[index].parse(star).replaceAll("[", "").replaceAll("]", "").replaceAll("✫", "").replaceAll("✪", "").replaceAll("⚝", "").replaceAll("✥", "") };
+  return { full: prestigeColors[index].parse(star), shortened: prestigeColors[index].parse(star).replaceAll("[", "").replace("[", "").replace("]", "") };
+};
+
+export const parseSkywarsStar = (star: number) => {
+  star = Math.floor(star);
+
+  const prestigeColors = [
+    { req: 0, parse: (star: number) => `§7[${star}⋆]` },
+    { req: 5, parse: (star: number) => `§f[${star}✙]` },
+    { req: 10, parse: (star: number) => `§6[${star}❤]` },
+    { req: 20, parse: (star: number) => `§b[${star}✦]` },
+    { req: 25, parse: (star: number) => `§2[${star}✌]` },
+    { req: 30, parse: (star: number) => `§3[${star}❦]` },
+    { req: 35, parse: (star: number) => `§4[${star}✵]` },
+    { req: 40, parse: (star: number) => `§d[${star}❣]` },
+    { req: 45, parse: (star: number) => `§9[${star}☯]` },
+    {
+      req: 50,
+      parse: (star: number) => {
+        const nums = star.toString().split("");
+        return `§c[§6${nums[0]}§e${nums[1]}§a✺§b]`;
+      },
+    },
+    { req: 55, parse: (star: number) => `§7[${star}✈]` },
+    { req: 60, parse: (star: number) => `§4[§c${star}⚰§4]` },
+    { req: 65, parse: (star: number) => `§c[§f${star}✠§c]` },
+    { req: 70, parse: (star: number) => `§e[§6${star}♕§e]` },
+    { req: 75, parse: (star: number) => `§7[§9${star}⚡§7]` },
+    { req: 80, parse: (star: number) => `§7[§b${star}⁂§7]` },
+    { req: 85, parse: (star: number) => `§7[§3${star}✰§7]` },
+    { req: 90, parse: (star: number) => `§a[§3${star}⁑§a]` },
+    { req: 95, parse: (star: number) => `§c[§e${star}☢§c]` },
+    { req: 100, parse: (star: number) => `§9[§1${star}✥§9]` },
+    { req: 105, parse: (star: number) => `§6[§4${star}♝§6]` },
+    { req: 110, parse: (star: number) => `§5[§b${star}♆§5]` },
+    { req: 115, parse: (star: number) => `§8[§7${star}☁§8]` },
+    { req: 120, parse: (star: number) => `§d[§5${star}⍟§d]` },
+    { req: 125, parse: (star: number) => `§7[§e${star}♗§7]` },
+    { req: 130, parse: (star: number) => `§c[§e${star}♔§c]` },
+    { req: 135, parse: (star: number) => `§6[§c${star}♞§6]` },
+    { req: 140, parse: (star: number) => `§a[§c${star}✏§a]` },
+    { req: 145, parse: (star: number) => `§a[§b${star}❈§a]` },
+    {
+      req: 150,
+      parse: (star: number) => {
+        const nums = star.toString().split("");
+        return `§c[§6${nums[0]}§e${nums[1]}§a${nums[2]}§bಠ§d_§5ಠ§c]`;
+      },
+    },
+  ];
+
+  const index = prestigeColors.findIndex(({ req }, index, arr) => (star >= req && arr[index + 1] && star < arr[index + 1].req) || !arr[index + 1]);
+  return {
+    full: prestigeColors[index].parse(star),
+    shortened: prestigeColors[index].parse(star).replace("[", "").replace("]", ""),
+  };
 };

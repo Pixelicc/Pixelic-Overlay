@@ -17,3 +17,4 @@ const color = ref(NotificationContext.color);
 const variant = ref(NotificationContext.variant);
 const duration = ref(NotificationContext.duration);
 </script>
+~/utils/NotificationManager

@@ -70,7 +70,7 @@ app.whenReady().then(() => {
     }
   });
 
-  mcLog.initTailing({ win, client: dataStore.get("client"), customLogPath: dataStore.get("customLogPath") });
+  mcLog.initTailing({ win, client: dataStore.get("overlaySettings").client, customLogPath: dataStore.get("overlaySettings").customLogPath });
 
   win.on("resize", () => {
     const width = win.getContentSize()[0];
@@ -85,20 +85,18 @@ app.whenReady().then(() => {
     }
   });
 
+  win.setBounds(dataStore.get("windowSettings").location);
+
   ipcMain.on("window", (event, msg) => {
-    if (typeof msg === "object" && Object.keys(msg).length !== 0) {
-      win.setBounds(msg);
-    } else {
-      switch (msg) {
-        case "minimize":
-          win.minimize();
-        case "close":
-          win.close();
-        case "hide":
-          win.hide();
-        case "show":
-          win.show();
-      }
+    switch (msg) {
+      case "minimize":
+        win.minimize();
+      case "close":
+        win.close();
+      case "hide":
+        win.hide();
+      case "show":
+        win.show();
     }
   });
 
@@ -106,8 +104,8 @@ app.whenReady().then(() => {
     if (typeof msg === "string") shell.openExternal(msg);
   });
 
-  ipcMain.on("discordRPCInit", (event, msg) => {
-    discordRPC.init(msg);
+  ipcMain.on("discordRPC", (event, msg) => {
+    discordRPC(msg);
   });
 
   ipcMain.on("mcLogInitTailing", (event, msg) => {
@@ -122,8 +120,12 @@ app.whenReady().then(() => {
     win.webContents.send("mcLogCheckPathCallback", fs.existsSync(msg));
   });
 
+  ipcMain.on("openStatistics", (event, msg) => {
+    win.webContents.send("openStatistics", msg);
+  });
+
   win.on("close", () => {
-    dataStore.set("windowLocation", win.getBounds());
+    dataStore.set("windowSettings.location", win.getBounds());
   });
 });
 

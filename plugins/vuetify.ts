@@ -71,13 +71,13 @@ export default defineNuxtPlugin((app) => {
       options: {
         customProperties: true,
       },
-      defaultTheme: dataStore.get("selectedTheme"),
+      defaultTheme: dataStore.get("appearanceSettings").theme.toLowerCase(),
       themes: {
         light,
         dark,
         sakura,
         kawaii,
-        custom: dataStore.get("customTheme"),
+        custom: dataStore.get("appearanceSettings").customThemeSettings,
       },
     },
   });

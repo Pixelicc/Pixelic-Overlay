@@ -32,7 +32,7 @@
         <v-col>
           <v-card title="Theme">
             <div class="ml-4 mr-4 mt-4">
-              <v-select label="Theme" variant="outlined" color="secondary" :items="themes" prepend-inner-icon="mdi-palette-outline" v-model="currentTheme" return-object @update:modelValue="setTheme"></v-select>
+              <v-select label="Theme" variant="outlined" color="secondary" :items="Object.values(Constants.overlay.themes)" prepend-inner-icon="mdi-palette-outline" v-model="currentTheme" return-object @update:modelValue="setTheme"></v-select>
               <v-divider v-if="theme.global.name.value === 'custom'" thickness="8" class="border-opacity-0"></v-divider>
               <div v-if="theme.global.name.value === 'custom'">
                 <v-select label="Component" variant="outlined" :items="themeComponents" prepend-inner-icon="mdi-palette-outline" v-model="previewedComponent" return-object @update:modelValue="setThemeComponent"></v-select>
@@ -53,52 +53,37 @@
 import dataStore from "../../electron/store";
 import { useTheme } from "vuetify";
 
-const opacity = ref(0);
-opacity.value = Math.round(Number(dataStore.get("opacity")) * 100);
-
+const opacity = ref(Math.round(Number(dataStore.get("appearanceSettings").opacity) * 100));
 const setOpacity = (value: number) => {
-  dataStore.set("opacity", (value / 100).toFixed(2));
-  opacity.value = Math.round(Number(dataStore.get("opacity")) * 100);
-  (document.querySelector(":root") as HTMLElement).style.setProperty("--opacity", dataStore.get("opacity"));
+  dataStore.set("appearanceSettings.opacity", (value / 100).toFixed(2));
+  (document.querySelector(":root") as HTMLElement).style.setProperty("--opacity", dataStore.get("appearanceSettings").opacity);
 };
 
-const hideIngame = ref(false);
-hideIngame.value = dataStore.get("hideIngame");
-
-const toggleHideIngame = (HideIngame: boolean | null) => {
-  if (HideIngame === true || HideIngame === false) {
-    dataStore.set("hideIngame", HideIngame);
-    hideIngame.value = dataStore.get("hideIngame");
-  }
+const hideIngame = ref(dataStore.get("windowSettings").hideIngame);
+const toggleHideIngame = () => {
+  dataStore.set("windowSettings.hideIngame", hideIngame.value);
 };
-
-const themes = ["Dark 🌙", "Light 💡", "Sakura 🌸", "Kawaii 🌈", "Custom 🎨"];
 
 const theme = useTheme();
-const currentTheme = ref("");
-currentTheme.value = theme.global.name.value.charAt(0).toUpperCase() + theme.global.name.value.slice(1);
-
+// @ts-ignore
+const currentTheme = ref(Constants.overlay.themes[theme.global.name.value.toUpperCase()]);
 const setTheme = (selectedTheme: string) => {
-  dataStore.set("selectedTheme", selectedTheme.split(" ")[0].toLowerCase());
-  theme.global.name.value = dataStore.get("selectedTheme");
+  dataStore.set("appearanceSettings.theme", reverseObject(Constants.overlay.themes)[selectedTheme]);
+  theme.global.name.value = Constants.overlay.themes[dataStore.get("appearanceSettings").theme];
 };
 
 const themeComponents = ["Background", "Primary", "Secondary", "Error", "Info", "Success", "Warning"];
 const selectedComponent = ref("");
 const previewedComponent = ref("");
-
 previewedComponent.value = "Background";
-
 const setThemeComponent = (component: string) => {
   selectedComponent.value = component.toLowerCase();
 };
-
 setThemeComponent("Background");
-
 const setThemeComponentColor = (selectedColor: string) => {
   if (selectedColor === undefined) return;
 
   theme.themes.value.custom.colors[selectedComponent.value] = selectedColor;
-  dataStore.set("customTheme", { ...dataStore.get("customTheme"), colors: { ...dataStore.get("customTheme").colors, [selectedComponent.value]: selectedColor } });
+  dataStore.set("appearanceSettings.customThemeSettings", { ...dataStore.get("appearanceSettings").customThemeSettings, colors: { ...dataStore.get("appearanceSettings").customThemeSettings.colors, [selectedComponent.value]: selectedColor } });
 };
 </script>

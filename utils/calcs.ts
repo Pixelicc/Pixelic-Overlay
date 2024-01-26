@@ -11,8 +11,8 @@ export const reverseObject = (obj: any) => {
   return reversedObj;
 };
 
-export const queryJSONPath = (obj: any, JSONPath: string) => {
-  if (!validateJSONPath(JSONPath)) throw new Error("Invalid JSONPath expression");
+export const queryJSONPath = (obj: any, JSONPath: string, defaultValue?: any) => {
+  if (defaultValue === undefined && !validateJSONPath(JSONPath)) throw new Error("Invalid JSONPath expression");
 
   const parts = JSONPath.slice(2).split(".");
   var current = obj;
@@ -23,7 +23,10 @@ export const queryJSONPath = (obj: any, JSONPath: string) => {
     const [_, key, index] = match;
     current = current[key];
     if (index !== undefined) current = current[index];
-    if (current === undefined) throw new Error("Invalid JSONPath expression");
+    if (current === undefined) {
+      if (defaultValue === undefined) throw new Error("Invalid JSONPath expression");
+      return defaultValue;
+    }
   }
 
   return current;

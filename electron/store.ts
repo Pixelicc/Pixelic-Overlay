@@ -2,134 +2,187 @@ import Store from "electron-store";
 import type { ThemeDefinition } from "vuetify/lib/framework.mjs";
 
 const store = new Store<{
-  player: string;
-  APIKey: string;
-  APIInstance: string;
-  translationServers: string[];
-  customTranslationServer: { URLs: { UUID: string; username: string }; paths: { UUID: string; username: string } };
-  client: "LUNAR" | "BADLION" | "DEFAULT" | "CUSTOM";
-  customLogPath: string;
-  mode: string;
-  selectedTheme: string;
-  customTheme: ThemeDefinition;
-  opacity: string;
-  advancedMode: boolean;
-  discordRPC: boolean;
-  hideIngame: boolean;
-  gameStartNotification: boolean;
-  queueNotification: boolean;
-  blacklistNotification: boolean;
-  blacklists: { enabled: boolean; type?: string; ID: string }[];
-  colums: string[];
-  windowLocation: any;
+  APISettings: {
+    key: string;
+    customInstanceSettings: {
+      baseURL: string;
+    };
+    translationServers: string[];
+    customTranslationServerSettings: { URLs: { UUID: string; username: string }; paths: { UUID: string; username: string } };
+  };
+  overlaySettings: {
+    username: string;
+    client: "LUNAR" | "BADLION" | "DEFAULT" | "CUSTOM";
+    customLogPath: string;
+    advancedMode: boolean;
+    discordRPC: boolean;
+  };
+  hypixelSettings: {
+    mode: "BEDWARS" | "SKYWARS" | "DUELS" | "MURDER_MYSTERY";
+    bedwarsSettings: {
+      mode: "OVERALL" | "CORES" | "SOLO" | "DOUBLES" | "THREES" | "FOURS" | "4V4";
+    };
+    skywarsSettings: {
+      mode: "OVERALL" | "SOLO" | "DOUBLES";
+    };
+    duelsSettings: {
+      mode: "OVERALL";
+    };
+    murderMysterySettings: {
+      mode: "OVERALL" | "CLASSIC" | "DOUBLE_UP" | "INFECTION" | "ASSASSINS";
+    };
+  };
+  appearanceSettings: {
+    opacity: string;
+    theme: "DARK" | "LIGHT" | "SAKURA" | "KAWAII" | "CUSTOM";
+    customThemeSettings: ThemeDefinition;
+  };
+  columnSettings: {
+    columns: ("LEVEL" | "KARMA" | "ACHIEVEMENT_POINTS")[];
+    bedwarsSettings: {
+      columns: ("LEVEL" | "WINSTREAK" | "WINS" | "LOSSES" | "WLR" | "FINAL_KILLS" | "FINAL_DEATHS" | "FKDR" | "KILLS" | "DEATHS" | "KDR" | "BEDS_BROKEN" | "BEDS_LOST" | "BBLR")[];
+    };
+    skywarsSettings: {
+      columns: ("LEVEL" | "WINS" | "LOSSES" | "WLR" | "KILLS" | "DEATHS" | "KDR")[];
+    };
+    duelsSettings: {
+      columns: ("WINSTREAK" | "WINS" | "LOSSES" | "WLR" | "KILLS" | "DEATHS" | "KDR")[];
+    };
+    murderMysterySettings: {
+      columns: ("WINS" | "LOSSES" | "WLR" | "KILLS" | "DEATHS" | "KDR" | "TIMES_HERO" | "MURDERER_CHANCE" | "DETECTIVE_CHANCE")[];
+    };
+  };
+  notificationSettings: {
+    gameStarted: boolean;
+    queued: boolean;
+    queuedBlacklisted: boolean;
+  };
+  blacklistSettings: {
+    blacklists: { enabled: boolean; type?: string; ID: string }[];
+  };
+  windowSettings: {
+    hideIngame: boolean;
+    location: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    };
+  };
 }>({
   name: "Pixelic-Overlay",
   schema: {
-    player: {
-      type: "string",
-      default: "",
-    },
-    APIKey: {
-      type: "string",
-      default: "",
-    },
-    APIInstance: {
-      type: "string",
-      default: "",
-    },
-    translationServers: {
-      type: "array",
-      default: ["MOJANG"],
-    },
-    customTranslationServer: {
+    APISettings: {
       type: "object",
       default: {
-        URLs: {
-          UUID: "",
-          username: "",
+        key: "",
+        customInstanceSettings: {
+          baseURL: "",
         },
-        paths: {
-          UUID: "",
-          username: "",
+        translationServers: ["MOJANG"],
+        customTranslationServerSettings: {
+          URLs: {
+            UUID: "",
+            username: "",
+          },
+          paths: {
+            UUID: "",
+            username: "",
+          },
         },
       },
     },
-    client: {
-      type: "string",
-      default: "DEFAULT",
-    },
-    customLogPath: {
-      type: "string",
-      default: "",
-    },
-    mode: {
-      type: "string",
-      default: "overall",
-    },
-    selectedTheme: {
-      type: "string",
-      default: "dark",
-    },
-    customTheme: {
+    overlaySettings: {
       type: "object",
       default: {
-        dark: true,
-        colors: {
-          background: "#181a1c",
-          primary: "#5C6BC0",
-          secondary: "#B388FF",
-          error: "#C62828",
-          info: "#3F51B5",
-          success: "#00e676",
-          warning: "#EF6C00",
+        username: "",
+        client: "CUSTOM",
+        customLogPath: "",
+        advancedMode: false,
+        discordRPC: true,
+      },
+    },
+    hypixelSettings: {
+      type: "object",
+      default: {
+        mode: "BEDWARS",
+        bedwarsSettings: {
+          mode: "OVERALL",
+        },
+        skywarsSettings: {
+          mode: "OVERALL",
+        },
+        duelsSettings: {
+          mode: "OVERALL",
+        },
+        murderMysterySettings: {
+          mode: "OVERALL",
         },
       },
     },
-    opacity: {
-      type: "string",
-      default: "0.75",
-    },
-    advancedMode: {
-      type: "boolean",
-      default: false,
-    },
-    discordRPC: {
-      type: "boolean",
-      default: true,
-    },
-    hideIngame: {
-      type: "boolean",
-      default: false,
-    },
-    gameStartNotification: {
-      type: "boolean",
-      default: false,
-    },
-    queueNotification: {
-      type: "boolean",
-      default: false,
-    },
-    blacklistNotification: {
-      type: "boolean",
-      default: false,
-    },
-    blacklists: {
-      type: "array",
-      default: [
-        {
-          type: "PERSONAL",
-          ID: "",
-          enabled: true,
-        },
-      ],
-    },
-    colums: {
-      type: "array",
-      default: ["WS", "Wins", "WLR", "Finals", "FKDR", "BBLR"],
-    },
-    windowLocation: {
+    appearanceSettings: {
       type: "object",
-      default: {},
+      default: {
+        opacity: "0.75",
+        theme: "DARK",
+        customThemeSettings: {
+          dark: true,
+          colors: {
+            background: "#181a1c",
+            primary: "#5C6BC0",
+            secondary: "#B388FF",
+            error: "#C62828",
+            info: "#3F51B5",
+            success: "#00e676",
+            warning: "#EF6C00",
+          },
+        },
+      },
+    },
+    columnSettings: {
+      type: "object",
+      default: {
+        columns: [],
+        bedwarsSettings: {
+          columns: ["LEVEL", "WINSTREAK", "WINS", "WLR", "FINAL_KILLS", "FKDR", "BBLR"],
+        },
+        skywarsSettings: {
+          columns: ["LEVEL", "WINS", "LOSSES", "WLR", "KILLS", "DEATHS", "KDR"],
+        },
+        duelsSettings: {
+          columns: ["WINSTREAK", "WINS", "LOSSES", "WLR", "KILLS", "DEATHS", "KDR"],
+        },
+        murderMysterySettings: {
+          columns: ["WINS", "WLR", "KILLS", "KDR", "MURDERER_CHANCE", "DETECTIVE_CHANCE"],
+        },
+      },
+    },
+    notificationSettings: {
+      type: "object",
+      default: {
+        gameStarted: false,
+        queued: false,
+        queuedBlacklisted: false,
+      },
+    },
+    blacklistSettings: {
+      type: "object",
+      default: {
+        blacklists: [
+          {
+            type: "PERSONAL",
+            ID: "",
+            enabled: true,
+          },
+        ],
+      },
+    },
+    windowSettings: {
+      type: "object",
+      default: {
+        hideIngame: false,
+        location: {},
+      },
     },
   },
 });

@@ -14,7 +14,7 @@
             <div class="ml-4 mr-4 mt-4">
               <div>
                 <div class="ml-12" style="font-style: italic; color: rgb(var(--v-theme-warning))">Providing a custom Pixelic-API Instance will reroute all API calls to your own hosted API Instance. This Feature will initally break a lot of Features due to missing Data on your API Instance. This also breaks all kinds of sharing between Users that do not use your Pixelic-API Instance aswell.</div>
-                <v-text-field class="mt-4" :rules="[validateURL]" variant="outlined" color="secondary" clearable label="Custom Pixelic-API Instance URL" persistent-placeholder placeholder="https://api.pixelic.de" prepend-icon="mdi-cloud-download" v-model="APIInstance" @update:model-value="setAPIInstance"></v-text-field>
+                <v-text-field class="mt-4" :rules="[validateURL]" variant="outlined" color="secondary" clearable label="Custom Pixelic-API Instance URL" persistent-placeholder placeholder="https://api.pixelic.de" prepend-icon="mdi-cloud-download" v-model="customInstance" @update:model-value="setCustomInstance"></v-text-field>
               </div>
               <v-divider :thickness="8" class="border-opacity-0"></v-divider>
               <div>
@@ -42,28 +42,25 @@
 
 <script setup lang="ts">
 import dataStore from "../../electron/store";
-import translationServers from "../../constants/translationServers";
 
-const APIInstance = ref("");
-APIInstance.value = dataStore.get("APIInstance");
-
-const setAPIInstance = () => {
-  if (validateURL(APIInstance.value)) {
-    dataStore.set("APIInstance", APIInstance.value);
+const customInstance = ref(dataStore.get("APISettings").customInstanceSettings.baseURL);
+const setCustomInstance = () => {
+  if (validateURL(customInstance.value)) {
+    dataStore.set("APISettings.customInstanceSettings.baseURL", customInstance.value);
   }
 };
 
 const availableTranslationServers: globalThis.Ref<any[]> = ref([]);
 availableTranslationServers.value = [];
-for (const server of Object.values(translationServers)) {
+for (const server of Object.values(Constants.overlay.translationServers)) {
   availableTranslationServers.value.push(server);
 }
 
 const selectedTranslationServers: globalThis.Ref<any[]> = ref([]);
 selectedTranslationServers.value = [];
-for (const ID of dataStore.get("translationServers")) {
+for (const ID of dataStore.get("APISettings").translationServers) {
   // @ts-ignore
-  selectedTranslationServers.value.push(translationServers[ID]);
+  selectedTranslationServers.value.push(Constants.overlay.translationServers[ID]);
 }
 
 const setTranslationServers = () => {
@@ -74,7 +71,7 @@ const setTranslationServers = () => {
   dataStore.set("translationServers", servers);
 };
 
-const customTranslationServer = ref(dataStore.get("customTranslationServer"));
+const customTranslationServer = ref(dataStore.get("APISettings").customTranslationServerSettings);
 
 const setCustomTranslationServerSettings = () => {
   if (validateURL(customTranslationServer.value.URLs.UUID) && validateUsernamePlaceholder(customTranslationServer.value.URLs.UUID)) {

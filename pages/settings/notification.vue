@@ -55,15 +55,10 @@
 <script setup>
 import dataStore from "../../electron/store";
 
-const gameStartNotification = ref(false);
-gameStartNotification.value = dataStore.get("gameStartNotification");
-const toggleGameStartNotification = () => dataStore.set("gameStartNotification", gameStartNotification.value);
-
-const queueNotification = ref(false);
-queueNotification.value = dataStore.get("queueNotification");
-const toggleQueueNotification = () => dataStore.set("queueNotification", queueNotification.value);
-
-const blacklistNotification = ref(false);
-blacklistNotification.value = dataStore.get("blacklistNotification");
-const toggleBlacklistNotification = () => dataStore.set("blacklistNotification", blacklistNotification.value);
+const gameStartNotification = ref(dataStore.get("notificationSettings").gameStarted);
+const toggleGameStartNotification = () => dataStore.set("notificationSettings.gameStarted", gameStartNotification.value);
+const queueNotification = ref(dataStore.get("notificationSettings").queued);
+const toggleQueueNotification = () => dataStore.set("notificationSettings.queued", queueNotification.value);
+const blacklistNotification = ref(dataStore.get("notificationSettings").queuedBlacklisted);
+const toggleBlacklistNotification = () => dataStore.set("notificationSettings.queuedBlacklisted", blacklistNotification.value);
 </script>
