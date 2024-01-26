@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { NotificationContext } from "~/utils/notification";
+import { NotificationContext } from "../utils/NotificationManager";
 
 const shown = ref(NotificationContext.shown);
 const icon = ref(NotificationContext.icon);
