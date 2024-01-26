@@ -6,6 +6,7 @@
       <v-row>
         <v-col>
           <h2>Column Settings</h2>
+          Clicked Order equals your Column Order
         </v-col>
       </v-row>
       <v-row>
