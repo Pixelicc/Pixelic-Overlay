@@ -23,6 +23,7 @@ app.whenReady().then(async () => {
     autoUpdater.disableWebInstaller = true;
     autoUpdater.checkForUpdatesAndNotify();
   } else {
+    autoUpdater.autoDownload = false;
     autoUpdater.checkForUpdates().then((status) => {
       if (status && PackageJSON.version !== status.updateInfo.version) {
         const notification = new Notification({
