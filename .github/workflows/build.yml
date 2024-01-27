@@ -1,5 +1,5 @@
 name: Build and Draft Release for Electron App
-on: [workflow_dispatch]
+on: [push]
 
 env:
   GH_TOKEN: ${{ secrets.TOKEN }}
