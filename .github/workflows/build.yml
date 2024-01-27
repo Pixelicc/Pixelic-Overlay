@@ -1,5 +1,5 @@
 name: Build Electron App
-on: [push]
+on: [push, workflow_dispatch]
 
 env:
   GH_TOKEN: ${{ secrets.TOKEN }}
@@ -12,7 +12,7 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: install dependencies
@@ -27,7 +27,7 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: install dependencies
@@ -40,7 +40,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: install dependencies
