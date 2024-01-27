@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain, shell, Notification } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 import Store from "electron-store";
@@ -7,6 +7,7 @@ import path from "path";
 import dataStore from "./store";
 import mcLog from "./scripts/mcLog";
 import discordRPC from "./scripts/discordRPC";
+import PackageJSON from "../package.json";
 
 process.env.ROOT = path.join(__dirname, "..");
 process.env.DIST = path.join(process.env.ROOT, "dist-electron");
@@ -17,9 +18,25 @@ autoUpdater.logger = log;
 
 Store.initRenderer();
 
-app.whenReady().then(() => {
-  autoUpdater.disableWebInstaller = true;
-  autoUpdater.checkForUpdatesAndNotify();
+app.whenReady().then(async () => {
+  if (process.platform !== "darwin") {
+    autoUpdater.disableWebInstaller = true;
+    autoUpdater.checkForUpdatesAndNotify();
+  } else {
+    autoUpdater.checkForUpdates().then((status) => {
+      if (status && PackageJSON.version !== status.updateInfo.version) {
+        const notification = new Notification({
+          title: "Update Available!",
+          body: `An Update is available, to download the lastest version click here! Your installed Version: ${PackageJSON.version} | Latest Version: ${status.updateInfo.version}`,
+          icon: path.join(__dirname, "assets/logo.png"),
+        });
+        notification.on("click", () => {
+          shell.openExternal("https://github.com/pixelicc/pixelic-overlay/releases/latest");
+        });
+        notification.show();
+      }
+    });
+  }
 
   const win = new BrowserWindow({
     width: 800,

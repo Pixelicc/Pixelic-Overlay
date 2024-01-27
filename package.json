@@ -2,7 +2,7 @@
   "name": "pixelic-overlay",
   "description": "Your Next Gen Open-Source Bedwars Overlay",
   "author": "Pixelic",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "private": true,
   "main": "dist-electron/main.js",
   "repository": {
