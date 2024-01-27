@@ -2,7 +2,7 @@ name: Build and Draft Release for Electron App
 on: [workflow_dispatch]
 
 env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
   build_and_draft_release_on_linux:
