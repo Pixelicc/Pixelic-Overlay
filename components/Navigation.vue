@@ -9,7 +9,7 @@
     <v-btn v-if="useRoute().path === '/'" icon @click="PlayerManager.clearPlayers" style="-webkit-app-region: no-drag">
       <v-icon color="primary">mdi-account-multiple-minus</v-icon>
     </v-btn>
-    <v-menu v-if="useRoute().path === '/'" v-model="quickSettings" :close-on-content-click="false" location="end">
+    <v-menu v-if="useRoute().path === '/' || useRoute().path === '/statistics'" v-model="quickSettings" :close-on-content-click="false" location="end">
       <template v-slot:activator="{ props }">
         <v-btn icon class="mr-4" v-bind="props" style="-webkit-app-region: no-drag">
           <v-icon color="primary">mdi-tune-vertical</v-icon>
