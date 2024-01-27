@@ -1,6 +1,14 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
 export default defineNuxtConfig({
+  router: {
+    options: {
+      hashMode: true,
+    },
+  },
+  app: {
+    baseURL: "./",
+  },
   css: ["../main.css"],
   devtools: {
     enabled: false,

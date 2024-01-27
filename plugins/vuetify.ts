@@ -59,6 +59,9 @@ const kawaii = {
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     defaults: {
+      VApp: {
+        style: "background-color: rgba(var(--v-theme-background), var(--opacity)) !important",
+      },
       VCard: {
         rounded: "lg",
       },
