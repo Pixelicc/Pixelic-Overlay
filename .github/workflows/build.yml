@@ -1,11 +1,11 @@
-name: Build and Draft Release for Electron App
+name: Build Electron App
 on: [workflow_dispatch]
 
 env:
   GH_TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
-  build_and_draft_release_on_linux:
+  Linux-Build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +20,7 @@ jobs:
       - name: build
         run: pnpm build
 
-  build_and_draft_release_on_mac:
+  MacOS-Build:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,16 +35,15 @@ jobs:
       - name: build
         run: pnpm build
 
-  build_and_draft_release_on_windows:
+  Windows-Build:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - uses: actions/setup-node@master
         with:
           node-version: 20
+      - name: install pnpm
+        run: npm install pnpm@latest -g
       - name: install dependencies
         run: pnpm install
       - name: build

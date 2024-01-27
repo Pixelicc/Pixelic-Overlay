@@ -13,7 +13,7 @@
     }
   ],
   "win": {
-    "icon": "src/assets/logo.png",
+    "icon": "assets/logo.png",
     "target": [
       {
         "target": "nsis",
@@ -30,7 +30,7 @@
     "license": "license.txt"
   },
   "linux": {
-    "icon": "src/assets/logo.png",
+    "icon": "assets/logo.png",
     "target": [
       {
         "target": "AppImage",
@@ -41,7 +41,7 @@
     ]
   },
   "mac": {
-    "icon": "src/assets/logo.png",
+    "icon": "assets/logo.png",
     "target": [
       {
         "target": "dmg",
