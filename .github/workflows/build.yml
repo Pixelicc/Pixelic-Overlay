@@ -1,5 +1,8 @@
 name: Build and Draft Release for Electron App
-on: [push]
+on: [workflow_dispatch]
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build_and_draft_release_on_linux:
@@ -16,8 +19,6 @@ jobs:
         run: pnpm install
       - name: build
         run: pnpm build
-      - name: publish
-        run: pnpm publish
 
   build_and_draft_release_on_mac:
     runs-on: macos-latest
@@ -33,8 +34,6 @@ jobs:
         run: pnpm install
       - name: build
         run: pnpm build
-      - name: publish
-        run: pnpm publish
 
   build_and_draft_release_on_windows:
     runs-on: windows-latest
@@ -50,5 +49,3 @@ jobs:
         run: pnpm install
       - name: build
         run: pnpm build
-      - name: publish
-        run: pnpm publish
