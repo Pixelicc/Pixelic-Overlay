@@ -35,6 +35,7 @@ jobs:
       - name: build
         run: pnpm build
 
+  # Using npm due to pnpm not properly working for Windows Github-Actions
   Windows-Build:
     runs-on: windows-latest
     steps:
@@ -42,9 +43,7 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 20
-      - name: install pnpm
-        run: npm install pnpm@latest -g
       - name: install dependencies
-        run: pnpm install
+        run: npm install
       - name: build
-        run: pnpm build
+        run: npm build
