@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "nuxi dev --port 5000",
-    "build": "nuxi build --prerender && electron-builder"
+    "build": "nuxi build --prerender && electron-builder",
+    "publish": "electron-builder publish"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",

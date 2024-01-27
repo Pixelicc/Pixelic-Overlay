@@ -1,0 +1,55 @@
+name: Build and Draft Release for Electron App
+on:
+  workflow_dispatch:
+
+jobs:
+  build_and_draft_release_on_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@master
+        with:
+          node-version: 20
+      - name: install dependencies
+        run: pnpm install
+      - name: build
+        run: pnpm build
+      - name: publish
+        run: pnpm publish
+
+  build_and_draft_release_on_mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@master
+        with:
+          node-version: 20
+      - name: install dependencies
+        run: pnpm install
+      - name: build
+        run: pnpm build
+      - name: publish
+        run: pnpm publish
+
+  build_and_draft_release_on_windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@master
+        with:
+          node-version: 20
+      - name: install dependencies
+        run: pnpm install
+      - name: build
+        run: pnpm build
+      - name: publish
+        run: pnpm publish
