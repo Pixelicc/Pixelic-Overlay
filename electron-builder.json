@@ -25,10 +25,9 @@
   },
   "nsis": {
     "oneClick": false,
-    "license": "license.txt",
-    "perMachine": false,
+    "deleteAppDataOnUninstall": false,
     "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
+    "license": "license.txt"
   },
   "linux": {
     "icon": "src/assets/logo.png",
