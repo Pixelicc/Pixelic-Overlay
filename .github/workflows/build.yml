@@ -1,6 +1,5 @@
 name: Build and Draft Release for Electron App
-on:
-  workflow_dispatch:
+on: [push]
 
 jobs:
   build_and_draft_release_on_linux:
