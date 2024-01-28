@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@mdi/font':
-    specifier: ^7.4.47
-    version: 7.4.47
   axios:
     specifier: ^1.6.6
     version: 1.6.7
@@ -37,6 +34,9 @@ dependencies:
     version: 5.0.10
 
 devDependencies:
+  '@mdi/font':
+    specifier: ^7.4.47
+    version: 7.4.47
   '@nuxtjs/google-fonts':
     specifier: ^3.1.3
     version: 3.1.3
@@ -824,7 +824,7 @@ packages:
 
   /@mdi/font@7.4.47:
     resolution: {integrity: sha512-43MtGpd585SNzHZPcYowu/84Vz2a2g31TvPMTm9uTiCSWzaheQySUcSyUH/46fPnuPQWof2yd0pGBtzee/IQWw==}
-    dev: false
+    dev: true
 
   /@netlify/functions@2.5.1:
     resolution: {integrity: sha512-7//hmiFHXGusAzuzEuXvRT9ItaeRjRs5lRs6lYUkaAXO1jnTWYDB2XdqFq5X4yMRX+/A96nrQ2HwCE+Pd0YMwg==}

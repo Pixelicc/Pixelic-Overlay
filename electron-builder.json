@@ -5,6 +5,10 @@
   "directories": {
     "output": "builds/${version}"
   },
+  "files": [
+    "dist-electron/**/*",
+    ".output/**/*"
+  ],
   "publish": [
     {
       "provider": "github",
