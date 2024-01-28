@@ -12,14 +12,6 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
 
     if (!UUID) {
       players.value.push({
-        success: false,
-        cause: "Invalid UUID",
-        player: {
-          UUID: null,
-          username: player,
-        },
-      });
-      players.value.push({
         player: {
           UUID: null,
           username: player,
@@ -59,7 +51,8 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
            * Needed if there is an actual real Player called like a Hypixel Nickname but has never played on Hypixel themselves
            */
           if (error.value.statusCode === 404 && inLobby.value === false) error.value.data.cause = "Invalid UUID";
-          const blacklistStatus = BlacklistManager.getPlayerBlacklistStatus((data.value as any)?.UUID || "");
+          const blacklistStatus = BlacklistManager.getPlayerBlacklistStatus((data.value as any)?.player?.UUID || "");
+
           players.value.push({
             player: {
               UUID: null,
@@ -79,7 +72,8 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
             },
           });
         } else {
-          const blacklistStatus = BlacklistManager.getPlayerBlacklistStatus((data.value as any)?.UUID || "");
+          const blacklistStatus = BlacklistManager.getPlayerBlacklistStatus((data.value as any)?.player?.UUID || "");
+          console.log(blacklistStatus);
           players.value.push({
             ...(data.value as any),
             headers,

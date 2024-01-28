@@ -56,7 +56,7 @@ const updateCustomBlacklists = async () => {
 };
 
 const getPlayerBlacklistStatus = (UUID: string): { personal?: boolean; reason?: string; timestamp?: number } => {
-  if (Object.hasOwn(personalBlacklist, formatUUID(UUID))) return { personal: true, ...personalBlacklist.value?.[formatUUID(UUID)] };
+  if (Object.hasOwn(personalBlacklist.value, formatUUID(UUID))) return { personal: true, ...personalBlacklist.value?.[formatUUID(UUID)] };
   const customQuery = customBlacklists.value.find((blacklist) => Object.hasOwn(blacklist, formatUUID(UUID)));
   if (!customQuery) return {};
   return { personal: false, ...customQuery[formatUUID(UUID)] };
