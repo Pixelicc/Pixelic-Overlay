@@ -173,7 +173,7 @@ const constants = {
         ACHIEVEMENT_POINTS: { title: "Achievement Points", align: "center", key: "player.achievementPoints", width: "10%" },
       },
       bedwars: {
-        LEVEL: { title: "Level", align: "center", key: "player.stats.Bedwars.{MODE}.level", width: "10%" },
+        LEVEL: { title: "Level", align: "center", key: "player.stats.Bedwars.level", width: "10%" },
         WINSTREAK: { title: "Winstreak", align: "center", key: "player.stats.Bedwars.{MODE}.winstreak", width: "6%" },
         WINS: { title: "Wins", align: "center", key: "player.stats.Bedwars.{MODE}.wins", width: "10%" },
         LOSSES: { title: "Losses", align: "center", key: "player.stats.Bedwars.{MODE}.losses", width: "10%" },
@@ -189,7 +189,7 @@ const constants = {
         BBLR: { title: "BBLR", align: "center", key: "player.stats.Bedwars.{MODE}.BBLR", width: "10%" },
       },
       skywars: {
-        LEVEL: { title: "Level", align: "center", key: "player.stats.Skywars.{MODE}.level", width: "10%" },
+        LEVEL: { title: "Level", align: "center", key: "player.stats.Skywars.level", width: "10%" },
         WINS: { title: "Wins", align: "center", key: "player.stats.Skywars.{MODE}.wins", width: "10%" },
         LOSSES: { title: "Losses", align: "center", key: "player.stats.Skywars.{MODE}.losses", width: "10%" },
         WLR: { title: "WLR", align: "center", key: "player.stats.Skywars.{MODE}.WLR", width: "10%" },
