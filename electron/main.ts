@@ -58,7 +58,7 @@ app.whenReady().then(async () => {
   });
 
   win.setBounds(dataStore.get("windowSettings").location);
-  win.setAlwaysOnTop(true, "floating");
+  win.setAlwaysOnTop(true, "pop-up-menu");
 
   var isFirstLoad = true;
 
