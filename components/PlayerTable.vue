@@ -38,7 +38,7 @@
             <span v-if="GamemodeManager.hypixelMode.value === 'SKYWARS'" v-html="parseMCColor(parseSkywarsStar(item.player?.stats?.Skywars?.level || 0).full)"></span>
           </v-tooltip>
           <!-- @vue-skip-->
-          <span v-if="header.title !== 'Level'" v-html="parseMCColor(parseStat(queryJSONPath(item, `$.${header.key.replace('{MODE}', GamemodeManager.minigameMode.value.toLowerCase())}`, 0), header.custom.ID, GamemodeManager.hypixelMode, GamemodeManager.minigameMode))"></span>
+          <span v-if="header.title !== 'Level'" v-html="parseMCColor(parseStat(queryJSONPath(item, `$.${header.key}`, 0), header.stat, GamemodeManager.hypixelMode, GamemodeManager.minigameMode))"></span>
         </td>
         <td>
           <v-menu :close-on-content-click="false" location="end">
@@ -104,34 +104,34 @@ const updateHeaders = () => {
   headers.value = [...defaultHeaders];
 
   hypixelColumns.forEach((column) => {
-    const header: any = Constants.overlay.headers.hypixel[column];
-    header.custom = { ID: column };
+    const header = { ...Constants.overlay.headers.hypixel[column], stat: column };
+    header.key = header.key.replace("{MODE}", GamemodeManager.minigameMode.value.toLowerCase());
     headers.value.push(header);
   });
 
   if (GamemodeManager.hypixelMode.value === "BEDWARS")
     bedwarsColumns.forEach((column) => {
-      const header: any = Constants.overlay.headers.bedwars[column];
-      header.custom = { ID: column };
+      const header = { ...Constants.overlay.headers.bedwars[column], stat: column };
+      header.key = header.key.replace("{MODE}", GamemodeManager.minigameMode.value.toLowerCase());
       headers.value.push(header);
     });
 
   if (GamemodeManager.hypixelMode.value === "SKYWARS")
     skywarsColumns.forEach((column) => {
-      const header: any = Constants.overlay.headers.skywars[column];
-      header.custom = { ID: column };
+      const header = { ...Constants.overlay.headers.skywars[column], stat: column };
+      header.key = header.key.replace("{MODE}", GamemodeManager.minigameMode.value.toLowerCase());
       headers.value.push(header);
     });
   if (GamemodeManager.hypixelMode.value === "DUELS")
     duelsColumns.forEach((column) => {
-      const header: any = Constants.overlay.headers.duels[column];
-      header.custom = { ID: column };
+      const header = { ...Constants.overlay.headers.duels[column], stat: column };
+      header.key = header.key.replace("{MODE}", GamemodeManager.minigameMode.value.toLowerCase());
       headers.value.push(header);
     });
   if (GamemodeManager.hypixelMode.value === "MURDER_MYSTERY")
     murderMysteryColumns.forEach((column) => {
-      const header: any = Constants.overlay.headers.murderMystery[column];
-      header.custom = { ID: column };
+      const header = { ...Constants.overlay.headers.murderMystery[column], stat: column };
+      header.key = header.key.replace("{MODE}", GamemodeManager.minigameMode.value.toLowerCase());
       headers.value.push(header);
     });
 
@@ -140,7 +140,7 @@ const updateHeaders = () => {
 };
 updateHeaders();
 
-watch(GamemodeManager.hypixelMode, () => updateHeaders());
+watch([GamemodeManager.hypixelMode, GamemodeManager.minigameMode], () => updateHeaders());
 
 const players = PlayerManager.players;
 </script>
