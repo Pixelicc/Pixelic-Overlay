@@ -73,7 +73,6 @@ const addPlayer = (player: string, options?: { force?: boolean; party?: boolean;
           });
         } else {
           const blacklistStatus = BlacklistManager.getPlayerBlacklistStatus((data.value as any)?.player?.UUID || "");
-          console.log(blacklistStatus);
           players.value.push({
             ...(data.value as any),
             headers,
