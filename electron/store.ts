@@ -96,7 +96,7 @@ const store = new Store<{
       type: "object",
       default: {
         username: "",
-        client: "CUSTOM",
+        client: "DEFAULT",
         customLogPath: "",
         advancedMode: false,
         discordRPC: true,
