@@ -1,66 +1,62 @@
 <template>
-  <v-app>
-    <Navigation />
-    <NuxtPage />
-    <v-container>
-      <v-row>
-        <v-col>
-          <h2>Blacklist Settings</h2>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-card title="Manage Lists">
-            <div class="ml-4 mr-4 mt-4">
-              <v-list density="compact">
-                <v-list-item v-for="blacklist in blacklists">
-                  <template v-slot:prepend>
-                    <v-icon v-if="blacklist?.type !== 'PERSONAL'">mdi-format-list-checkbox</v-icon>
-                    <v-icon v-if="blacklist?.type === 'PERSONAL'">mdi-account</v-icon>
-                  </template>
-                  <template v-slot:append>
-                    <v-btn v-if="blacklist?.type !== 'PERSONAL'" icon variant="text" @click="removeBlacklist(blacklist)" style="display: flex">
-                      <v-icon color="secondary">mdi-delete</v-icon>
-                    </v-btn>
-                    <v-dialog v-if="blacklist?.type === 'PERSONAL'" v-model="editPersonalBlacklistDialog">
-                      <template v-slot:activator="{ props }">
-                        <v-btn
-                          icon
-                          variant="text"
-                          color="secondary"
-                          v-bind="props"
-                          @click="
-                            editPersonalBlacklistDialogLoadPersonalBlacklist();
-                            editPersonalBlacklistDialog = true;
-                          ">
-                          <v-icon>mdi-pencil</v-icon></v-btn
-                        >
-                      </template>
-                      <v-container>
-                        <v-row>
-                          <v-col>
-                            <v-card title="Edit Blacklist">
-                              <div class="ml-4 mr-4 mt-4">
-                                <v-data-table-virtual :headers="editPersonalBlacklistDialogHeaders" :items="editPersonalBlacklistDialogItems" v-model="editPersonalBlacklistDialogSelectedItems" item-value="UUID" show-select class="edittable" height="475"> </v-data-table-virtual>
-                                <v-card-actions class="justify-center">
-                                  <v-btn variant="outlined" prepend-icon="mdi-delete" color="error" @click="editPersonalBlacklistDialogDeleteSelection">Delete Selection</v-btn>
-                                  <v-btn variant="outlined" prepend-icon="mdi-cancel" color="warning" @click="editPersonalBlacklistDialog = false">Cancel</v-btn>
-                                </v-card-actions>
-                              </div>
-                            </v-card>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-dialog>
-                    <v-checkbox v-model="blacklist.enabled" color="secondary" @update:model-value="saveBlacklists()" style="display: flex"></v-checkbox>
-                  </template>
-                  <v-list-item-title v-if="blacklist?.type !== 'PERSONAL'">ID: {{ blacklist.ID }}</v-list-item-title>
-                  <v-list-item-title v-if="blacklist?.type === 'PERSONAL'">Personal Blacklist</v-list-item-title>
-                  <v-list-item-subtitle v-if="blacklist?.type === 'PERSONAL'">Disabling this list will prevent you from directly seing players you reported!</v-list-item-subtitle>
-                </v-list-item>
-              </v-list>
-            </div>
-            <div class="ma-4">
+  <v-container>
+    <v-row>
+      <v-col>
+        <h2>Blacklist Settings</h2>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-card title="Manage Lists">
+          <v-card-text class="mt-4">
+            <v-list density="compact">
+              <v-list-item v-for="blacklist in blacklists">
+                <template v-slot:prepend>
+                  <v-icon v-if="blacklist?.type !== 'PERSONAL'">mdi-format-list-checkbox</v-icon>
+                  <v-icon v-if="blacklist?.type === 'PERSONAL'">mdi-account</v-icon>
+                </template>
+                <template v-slot:append>
+                  <v-btn v-if="blacklist?.type !== 'PERSONAL'" icon variant="text" @click="removeBlacklist(blacklist)" style="display: flex">
+                    <v-icon color="secondary">mdi-delete</v-icon>
+                  </v-btn>
+                  <v-dialog v-if="blacklist?.type === 'PERSONAL'" v-model="editPersonalBlacklistDialog">
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        icon
+                        variant="text"
+                        color="secondary"
+                        v-bind="props"
+                        @click="
+                          editPersonalBlacklistDialogLoadPersonalBlacklist();
+                          editPersonalBlacklistDialog = true;
+                        ">
+                        <v-icon>mdi-pencil</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-container>
+                      <v-row>
+                        <v-col>
+                          <v-card title="Edit Blacklist">
+                            <div class="ml-4 mr-4 mt-4">
+                              <v-data-table-virtual :headers="editPersonalBlacklistDialogHeaders" :items="editPersonalBlacklistDialogItems" v-model="editPersonalBlacklistDialogSelectedItems" item-value="UUID" show-select class="edittable" height="475"> </v-data-table-virtual>
+                              <v-card-actions class="justify-center">
+                                <v-btn variant="outlined" prepend-icon="mdi-delete" color="error" @click="editPersonalBlacklistDialogDeleteSelection">Delete Selection</v-btn>
+                                <v-btn variant="outlined" prepend-icon="mdi-cancel" color="warning" @click="editPersonalBlacklistDialog = false">Cancel</v-btn>
+                              </v-card-actions>
+                            </div>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-dialog>
+                  <v-checkbox v-model="blacklist.enabled" color="secondary" @update:model-value="saveBlacklists()" style="display: flex"></v-checkbox>
+                </template>
+                <v-list-item-title v-if="blacklist?.type !== 'PERSONAL'">ID: {{ blacklist.ID }}</v-list-item-title>
+                <v-list-item-title v-if="blacklist?.type === 'PERSONAL'">Personal Blacklist</v-list-item-title>
+                <v-list-item-subtitle v-if="blacklist?.type === 'PERSONAL'">Disabling this list will prevent you from directly seing players you reported!</v-list-item-subtitle>
+              </v-list-item>
+            </v-list>
+            <div class="ma-2">
               <v-dialog v-model="addBlacklistDialog">
                 <template v-slot:activator="{ props }">
                   <v-btn variant="outlined" color="secondary" v-bind="props" @click="addBlacklistDialog = true">Add Blacklist</v-btn>
@@ -69,21 +65,20 @@
                   <v-row>
                     <v-col>
                       <v-card title="Paste Blacklist ID">
-                        <div class="ml-4 mr-4 mt-4">
+                        <v-card-text class="mt-4">
                           <v-text-field :rules="[validateBlacklistID]" variant="outlined" color="secondary" label="Blacklist ID" prepend-icon="mdi-content-paste" clearable v-model="addBlacklistQuery" @keydown.enter.prevent:model-value="addBlacklist"></v-text-field>
-                        </div>
+                        </v-card-text>
                       </v-card>
                     </v-col>
                   </v-row>
                 </v-container>
               </v-dialog>
             </div>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-    <Notification />
-  </v-app>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">

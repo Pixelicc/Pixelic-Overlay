@@ -1,48 +1,43 @@
 <template>
-  <v-app>
-    <Navigation />
-    <NuxtPage />
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-card :loading="loadingPlayer" title="Overview" :disabled="noPlayer">
-            <template v-slot:loader="{ isActive }">
-              <v-progress-linear :active="isActive" color="primary" height="4" indeterminate></v-progress-linear>
-            </template>
-            <div class="ml-4 mr-4 mb-4 mt-2" v-if="!loadingPlayer">
-              <!-- @vue-skip -->
-              <span v-html="parseMCColor(`${GamemodeManager.hypixelMode.value === 'BEDWARS' ? parseBedwarsStar(playerRef?.stats?.Bedwars?.level || 0).full : GamemodeManager.hypixelMode.value === 'SKYWARS' ? parseSkywarsStar(playerRef?.stats?.Skywars?.level || 0).full : ''} ${parseRank(playerRef?.rank || null, playerRef?.plusColor || null, playerRef?.plusPlusColor || null).full} ${playerRef.username}`)" style="font-size: x-large"></span><br />
-              <v-container>
-                <v-row>
-                  <v-col v-for="(row, rowIndex) of overviewRows">
-                    <span v-for="(column, columnIndex) of row"> {{ column.title }}: <span v-html="column.value"></span><br v-if="columnIndex !== overviewRows[rowIndex].length - 1" /></span>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col v-for="(row, rowIndex) of gamemodeRows">
-                    <span v-for="(column, columnIndex) of row"> {{ column.title }}: <span v-html="column.value"></span><br v-if="columnIndex !== gamemodeRows[rowIndex].length - 1" /></span>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-card :loading="loadingHistory" title="Alltime Graph" :disabled="noHistory">
-            <template v-slot:loader="{ isActive }">
-              <v-progress-linear :active="isActive" color="primary" height="4" indeterminate></v-progress-linear>
-            </template>
-            <div class="ma-4">
-              <canvas id="alltimeGraph"></canvas>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-    <Notification />
-  </v-app>
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-card :loading="loadingPlayer" title="Overview" :disabled="noPlayer">
+          <template v-slot:loader="{ isActive }">
+            <v-progress-linear :active="isActive" color="primary" height="4" indeterminate></v-progress-linear>
+          </template>
+          <div class="ml-4 mr-4 mb-4 mt-2" v-if="!loadingPlayer">
+            <!-- @vue-skip -->
+            <span v-html="parseMCColor(`${GamemodeManager.hypixelMode.value === 'BEDWARS' ? parseBedwarsStar(playerRef?.stats?.Bedwars?.level || 0).full : GamemodeManager.hypixelMode.value === 'SKYWARS' ? parseSkywarsStar(playerRef?.stats?.Skywars?.level || 0).full : ''} ${parseRank(playerRef?.rank || null, playerRef?.plusColor || null, playerRef?.plusPlusColor || null).full} ${playerRef.username}`)" style="font-size: x-large"></span><br />
+            <v-container>
+              <v-row>
+                <v-col v-for="(row, rowIndex) of overviewRows">
+                  <span v-for="(column, columnIndex) of row"> {{ column.title }}: <span v-html="column.value"></span><br v-if="columnIndex !== overviewRows[rowIndex].length - 1" /></span>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col v-for="(row, rowIndex) of gamemodeRows">
+                  <span v-for="(column, columnIndex) of row"> {{ column.title }}: <span v-html="column.value"></span><br v-if="columnIndex !== gamemodeRows[rowIndex].length - 1" /></span>
+                </v-col>
+              </v-row>
+            </v-container>
+          </div>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-card :loading="loadingHistory" title="Alltime Graph" :disabled="noHistory">
+          <template v-slot:loader="{ isActive }">
+            <v-progress-linear :active="isActive" color="primary" height="4" indeterminate></v-progress-linear>
+          </template>
+          <div class="ma-4">
+            <canvas id="alltimeGraph"></canvas>
+          </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
