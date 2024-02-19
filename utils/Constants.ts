@@ -174,7 +174,7 @@ const constants = {
       },
       bedwars: {
         LEVEL: { title: "Level", align: "center", key: "player.stats.Bedwars.level", width: "10%" },
-        WINSTREAK: { title: "Winstreak", align: "center", key: "player.stats.Bedwars.{MODE}.winstreak", width: "6%" },
+        WINSTREAK: { title: "WS", align: "center", key: "player.stats.Bedwars.{MODE}.winstreak", width: "6%" },
         WINS: { title: "Wins", align: "center", key: "player.stats.Bedwars.{MODE}.wins", width: "10%" },
         LOSSES: { title: "Losses", align: "center", key: "player.stats.Bedwars.{MODE}.losses", width: "10%" },
         WLR: { title: "WLR", align: "center", key: "player.stats.Bedwars.{MODE}.WLR", width: "10%" },
@@ -198,7 +198,7 @@ const constants = {
         KDR: { title: "KDR", align: "center", key: "player.stats.Skywars.{MODE}.KDR", width: "10%" },
       },
       duels: {
-        WINSTREAK: { title: "Winstreak", align: "center", key: "player.stats.Duels.{MODE}.winstreak", width: "6%" },
+        WINSTREAK: { title: "WS", align: "center", key: "player.stats.Duels.{MODE}.winstreak", width: "6%" },
         WINS: { title: "Wins", align: "center", key: "player.stats.Duels.{MODE}.wins", width: "10%" },
         LOSSES: { title: "Losses", align: "center", key: "player.stats.Duels.{MODE}.losses", width: "10%" },
         WLR: { title: "WLR", align: "center", key: "player.stats.Duels.{MODE}.WLR", width: "10%" },
