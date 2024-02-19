@@ -11,7 +11,7 @@ const getAPI = () => {
   if (dataStore.get("overlaySettings").advancedMode && dataStore.get("APISettings").customInstanceSettings.baseURL.length !== 0) {
     return dataStore.get("APISettings").customInstanceSettings.baseURL;
   }
-  return process.env.VITE_DEV_SERVER_URL ? "http://localhost:3000" : "https://api.pixelic.de";
+  return "https://api.pixelic.app";
 };
 
 export default (UUID: string) => {
