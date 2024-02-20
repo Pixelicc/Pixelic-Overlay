@@ -30,32 +30,6 @@ const dark = {
   },
 };
 
-const sakura = {
-  dark: false,
-  colors: {
-    background: "#F5F5F5",
-    primary: "#FF80AB",
-    secondary: "#CE93D8",
-    error: "#C62828",
-    info: "#9575CD",
-    success: "#00e676",
-    warning: "#EF6C00",
-  },
-};
-
-const kawaii = {
-  dark: false,
-  colors: {
-    background: "#F5F5F5",
-    primary: "#F57EB6",
-    secondary: "#C1A7E2",
-    error: "#c21e56",
-    info: "#DDE5ED",
-    success: "#F8BED6",
-    warning: "#e9c4ac",
-  },
-};
-
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     defaults: {
@@ -78,8 +52,6 @@ export default defineNuxtPlugin((app) => {
       themes: {
         light,
         dark,
-        sakura,
-        kawaii,
         custom: dataStore.get("appearanceSettings").customThemeSettings,
       },
     },
