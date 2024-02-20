@@ -34,7 +34,7 @@ const store = new Store<{
   };
   appearanceSettings: {
     opacity: string;
-    theme: "DARK" | "LIGHT" | "SAKURA" | "KAWAII" | "CUSTOM";
+    theme: "DARK" | "LIGHT" | "CUSTOM";
     customThemeSettings: ThemeDefinition;
   };
   columnSettings: {

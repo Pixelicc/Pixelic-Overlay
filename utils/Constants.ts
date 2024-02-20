@@ -72,8 +72,6 @@ const constants = {
     themes: {
       DARK: "dark",
       LIGHT: "light",
-      SAKURA: "sakura",
-      KAWAII: "kawaii",
       CUSTOM: "custom",
     },
     supportedClients: {
