@@ -15,12 +15,10 @@
           <v-icon color="primary">mdi-tune-vertical</v-icon>
         </v-btn>
       </template>
-      <v-card min-width="300">
-        <v-list>
-          <v-list-item>
-            <GamemodeSelector />
-          </v-list-item>
-        </v-list>
+      <v-card class="mb-n2" min-width="250">
+        <v-card-text>
+          <GamemodeSelector />
+        </v-card-text>
       </v-card>
     </v-menu>
     <v-text-field v-if="useRoute().path === '/'" variant="outlined" color="primary" density="compact" single-line hide-details prepend-inner-icon="mdi-account-search" persistent-placeholder placeholder="Search player(s)" v-model="playerSearchQuery" @keydown.enter.prevent="addPlayerFromQuery" :rules="[validateQuery]" style="-webkit-app-region: no-drag; max-width: 25%"></v-text-field>
