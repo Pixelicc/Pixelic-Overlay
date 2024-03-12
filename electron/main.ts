@@ -144,6 +144,14 @@ app.whenReady().then(async () => {
   ipcMain.on("openStatistics", (event, msg) => {
     win.webContents.send("openStatistics", msg);
   });
+
+  ipcMain.on("notification", (event, msg) => {
+    const notification = new Notification({
+      body: msg,
+      icon: path.join(__dirname, "../assets/logo.png"),
+    });
+    notification.show();
+  });
 });
 
 if (process.platform === "win32") {
